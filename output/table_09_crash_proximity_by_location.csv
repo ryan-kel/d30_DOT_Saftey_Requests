@@ -1,0 +1,2370 @@
+location_name,dataset,outcome,latitude,longitude,crashes_150m,injuries_150m,ped_injuries_150m,fatalities_150m
+62 Avenue,SRTS,denied,40.713843,-73.900939,71,86,18,1
+62 Avenue,SRTS,denied,40.713843,-73.90093899999998,71,86,18,1
+Metropolitan Avenue & Aubrey Avenue,Signal Study,denied,40.711994,-73.86073,66,101,4,0
+Metropolitan Avenue & Aubrey Avenue,Signal Study,denied,40.711994,-73.86073,66,101,4,0
+Aubrey Avenue & Metropolitan Avenue,Signal Study,denied,40.711994,-73.86073,66,101,4,0
+Metropolitan Avenue & Aubrey Avenue,Signal Study,denied,40.711994,-73.86073,66,101,4,0
+Onderdonk Avenue,SRTS,denied,40.700718,-73.901694,62,82,19,0
+70 Avenue,SRTS,denied,40.700718,-73.901694,62,82,19,0
+62 Road,SRTS,denied,40.713173,-73.900749,62,69,17,0
+61 Street,SRTS,approved,40.712759,-73.902243,59,70,17,0
+61 Street & Metropolitan Avenue,Signal Study,denied,40.712757,-73.90225,59,70,17,0
+Metropolitan Avenue,SRTS,denied,40.7128770415982,-73.90537725573958,58,72,19,0
+69 Avenue,SRTS,denied,40.701229,-73.902559,57,67,15,0
+Cypress Avenue,SRTS,denied,40.693843,-73.896912,57,72,13,0
+69 Avenue & Onderdonk Avenue,Signal Study,denied,40.70123,-73.902565,57,67,15,0
+Fresh Pond Road & Metropolitan Avenue,Signal Study,denied,40.712696,-73.900604,57,64,17,0
+69 Avenue,SRTS,denied,40.701229,-73.902559,57,67,15,0
+Onderdonk Avenue,SRTS,denied,40.701229,-73.902559,57,67,15,0
+Fresh Pond Road & Metropolitan Avenue,Signal Study,denied,40.712696,-73.900604,57,64,17,0
+Fresh Pond Road & Metropolitan Avenue,Signal Study,denied,40.712696,-73.900604,57,64,17,0
+Seneca Avenue & Catalpa Avenue,Signal Study,denied,40.700737,-73.9042,56,67,18,0
+Cooper Avenue & Cypress Avenue,Signal Study,denied,40.694107,-73.89737,55,70,12,0
+Cooper Avenue,SRTS,denied,40.69411,-73.897362,55,70,12,0
+Cypress Avenue & Cooper Avenue,Signal Study,denied,40.694107,-73.89737,55,70,12,0
+Cypress Avenue & Cooper Avenue,Signal Study,denied,40.694107,-73.89737,55,70,12,0
+Cypress Avenue,SRTS,denied,40.69411,-73.897362,55,70,12,0
+Cooper Avenue & Cypress Avenue,Signal Study,denied,40.694107,-73.89737,55,70,12,0
+Seneca Avenue,SRTS,denied,40.700005,-73.90295399999998,55,73,13,0
+Cypress Avenue & Cooper Avenue,Signal Study,denied,40.694107,-73.89737,55,70,12,0
+Seneca Avenue & Weirfield Street,Signal Study,approved,40.700005,-73.90296,55,73,13,0
+Forest Avenue,SRTS,denied,40.712903,-73.906077,54,64,19,0
+Metropolitan Avenue & Forest Avenue,Signal Study,denied,40.712902,-73.90608,54,64,19,0
+Metropolitan Avenue & Forest Avenue,Signal Study,denied,40.712902,-73.90608,54,64,19,0
+Bleecker Street & Fresh Pond Road,Signal Study,denied,40.711903,-73.90019,54,64,16,0
+Metropolitan Avenue & 60 Street,Signal Study,denied,40.7129023175027,-73.906077007385,54,64,19,0
+Metropolitan Avenue,SRTS,denied,40.7129023175027,-73.906077007385,54,64,19,0
+Fresh Pond Road & Bleecker Street,Signal Study,denied,40.711903,-73.90019,54,64,16,0
+Forest Avenue,SRTS,denied,40.712903,-73.90607699999998,54,64,19,0
+Metropolitan Avenue & Forest Avenue,Signal Study,denied,40.712902,-73.90608,54,64,19,0
+Metropolitan Avenue & Forest Avenue,Signal Study,denied,40.712902,-73.90608,54,64,19,0
+Forest Avenue & Metropolitan Avenue,Signal Study,denied,40.712902,-73.90608,54,64,19,0
+Fresh Pond Road & Bleecker Street,Signal Study,denied,40.711903,-73.90019,54,64,16,0
+Metropolitan Avenue & Forest Avenue,Signal Study,denied,40.712902,-73.90608,54,64,19,0
+Rutledge Avenue,SRTS,denied,40.710564,-73.86028899999998,53,75,2,0
+Rutledge Avenue,SRTS,approved,40.710564,-73.86028899999998,53,75,2,0
+Rutledge Avenue,SRTS,denied,40.710564,-73.86028899999998,53,75,2,0
+Rutledge Avenue,SRTS,approved,40.710564,-73.86028899999998,53,75,2,0
+Forest Avenue,SRTS,denied,40.712647,-73.905962,52,62,18,0
+59 Street,SRTS,denied,40.694477,-73.896464,52,66,12,0
+Forest Avenue,SRTS,denied,40.712647,-73.905962,52,62,18,0
+59 Street,SRTS,denied,40.6944766867988,-73.8964637099408,52,66,12,0
+Vermont Place & Cypress Avenue,Signal Study,denied,40.691433,-73.89063,52,75,1,0
+Borden Avenue,SRTS,denied,40.7272090895549,-73.90740981585108,52,80,2,0
+Cypress Avenue & Vermont Place,Signal Study,denied,40.691433,-73.89063,52,75,1,0
+Cooper Avenue,SRTS,denied,40.694477,-73.896464,52,66,12,0
+Cypress Avenue & Putnam Avenue,Signal Study,denied,40.700367,-73.906624,51,55,13,0
+60 Street,SRTS,denied,40.7128574299664,-73.90489392550718,51,61,17,0
+60 Street,SRTS,approved,40.7137143474128,-73.9055636412889,50,60,19,0
+Forest Avenue,SRTS,denied,40.701087,-73.900417,49,60,19,0
+Myrtle Avenue & Seneca Avenue,Signal Study,denied,40.70041,-73.90368,49,60,15,0
+Myrtle Avenue & Hancock Street,Signal Study,denied,40.70041,-73.90368,49,60,15,0
+70 Avenue,SRTS,approved,40.701087,-73.900417,49,60,19,0
+70 Avenue,SRTS,denied,40.701087,-73.900417,49,60,19,0
+Myrtle Avenue & Seneca Avenue,Signal Study,denied,40.70041,-73.90368,49,60,15,0
+71 Avenue,SRTS,denied,40.7005043711554,-73.8997578860275,49,61,22,0
+Forest Avenue,SRTS,denied,40.711843,-73.90558799999998,48,55,17,0
+Forest Avenue & Greene Avenue,Signal Study,denied,40.71184,-73.905594,48,55,17,0
+Forest Avenue,SRTS,denied,40.711843,-73.905588,48,55,17,0
+61 Street,SRTS,denied,40.721031,-73.904096,48,54,14,0
+Cypress Avenue,SRTS,denied,40.6997,-73.905493,48,51,15,0
+56 Drive,SRTS,denied,40.724888,-73.898978,47,61,5,0
+56 Drive,SRTS,denied,40.724888,-73.898978,47,61,5,0
+Perry Avenue & Hamilton Place,Signal Study,denied,40.724888,-73.89899,47,61,5,0
+Flushing Avenue,SRTS,denied,40.721629,-73.903117,46,48,11,0
+Forest Avenue,SRTS,denied,40.7005,-73.900201,46,56,20,0
+Myrtle Avenue & Forest Avenue,Signal Study,denied,40.700497,-73.90021,46,56,20,0
+Metropolitan Avenue,SRTS,denied,40.711845,-73.85975999999998,46,69,3,0
+Metropolitan Avenue & Woodhaven Boulevard,Signal Study,denied,40.711845,-73.859764,46,69,3,0
+Fresh Pond Road,SRTS,denied,40.721629,-73.903117,46,48,11,0
+Borden Avenue & Maurice Avenue,Signal Study,denied,40.727733,-73.906731,45,68,1,0
+Maurice Avenue & Borden Avenue,Signal Study,denied,40.727733,-73.906731,45,68,1,0
+Maurice Avenue & Borden Avenue,Signal Study,denied,40.727733,-73.906731,45,68,1,0
+Grand Avenue,SRTS,denied,40.724281,-73.898438,44,58,6,0
+Metropolitan Avenue & Himrod Street,Signal Study,denied,40.712948,-73.90693,44,53,14,0
+Cornelia Street,SRTS,denied,40.701055,-73.904727,44,49,14,0
+Cornelia Street,SRTS,denied,40.701055,-73.90472699999998,44,49,14,0
+Himrod Street,SRTS,denied,40.712851,-73.906946,44,53,15,0
+Grand Avenue & Hamilton Place,Signal Study,denied,40.72428,-73.898445,44,58,6,0
+56 Drive,SRTS,denied,40.724288,-73.900148,43,58,3,0
+62 Road,SRTS,denied,40.713366,-73.899421,43,49,12,0
+71 Avenue,SRTS,approved,40.700871,-73.89852,43,55,18,0
+56 Drive,SRTS,denied,40.724288,-73.900148,43,58,3,0
+56 Road,SRTS,denied,40.7267442025759,-73.8965362463079,42,52,6,0
+56 Drive,SRTS,denied,40.725091,-73.898584,42,54,5,0
+56 Drive,SRTS,denied,40.725091,-73.898584,42,54,5,0
+64 Street,SRTS,denied,40.723431,-73.901823,41,44,5,0
+64 Street,SRTS,denied,40.7234304181845,-73.9018230964106,41,44,5,0
+Forest Avenue,SRTS,denied,40.701771,-73.900697,41,47,14,0
+63 Street,SRTS,denied,40.722144,-73.902269,41,45,7,0
+64 Street,SRTS,denied,40.7225682225547,-73.901423914554,41,44,4,0
+Onderdonk Avenue,SRTS,denied,40.701457,-73.902948,41,47,12,0
+56 Drive,SRTS,denied,40.7234304181845,-73.9018230964106,41,44,5,0
+Onderdonk Avenue,SRTS,denied,40.701457,-73.90294799999998,41,47,12,0
+64 Street,SRTS,denied,40.7225682225547,-73.901423914554,41,44,4,0
+63 Street,SRTS,denied,40.722144,-73.902269,41,45,7,0
+69 Avenue,SRTS,denied,40.701771,-73.900697,41,47,14,0
+55 Drive,SRTS,denied,40.725291,-73.89818699999998,41,54,5,0
+Forest Avenue,SRTS,denied,40.700082,-73.899502,40,51,19,0
+55 Road,SRTS,approved,40.726735,-73.908045,40,49,6,0
+Grand Avenue,SRTS,denied,40.721844,-73.90443399999998,40,45,14,0
+64 Street,SRTS,denied,40.722802,-73.901813,40,42,4,0
+61 Street,SRTS,denied,40.721844,-73.90443399999998,40,45,14,0
+Maspeth Avenue & Grand Avenue,Signal Study,denied,40.7228,-73.90182,40,42,4,0
+61 Street,SRTS,denied,40.721921,-73.904448,40,45,14,0
+55 Drive,SRTS,denied,40.7253269969259,-73.8985985146857,39,51,5,0
+Linden Street,SRTS,denied,40.709682,-73.898904,39,45,5,0
+Myrtle Avenue,SRTS,denied,40.70052,-73.897962,39,50,16,0
+62 Avenue,SRTS,denied,40.713614,-73.90683,39,48,14,0
+Linden Street,SRTS,denied,40.709682,-73.898904,39,45,5,0
+Myrtle Avenue & Summerfield Street,Signal Study,denied,40.70052,-73.897962,39,50,16,0
+Eliot Avenue,SRTS,denied,40.71946,-73.891162,38,50,12,0
+69 Street,SRTS,denied,40.71946,-73.891162,38,50,12,0
+Fresh Pond Road & Putnam Avenue,Signal Study,denied,40.706497,-73.89695,38,53,12,0
+Eliot Avenue & 69 Street,Signal Study,denied,40.71946,-73.89117,38,50,12,0
+69 Street,SRTS,denied,40.71946,-73.891162,38,50,12,0
+Eliot Avenue & 69 Street,Signal Study,denied,40.71946,-73.89117,38,50,12,0
+Myrtle Avenue & Norman Street,Signal Study,denied,40.700516,-73.89799,38,49,15,0
+69 Place,SRTS,denied,40.720156,-73.889663,37,49,10,0
+60 Place,SRTS,approved,40.7128180680508,-73.9037685515869,37,43,12,0
+Myrtle Avenue & 64 Street,Signal Study,denied,40.700964,-73.89245299999999,37,44,11,0
+69 Place,SRTS,denied,40.720156,-73.889663,37,49,10,0
+Eliot Avenue,SRTS,denied,40.720156,-73.889663,37,49,10,0
+Myrtle Avenue & St Nicholas Avenue,Signal Study,denied,40.69984,-73.90868,37,40,11,0
+69 Place,SRTS,denied,40.720156,-73.889663,37,49,10,0
+Myrtle Avenue & St Nicholas Avenue,Signal Study,denied,40.69984,-73.90868,37,40,11,0
+Myrtle Avenue & St Nicholas Avenue,Signal Study,denied,40.69984,-73.90868,37,40,11,0
+60 Place,SRTS,denied,40.712912,-73.90383,36,42,12,0
+Grand Avenue,SRTS,denied,40.725166,-73.896708,36,44,7,0
+64 Place & Central Avenue,Signal Study,denied,40.702126,-73.89164,36,44,8,0
+55 Drive,SRTS,denied,40.725166,-73.896708,36,44,7,0
+64 Place,SRTS,approved,40.701046,-73.89152699999998,35,43,11,0
+Myrtle Avenue,SRTS,denied,40.700517,-73.898348,35,45,15,0
+64 Place,SRTS,approved,40.701046,-73.89152699999998,35,43,11,0
+88 Lane,SRTS,denied,40.703232,-73.85695,35,47,1,0
+Seneca Avenue,SRTS,denied,40.699585,-73.90224,35,51,8,0
+Cypress Hills Street,SRTS,denied,40.692317,-73.882678,35,49,2,0
+60 Lane,SRTS,denied,40.720606,-73.904785,35,39,10,0
+Seneca Avenue,SRTS,denied,40.699585,-73.90224,35,51,8,0
+Flushing Avenue & 60 Lane,Signal Study,approved,40.720604,-73.9047875,35,39,10,0
+Seneca Avenue,SRTS,denied,40.699585,-73.90224,35,51,8,0
+Eliot Avenue,SRTS,denied,40.715236,-73.899905,35,46,7,1
+60 Lane,SRTS,approved,40.720606,-73.904785,35,39,10,0
+Borden Avenue,SRTS,denied,40.725932,-73.896512,35,44,7,0
+Seneca Avenue & Centre Street,Signal Study,denied,40.699585,-73.902245,35,51,8,0
+Metropolitan Avenue,SRTS,denied,40.713117,-73.909716,34,43,4,0
+Grand Avenue & Borden Avenue,Signal Study,denied,40.725635,-73.895856,34,43,6,0
+60 Avenue,SRTS,denied,40.721433,-73.89273799999998,34,41,1,0
+Grand Avenue & Borden Avenue,Signal Study,denied,40.725635,-73.895856,34,43,6,0
+69 Street,SRTS,denied,40.721433,-73.892738,34,41,1,0
+58 Avenue,SRTS,denied,40.7233451625158,-73.8984644368446,34,48,4,0
+Grand Avenue,SRTS,denied,40.725635,-73.895856,34,43,6,0
+69 Street & 60 Avenue,Signal Study,denied,40.72143,-73.892746,34,41,1,0
+Grand Avenue & Borden Avenue,Signal Study,denied,40.725635,-73.895856,34,43,6,0
+Cypress Hills Street & Fresh Pond Road,Signal Study,denied,40.70697661724096,-73.89780783898678,34,47,11,0
+Myrtle Avenue & Cypress Hills Street,Signal Study,denied,40.701103,-73.89088,33,38,9,0
+Myrtle Avenue,SRTS,denied,40.701103,-73.890867,33,38,9,0
+Brown Place,SRTS,denied,40.725111,-73.896052,33,43,5,0
+55 Drive,SRTS,denied,40.725111,-73.89605199999998,33,43,5,0
+Brown Place,SRTS,denied,40.7251106346716,-73.8960517276448,33,43,5,0
+Fresh Pond Road & Eliot Avenue,Signal Study,denied,40.714622,-73.90117,33,42,7,1
+60 Drive,SRTS,approved,40.7154043523041,-73.9013731857674,33,42,8,1
+Eliot Avenue & Fresh Pond Road,Signal Study,denied,40.714622,-73.90117,33,42,7,1
+60 Drive,SRTS,denied,40.7154043523041,-73.9013731857674,33,42,8,1
+60 Drive,SRTS,approved,40.7154043523041,-73.9013731857674,33,42,8,1
+Woodhaven Boulevard & Union Turnpike,Signal Study,denied,40.70559,-73.85823,33,44,3,0
+Metropolitan Avenue,SRTS,denied,40.713014,-73.90801,33,42,7,0
+Myrtle Avenue & Cypress Hills Street,Signal Study,denied,40.701103,-73.89088,33,38,9,0
+Cypress Hills Street,SRTS,denied,40.701103,-73.890867,33,38,9,0
+60 Drive,SRTS,denied,40.7154043523041,-73.9013731857674,33,42,8,1
+Eliot Avenue & Fresh Pond Road,Signal Study,denied,40.714622,-73.90117,33,42,7,1
+Woodhaven Boulevard & Union Turnpike,Signal Study,denied,40.70559,-73.85823,33,44,3,0
+Cypress Hills Street,SRTS,denied,40.701103,-73.890867,33,38,9,0
+58 Avenue,SRTS,denied,40.7236930823236,-73.8977134975539,32,43,5,0
+64 Street,SRTS,denied,40.7235347219927,-73.90182655048268,32,34,5,0
+64 Street,SRTS,denied,40.723535,-73.901827,32,34,5,0
+69 Street & 60 Drive,Signal Study,denied,40.72021,-73.89178,31,39,9,0
+Andrews Avenue,SRTS,denied,40.713901,-73.90881,31,39,4,0
+Andrews Avenue,SRTS,denied,40.713901,-73.90881,31,39,4,0
+Palmetto Street,SRTS,approved,40.708403,-73.898004,31,40,4,0
+Palmetto Street & Fresh Pond Road,Signal Study,denied,40.7084,-73.89801,31,40,4,0
+56 Drive,SRTS,denied,40.725932,-73.89689099999998,31,39,5,0
+69 Street,SRTS,denied,40.720213,-73.89177,31,39,9,0
+Palmetto Street,SRTS,denied,40.708403,-73.898004,31,40,4,0
+71 Street,SRTS,denied,40.70219,-73.88015699999998,31,37,10,0
+55 Street,SRTS,approved,40.713901,-73.90881,31,39,4,0
+Woodhaven Boulevard & 81 Road,Signal Study,denied,40.70456,-73.856735,31,42,0,0
+Borden Avenue,SRTS,denied,40.725932,-73.89689099999998,31,39,5,0
+56 Drive,SRTS,denied,40.725932,-73.89689099999998,31,39,5,0
+81 Avenue,SRTS,denied,40.704072,-73.85961399999998,30,39,4,0
+68 Street,SRTS,denied,40.721,-73.893688,30,36,0,0
+88 Street,SRTS,denied,40.704072,-73.85961399999998,30,39,4,0
+68 Street,SRTS,denied,40.721,-73.89368799999998,30,36,0,0
+68 Street,SRTS,denied,40.721,-73.89368799999998,30,36,0,0
+Cooper Avenue,SRTS,denied,40.701281,-73.881677,30,35,7,0
+Eliot Avenue,SRTS,denied,40.718987,-73.892129,29,38,9,0
+82 Avenue,SRTS,denied,40.703982511193,-73.8562273503268,29,41,1,0
+Myrtle Avenue,SRTS,denied,40.701149,-73.890247,29,35,10,0
+Woodbine Street,SRTS,approved,40.70776,-73.897565,29,42,7,0
+Woodbine Street,SRTS,denied,40.700169,-73.909204,29,31,7,0
+Central Avenue & Cypress Hills Street,Signal Study,denied,40.701862,-73.89272,29,35,8,0
+Otto Road,SRTS,denied,40.701863,-73.892716,29,35,8,0
+82 Avenue,SRTS,approved,40.703982511193,-73.8562273503268,29,41,1,0
+Myrtle Avenue & Central Avenue,Signal Study,denied,40.70086,-73.893845,29,36,7,0
+74 Street,SRTS,approved,40.713215,-73.878583,29,40,14,0
+Putnam Avenue,SRTS,denied,40.706245,-73.898,29,38,12,0
+74 Street,SRTS,denied,40.713215,-73.878583,29,40,14,0
+Woodbine Street,SRTS,denied,40.70776,-73.897565,29,42,7,0
+Cooper Avenue & 70 Street,Signal Study,denied,40.70171,-73.88091,29,35,11,0
+Putnam Avenue,SRTS,denied,40.706245,-73.898,29,38,12,0
+82 Avenue,SRTS,approved,40.703982511193,-73.8562273503268,29,41,1,0
+Woodbine Street,SRTS,denied,40.70776,-73.897565,29,42,7,0
+81 Street,SRTS,denied,40.725396,-73.878369,29,36,13,0
+55 Drive,SRTS,denied,40.726069,-73.908891,29,40,6,0
+82 Avenue,SRTS,denied,40.703982511193,-73.8562273503268,29,41,1,0
+Cypress Avenue,SRTS,denied,40.699279,-73.904783,29,31,7,0
+Flushing Avenue,SRTS,denied,40.712448,-73.918526,29,37,1,0
+Eliot Avenue,SRTS,denied,40.718987,-73.892129,29,38,9,0
+74 Street,SRTS,denied,40.713215,-73.878583,29,40,14,0
+Woodbine Street & 64 Street,Signal Study,denied,40.70776,-73.897565,29,42,7,0
+Metropolitan Avenue & 80 Street,Signal Study,denied,40.713287,-73.87163,29,32,5,0
+81 Street,SRTS,approved,40.725396,-73.878369,29,36,13,0
+59 Street,SRTS,denied,40.726069,-73.90889099999998,29,40,6,0
+Hancock Street,SRTS,approved,40.699279,-73.90478299999998,29,31,7,0
+Cooper Avenue & Metropolitan Avenue,Signal Study,denied,40.7122,-73.86208,28,44,2,0
+Forest Avenue,SRTS,denied,40.703665,-73.901513,28,31,8,0
+68 Street,SRTS,approved,40.721604,-73.89416,28,33,0,0
+60 Drive,SRTS,denied,40.719764,-73.892734,28,35,8,0
+68 Avenue,SRTS,denied,40.703665,-73.901513,28,31,8,0
+Tonsor Street,SRTS,denied,40.713059,-73.908786,28,36,3,0
+Linden Street & Onderdonk Avenue,Signal Study,approved,40.704594,-73.90826,28,41,6,0
+Andrews Avenue,SRTS,denied,40.713064,-73.908905,28,36,3,0
+71 Place & Cooper Avenue,Signal Study,denied,40.702625,-73.8794,28,38,9,0
+68 Street,SRTS,denied,40.7217741368347,-73.89427836862099,28,33,0,0
+Tonsor Street,SRTS,denied,40.713059,-73.908786,28,36,3,0
+68 Street,SRTS,denied,40.7197635433395,-73.8927339301251,28,35,8,0
+69 Street,SRTS,denied,40.722031,-73.893214,28,33,0,0
+Gates Avenue,SRTS,approved,40.70904,-73.898454,28,33,4,0
+69 Street & 59 Drive,Signal Study,denied,40.72203,-73.89322,28,33,0,0
+Metropolitan Avenue & Tonsor Street,Signal Study,denied,40.71306,-73.90879,28,36,3,0
+81 Street,SRTS,denied,40.725728,-73.878636,28,38,12,0
+Metropolitan Avenue & 74 Street,Signal Study,denied,40.71283,-73.878296,28,39,14,0
+Gates Avenue,SRTS,denied,40.70904,-73.898454,28,33,4,0
+Myrtle Avenue,SRTS,denied,40.700617,-73.896721,28,35,7,0
+Metropolitan Avenue,SRTS,denied,40.713064,-73.908905,28,36,3,0
+Cooper Avenue & Metropolitan Avenue,Signal Study,denied,40.7122,-73.86208,28,44,2,0
+68 Street,SRTS,denied,40.721604,-73.89416,28,33,0,0
+68 Street,SRTS,denied,40.721604,-73.89416,28,33,0,0
+68 Street,SRTS,denied,40.7197635433395,-73.8927339301251,28,35,8,0
+Gates Avenue,SRTS,denied,40.70904,-73.898454,28,33,4,0
+Metropolitan Avenue,SRTS,denied,40.713059,-73.908786,28,36,3,0
+81 Street,SRTS,denied,40.725728,-73.878636,28,38,12,0
+Forest Avenue,SRTS,denied,40.703665,-73.901513,28,31,8,0
+Fresh Pond Road & Myrtle Avenue,Signal Study,denied,40.700798,-73.894585,28,34,6,0
+63 Avenue,SRTS,approved,40.723861,-73.870551,28,33,6,0
+68 Street,SRTS,denied,40.7217741368347,-73.89427836862099,28,33,0,0
+68 Street,SRTS,denied,40.719764,-73.892734,28,35,8,0
+Myrtle Avenue & Fresh Pond Road,Signal Study,denied,40.700798,-73.894585,28,34,6,0
+68 Avenue & Forest Avenue,Signal Study,denied,40.703663,-73.90152,28,31,8,0
+Borden Avenue,SRTS,denied,40.726318,-73.90178299999998,28,42,3,0
+Eliot Avenue,SRTS,denied,40.718806,-73.892512,27,44,6,0
+54 Avenue,SRTS,approved,40.7285470266019,-73.90555705338609,27,47,1,0
+Eliot Avenue,SRTS,denied,40.718806,-73.892512,27,44,6,0
+57 Street,SRTS,denied,40.71935,-73.91231999999998,27,36,1,0
+Myrtle Avenue,SRTS,denied,40.700653,-73.89627,27,32,6,0
+Myrtle Avenue & 60 Lane,Signal Study,denied,40.700653,-73.89628,27,32,6,0
+Myrtle Avenue,SRTS,denied,40.700666,-73.896097,27,32,8,0
+60 Drive,SRTS,denied,40.7155150555191,-73.9024443882074,27,33,9,1
+Grove Street,SRTS,denied,40.710095,-73.900281,27,32,3,0
+Grove Street,SRTS,denied,40.710095,-73.900281,27,32,3,0
+60 Drive,SRTS,denied,40.715515,-73.902444,27,33,9,1
+Menahan Street,SRTS,denied,40.704565,-73.910655,27,34,4,0
+Linden Street,SRTS,denied,40.704593,-73.908246,26,39,5,0
+56 Avenue,SRTS,denied,40.7253349564893,-73.9080798673397,26,36,6,0
+Linden Street,SRTS,denied,40.704593,-73.908246,26,39,5,0
+Cypress Avenue,SRTS,denied,40.702124,-73.909583,26,30,5,0
+Caldwell Avenue & Eliot Avenue,Signal Study,denied,40.7252623621263,-73.8797865999895,26,36,11,0
+55 Street,SRTS,denied,40.713415,-73.90797399999998,26,31,6,0
+Queens Midtown Expressway Sr S,SRTS,denied,40.725458,-73.899966,26,31,3,0
+79 Street,SRTS,denied,40.724626,-73.880027,26,36,10,0
+82 Avenue,SRTS,denied,40.704004,-73.85592099999998,26,36,0,0
+Woodward Avenue,SRTS,denied,40.703538,-73.90338199999998,25,28,8,0
+Woodward Avenue,SRTS,denied,40.703538,-73.903382,25,28,8,0
+Metropolitan Avenue & 75 Street,Signal Study,denied,40.712887,-73.877716,25,35,13,0
+56 Road,SRTS,denied,40.725993819792,-73.8984243227148,25,31,2,0
+69 Street,SRTS,denied,40.720823,-73.892256,25,32,2,0
+Cooper Avenue & Woodhaven Boulevard,Signal Study,denied,40.713057975976746,-73.86204125524468,25,41,1,0
+Woodward Avenue,SRTS,denied,40.703538,-73.903382,25,28,8,0
+Woodward Avenue,SRTS,denied,40.704112,-73.904358,25,28,10,0
+68 Street,SRTS,denied,40.720382,-73.893216,25,32,2,0
+Fresh Pond Road & 67 Avenue,Signal Study,denied,40.705765,-73.896576,25,27,11,0
+Fresh Pond Road & 67 Avenue,Signal Study,denied,40.705765,-73.896576,25,27,11,0
+68 Street,SRTS,denied,40.720382,-73.89321599999998,25,32,2,0
+69 Street & 60 Road,Signal Study,denied,40.72082,-73.892265,25,32,2,0
+68 Street,SRTS,denied,40.720382,-73.893216,25,32,2,0
+68 Street,SRTS,denied,40.720382,-73.89321599999998,25,32,2,0
+59 Street,SRTS,denied,40.725388,-73.908827,25,35,6,0
+Woodward Avenue,SRTS,denied,40.704112,-73.904358,25,28,10,0
+Woodward Avenue,SRTS,denied,40.703538,-73.90338199999998,25,28,8,0
+Borden Avenue,SRTS,denied,40.725994,-73.898424,25,31,2,0
+Putnam Avenue,SRTS,denied,40.703538,-73.903382,25,28,8,0
+60 Road & 69 Street,Signal Study,denied,40.72082,-73.892265,25,32,2,0
+57 Street,SRTS,denied,40.71852,-73.912076,25,34,1,0
+69 Street & Cooper Avenue,Signal Study,denied,40.70086,-73.882454,24,29,6,0
+64 Place & 74 Avenue,Signal Study,denied,40.700333,-73.89145,24,27,9,0
+Borden Avenue,SRTS,denied,40.7261599853753,-73.9001161605222,24,28,3,0
+69 Street & 55 Avenue,Signal Study,denied,40.727787,-73.89551,24,28,5,0
+Cornelia Street,SRTS,denied,40.701963,-73.903802,24,25,8,0
+64 Lane,SRTS,denied,40.700417,-73.890497,24,29,10,0
+Tonsor Street,SRTS,denied,40.712282,-73.908747,24,29,4,0
+Forest Avenue,SRTS,denied,40.699661,-73.898796,24,33,10,0
+69 Place,SRTS,denied,40.720909,-73.890264,24,34,6,0
+Forest Avenue & Norman Street,Signal Study,denied,40.69966,-73.8988,24,33,10,0
+Borden Avenue,SRTS,denied,40.726011,-73.89861899999998,24,30,2,0
+Cornelia Street,SRTS,approved,40.701963,-73.903802,24,25,8,0
+64 Place,SRTS,approved,40.700335,-73.89143799999998,24,27,9,0
+Borden Avenue & Hamilton Place,Signal Study,denied,40.72616,-73.90012,24,28,3,0
+Onderdonk Avenue,SRTS,denied,40.701963,-73.903802,24,25,8,0
+64 Place,SRTS,approved,40.700335,-73.89143799999998,24,27,9,0
+Catalpa Avenue,SRTS,denied,40.702337,-73.901367,24,28,5,0
+69 Street,SRTS,denied,40.700862,-73.88245,24,29,6,0
+Queens Midtown Expressway Sr S,SRTS,denied,40.725424,-73.899508,24,29,3,0
+Woodward Avenue & Catalpa Avenue,Signal Study,denied,40.702335,-73.901375,24,28,5,0
+69 Place,SRTS,denied,40.720909,-73.890264,24,34,6,0
+Tonsor Street,SRTS,denied,40.712282,-73.908747,24,29,4,0
+Cooper Avenue,SRTS,denied,40.700862,-73.88245,24,29,6,0
+64 Place,SRTS,approved,40.700335,-73.89143799999998,24,27,9,0
+Onderdonk Avenue,SRTS,denied,40.701963,-73.903802,24,25,8,0
+69 Place,SRTS,approved,40.720909,-73.890264,24,34,6,0
+Cornelia Street,SRTS,denied,40.701963,-73.903802,24,25,8,0
+73 Place,SRTS,denied,40.712727,-73.87934099999998,23,28,12,0
+73 Place,SRTS,denied,40.712727,-73.879341,23,28,12,0
+73 Place,SRTS,denied,40.712727,-73.87934099999998,23,28,12,0
+Forest Avenue,SRTS,denied,40.703215,-73.901323,23,26,7,0
+68 Avenue,SRTS,denied,40.705274486251696,-73.89633152373318,23,25,10,0
+Cooper Avenue,SRTS,denied,40.7090033222415,-73.8706406882855,23,26,7,0
+68 Avenue,SRTS,denied,40.705274486251696,-73.89633152373318,23,25,10,0
+Woodward Avenue,SRTS,approved,40.702664,-73.901897,23,28,4,0
+73 Place,SRTS,denied,40.712727,-73.87934099999998,23,28,12,0
+Metropolitan Avenue & 73 Place,Signal Study,denied,40.712727,-73.87935,23,28,12,0
+Metropolitan Avenue & 73 Place,Signal Study,denied,40.712727,-73.87935,23,28,12,0
+73 Place,SRTS,denied,40.712727,-73.87934099999998,23,28,12,0
+68 Avenue,SRTS,denied,40.705275,-73.896332,23,25,10,0
+Fairview Avenue,SRTS,denied,40.704608,-73.902291,23,28,7,0
+Caldwell Avenue,SRTS,denied,40.725395,-73.880649,23,33,9,0
+Borden Avenue,SRTS,denied,40.726124012004895,-73.8997806827043,23,27,3,0
+73 Place,SRTS,denied,40.712727,-73.87934099999998,23,28,12,0
+Woodward Avenue,SRTS,approved,40.702664,-73.901897,23,28,4,0
+Woodhaven Boulevard & 62 Road,Signal Study,denied,40.726185,-73.87022,23,34,5,0
+73 Place,SRTS,denied,40.712727,-73.879341,23,28,12,0
+Caldwell Avenue,SRTS,denied,40.725562,-73.879643,23,29,10,0
+Forest Avenue,SRTS,denied,40.703215,-73.901323,23,26,7,0
+Forest Avenue,SRTS,denied,40.70405,-73.901675,22,27,6,0
+Myrtle Avenue & 61 Street,Signal Study,denied,40.700826,-73.894236,22,25,6,0
+69 Street,SRTS,denied,40.718812,-73.890636,22,26,7,0
+Cornelia Street & Forest Avenue,Signal Study,denied,40.70405,-73.90168,22,27,6,0
+88 Street,SRTS,denied,40.703484,-73.859143,22,27,1,0
+67 Avenue,SRTS,denied,40.7043845004715,-73.9018150789991,22,27,6,0
+Forest Avenue,SRTS,denied,40.704385,-73.901815,22,27,6,0
+55 Avenue,SRTS,denied,40.7269761918798,-73.9012911171921,22,27,3,0
+Catalpa Avenue,SRTS,denied,40.702449,-73.900985,22,26,3,0
+61 Street,SRTS,denied,40.700826,-73.894236,22,25,6,0
+Myrtle Avenue & 62 Street,Signal Study,denied,40.70089,-73.89336,22,26,7,0
+81 Road,SRTS,denied,40.703484,-73.859143,22,27,1,0
+Seneca Avenue & Greene Avenue,Signal Study,denied,40.705437,-73.91214,22,30,4,0
+61 Street & 60 Lane,Signal Study,denied,40.700826,-73.894236,22,25,6,0
+79 Street,SRTS,denied,40.7084,-73.87322799999998,22,29,4,0
+Myrtle Avenue & 62 Street,Signal Study,denied,40.70089,-73.89336,22,26,7,0
+Forest Avenue & 67 Avenue,Signal Study,denied,40.704384,-73.90182250000001,22,27,6,0
+Forest Avenue,SRTS,denied,40.702449,-73.900985,22,26,3,0
+61 Road,SRTS,denied,40.727379,-73.872564,22,24,10,1
+59 Street,SRTS,denied,40.6939790891324,-73.895584587204,22,23,6,0
+69 Street,SRTS,denied,40.701779,-73.882823,22,27,4,0
+Putnam Avenue & Woodward Avenue,Signal Study,denied,40.703537,-73.90339,22,25,8,0
+Bleecker Street,SRTS,denied,40.705907,-73.910469,22,27,3,0
+69 Street,SRTS,denied,40.718812,-73.890636,22,26,7,0
+67 Avenue & Forest Avenue,Signal Study,denied,40.704384,-73.90182250000001,22,27,6,0
+Catalpa Avenue,SRTS,denied,40.702449,-73.900985,22,26,3,0
+Forest Avenue & Catalpa Avenue,Signal Study,denied,40.702446,-73.90099,22,26,3,0
+58 Place,SRTS,denied,40.720314,-73.910515,22,30,1,0
+Woodward Avenue,SRTS,denied,40.704849,-73.905609,21,23,9,0
+Metropolitan Avenue & 69 Street,Signal Study,denied,40.712204,-73.88638,21,24,6,0
+Cornelia Street & Woodward Avenue,Signal Study,denied,40.7031,-73.90264,21,24,9,0
+62 Street & 68 Avenue,Signal Study,approved,40.705513,-73.89538,21,23,9,0
+86 Street & Eliot Avenue,Signal Study,denied,40.72911,-73.87161,21,26,4,1
+Metropolitan Avenue & 69 Street,Signal Study,denied,40.712204,-73.88638,21,24,6,0
+Myrtle Avenue & 72 Street,Signal Study,denied,40.702145,-73.87826,21,30,5,0
+Woodward Avenue & Gates Avenue,Signal Study,approved,40.705284,-73.90636,21,23,8,0
+Cooper Avenue,SRTS,denied,40.707845,-73.873171,21,28,4,0
+68 Avenue,SRTS,approved,40.705513,-73.895379,21,23,9,0
+Woodward Avenue & Palmetto Street,Signal Study,approved,40.70485,-73.90562,21,23,9,0
+Borden Avenue,SRTS,denied,40.726263,-73.901159,21,26,3,0
+Forest Avenue,SRTS,denied,40.703064,-73.901251,21,24,6,0
+55 Avenue,SRTS,denied,40.726938,-73.9008,21,26,3,0
+68 Avenue,SRTS,denied,40.705513,-73.895379,21,23,9,0
+69 Place,SRTS,approved,40.722123,-73.89123999999998,21,26,2,0
+Forest Avenue,SRTS,denied,40.69923,-73.898068,21,25,4,0
+Stanhope Street,SRTS,denied,40.706755,-73.91436,21,32,6,0
+Woodward Avenue,SRTS,denied,40.703101,-73.90263899999998,21,24,9,0
+Onderdonk Avenue & Menahan Street,Signal Study,denied,40.705467,-73.90974,21,25,2,0
+Jay Avenue & 65 Place,Signal Study,denied,40.7267,-73.90034,21,26,3,0
+Gates Avenue,SRTS,denied,40.705286,-73.906351,21,23,8,0
+Forest Avenue & Summerfield Street,Signal Study,denied,40.69923,-73.89807,21,25,4,0
+Juniper Blvd South,SRTS,denied,40.720344,-73.87431999999998,21,32,4,0
+68 Avenue & 62 Street,Signal Study,denied,40.705513,-73.89538,21,23,9,0
+Madison Street,SRTS,denied,40.703975,-73.90412399999998,21,24,9,0
+74 Avenue,SRTS,denied,40.7098007788593,-73.86016445180718,21,25,1,0
+Myrtle Avenue & 72 Street,Signal Study,denied,40.702145,-73.87826,21,30,5,0
+Forest Avenue,SRTS,denied,40.704871,-73.901995,21,26,6,0
+Cornelia Street,SRTS,denied,40.703101,-73.90263899999998,21,24,9,0
+Menahan Street,SRTS,denied,40.709989,-73.904743,21,30,6,0
+Forest Avenue,SRTS,denied,40.709989,-73.904743,21,30,6,0
+Cooper Avenue,SRTS,denied,40.708448,-73.87186099999998,21,29,3,0
+Forest Avenue,SRTS,denied,40.704698,-73.90193,21,26,6,0
+Himrod Street,SRTS,approved,40.706316,-73.913621,21,26,4,0
+68 Road,SRTS,denied,40.703064,-73.901251,21,24,6,0
+Woodward Avenue,SRTS,denied,40.704849,-73.905609,21,23,9,0
+69 Place,SRTS,denied,40.722123,-73.89123999999998,21,26,2,0
+Woodward Avenue,SRTS,denied,40.705286,-73.906351,21,23,8,0
+Woodward Avenue,SRTS,denied,40.703975,-73.904124,21,24,9,0
+Woodward Avenue,SRTS,denied,40.703101,-73.902639,21,24,9,0
+69 Place,SRTS,denied,40.722123,-73.89124,21,26,2,0
+Woodward Avenue,SRTS,denied,40.703975,-73.904124,21,24,9,0
+69 Place,SRTS,denied,40.722123,-73.89124,21,26,2,0
+Cooper Avenue & 72 Street,Signal Study,denied,40.70307,-73.87864,21,29,3,0
+80 Street,SRTS,denied,40.7196961861852,-73.8749417450031,20,29,4,0
+70 Avenue,SRTS,denied,40.701539,-73.898855,20,26,9,0
+65 Place,SRTS,denied,40.727255308276895,-73.9003057390507,20,24,3,0
+70 Avenue,SRTS,approved,40.701539,-73.898855,20,26,9,0
+73 Place,SRTS,denied,40.713655,-73.880032,20,25,7,0
+60 Street,SRTS,denied,40.701539,-73.898855,20,26,9,0
+Forest Avenue & Grove Street,Signal Study,denied,40.70913,-73.90436,20,29,5,0
+69 Street,SRTS,denied,40.722625,-73.893667,20,25,2,0
+65 Place,SRTS,denied,40.726913,-73.900321,20,24,3,0
+Grove Street,SRTS,denied,40.706722,-73.907269,20,21,7,0
+Furmanville Avenue,SRTS,denied,40.71774,-73.87321,20,25,2,0
+Cypress Avenue,SRTS,denied,40.69674,-73.900503,20,29,3,0
+80 Avenue,SRTS,denied,40.694743,-73.895789,20,21,5,0
+79 Place,SRTS,denied,40.71774,-73.87321,20,25,2,0
+81 Avenue,SRTS,denied,40.70327,-73.861422,20,27,1,0
+Summerfield Street,SRTS,denied,40.69674,-73.900503,20,29,3,0
+65 Place,SRTS,denied,40.726701,-73.900328,20,24,3,0
+Juniper Valley Road & 79 Place,Signal Study,denied,40.71774,-73.87321,20,25,2,0
+65 Place,SRTS,denied,40.726913,-73.900321,20,24,3,0
+Grove Street,SRTS,denied,40.70913,-73.904351,20,29,5,0
+Cypress Hills Street & 70 Avenue,Signal Study,denied,40.702778,-73.89457,20,24,6,0
+73 Place,SRTS,denied,40.713655,-73.880032,20,25,7,0
+79 Place,SRTS,denied,40.7177400215027,-73.8732102485189,20,25,2,0
+69 Street & 59 Road,Signal Study,denied,40.722622,-73.89368,20,25,2,0
+Menahan Street,SRTS,denied,40.70547,-73.90972999999998,20,24,2,0
+Cooper Avenue,SRTS,denied,40.694743,-73.895789,20,21,5,0
+73 Place,SRTS,denied,40.713655,-73.880032,20,25,7,0
+65 Place,SRTS,denied,40.726701,-73.900328,20,24,3,0
+70 Avenue,SRTS,denied,40.701539,-73.898855,20,26,9,0
+55 Drive,SRTS,denied,40.725529442665696,-73.9009865940423,20,25,3,0
+Queens Midtown Expressway Sr S,SRTS,denied,40.72553,-73.900987,20,25,3,0
+81 Avenue,SRTS,denied,40.70327,-73.861422,20,27,1,0
+73 Place,SRTS,denied,40.713655,-73.880032,20,25,7,0
+Grove Street,SRTS,denied,40.706722,-73.907269,20,21,7,0
+Forest Avenue,SRTS,denied,40.70913,-73.904351,20,29,5,0
+Woodward Avenue,SRTS,denied,40.704409,-73.904866,19,22,6,0
+Woodbine Street,SRTS,denied,40.704409,-73.904866,19,22,6,0
+Woodward Avenue,SRTS,denied,40.705723,-73.907093,19,20,8,0
+79 Street,SRTS,denied,40.709083,-73.873281,19,25,4,0
+79 Street,SRTS,approved,40.709083,-73.873281,19,25,4,0
+George Street,SRTS,approved,40.698015,-73.902643,19,33,7,0
+Cypress Avenue,SRTS,denied,40.698015,-73.902643,19,33,7,0
+Bleecker Street,SRTS,denied,40.710643,-73.90564,19,28,5,0
+73 Place,SRTS,denied,40.712027,-73.879216,19,23,13,0
+80 Street,SRTS,denied,40.720155,-73.875309,19,28,4,0
+Woodbine Street,SRTS,approved,40.704409,-73.904866,19,22,6,0
+67 Road,SRTS,denied,40.712027,-73.879216,19,23,13,0
+69 Road,SRTS,denied,40.709083,-73.873281,19,25,4,0
+Woodbine Street,SRTS,denied,40.704409,-73.904866,19,22,6,0
+68 Street,SRTS,approved,40.7222080895131,-73.8945843310216,19,24,2,0
+67 Road & 73 Place,Signal Study,denied,40.712025,-73.87923,19,23,13,0
+73 Place,SRTS,approved,40.712027,-73.879216,19,23,13,0
+73 Place,SRTS,denied,40.712027,-73.879216,19,23,13,0
+73 Place,SRTS,denied,40.712027,-73.879216,19,23,13,0
+70 Avenue,SRTS,denied,40.702592,-73.89520299999998,19,23,5,0
+Metropolitan Avenue & Woodward Avenue,Signal Study,denied,40.713816,-73.92084249999999,19,24,2,0
+Woodward Avenue,SRTS,denied,40.704409,-73.904866,19,22,6,0
+68 Street,SRTS,denied,40.7222080895131,-73.8945843310216,19,24,2,0
+73 Place,SRTS,denied,40.712027,-73.879216,19,23,13,0
+69 Road,SRTS,denied,40.709083,-73.873281,19,25,4,0
+79 Street,SRTS,denied,40.709083,-73.873281,19,25,4,0
+Juniper Blvd South,SRTS,approved,40.720155,-73.875309,19,28,4,0
+Woodbine Street,SRTS,approved,40.704409,-73.904866,19,22,6,0
+Himrod Street,SRTS,approved,40.707223,-73.912693,19,28,4,0
+79 Street,SRTS,approved,40.709083,-73.873281,19,25,4,0
+69 Road,SRTS,denied,40.709083,-73.873281,19,25,4,0
+Harman Street,SRTS,denied,40.705879,-73.912878,19,24,3,0
+Greene Avenue,SRTS,denied,40.706347,-73.911212,19,27,3,0
+Onderdonk Avenue & Himrod Street,Signal Study,denied,40.707222,-73.912695,19,28,4,0
+73 Place,SRTS,denied,40.712027,-73.879216,19,23,13,0
+Cooper Avenue,SRTS,denied,40.709208643222496,-73.87016417188141,19,21,4,0
+Cooper Avenue,SRTS,denied,40.708319,-73.87217099999998,19,27,3,0
+68 Street,SRTS,denied,40.722208,-73.894584,19,24,2,0
+Union Turnpike,SRTS,denied,40.704745,-73.860157,18,23,3,0
+Bleecker Street & Woodward Avenue,Signal Study,approved,40.70703,-73.909325,18,19,4,0
+Seneca Avenue,SRTS,denied,40.699161,-73.90152299999998,18,29,4,0
+Traffic Avenue,SRTS,denied,40.711225,-73.898631,18,21,2,0
+57 Avenue,SRTS,denied,40.728211,-73.89121199999998,18,20,3,0
+Dry Harbor Road & 80 Street,Signal Study,denied,40.717827,-73.8724,18,23,2,0
+71 Street,SRTS,denied,40.728211,-73.89121199999998,18,20,3,0
+Traffic Avenue,SRTS,denied,40.711225,-73.89863099999998,18,21,2,0
+79 Street,SRTS,denied,40.719014,-73.875538,18,27,2,0
+Metropolitan Avenue & Flushing Avenue,Signal Study,denied,40.713295,-73.916238,18,22,0,0
+Metropolitan Avenue & Flushing Avenue,Signal Study,denied,40.713295,-73.916238,18,22,0,0
+Cypress Avenue,SRTS,denied,40.693195,-73.895744,18,19,3,0
+79 Street,SRTS,denied,40.719014,-73.875538,18,27,2,0
+Forest Avenue,SRTS,denied,40.705148,-73.902121,18,21,6,0
+Woodhaven Boulevard,SRTS,approved,40.709262,-73.85948399999998,18,21,1,0
+Cypress Avenue,SRTS,denied,40.69622,-73.899869,18,23,6,0
+69 Place,SRTS,denied,40.719502,-73.889156,18,26,3,0
+Bleecker Street,SRTS,denied,40.707034,-73.909321,18,19,4,0
+71 Street,SRTS,denied,40.728211,-73.89121199999998,18,20,3,0
+53 Street,SRTS,denied,40.714424,-73.91423799999998,18,20,1,0
+Andrews Avenue & 55 Street,Signal Study,denied,40.714363,-73.909614,18,26,2,0
+Flushing Avenue & 53 Street,Signal Study,denied,40.714424,-73.914246,18,20,1,0
+61 Street,SRTS,denied,40.700508,-73.8942,18,19,5,0
+Penelope Avenue,SRTS,denied,40.719014,-73.875538,18,27,2,0
+Metropolitan Avenue & Flushing Avenue,Signal Study,denied,40.713295,-73.916238,18,22,0,0
+Metropolitan Avenue & Flushing Avenue,Signal Study,denied,40.713295,-73.916238,18,22,0,0
+69 Place,SRTS,denied,40.719502,-73.889156,18,26,3,0
+Grandview Avenue,SRTS,denied,40.7123630839787,-73.91141270196398,18,23,2,0
+69 Lane,SRTS,denied,40.720537,-73.88884,18,26,3,0
+Forest Avenue,SRTS,denied,40.710755,-73.90509199999998,18,27,4,0
+64 Street,SRTS,denied,40.7152397693739,-73.89833610041158,18,29,2,0
+Woodward Avenue & Bleecker Street,Signal Study,denied,40.70703,-73.909325,18,19,4,0
+Metropolitan Avenue & Flushing Avenue,Signal Study,denied,40.713295,-73.916238,18,22,0,0
+57 Avenue,SRTS,approved,40.728282,-73.89064899999998,18,20,6,0
+Madison Street,SRTS,denied,40.7050470187177,-73.9030295702986,18,20,5,0
+George Street,SRTS,denied,40.699161,-73.901523,18,29,4,0
+Metropolitan Avenue & Flushing Avenue,Signal Study,denied,40.713295,-73.916238,18,22,0,0
+79 Street,SRTS,denied,40.71997,-73.876305,18,27,2,0
+Decatur Street,SRTS,denied,40.69622,-73.899869,18,23,6,0
+55 Street,SRTS,denied,40.714363,-73.909614,18,26,2,0
+60 Street & Bleecker Street,Signal Study,denied,40.710755,-73.90509199999998,18,27,4,0
+Putnam Avenue,SRTS,denied,40.705148,-73.902121,18,21,6,0
+71 Street,SRTS,denied,40.728211,-73.89121199999998,18,20,3,0
+Cypress Avenue & Clover Place,Signal Study,denied,40.69319,-73.89575,18,19,3,0
+71 Street,SRTS,denied,40.728211,-73.89121199999998,18,20,3,0
+Juniper Blvd South,SRTS,denied,40.71997,-73.876305,18,27,2,0
+Juniper Blvd South,SRTS,denied,40.71997,-73.876305,18,27,2,0
+Cypress Avenue,SRTS,denied,40.6931942297256,-73.8957444841335,18,19,3,0
+57 Avenue,SRTS,denied,40.728211,-73.89121199999998,18,20,3,0
+Cooper Avenue,SRTS,denied,40.7006832423036,-73.88281071230291,18,19,4,0
+Bleecker Street,SRTS,approved,40.710755,-73.90509199999998,18,27,4,0
+Flushing Avenue,SRTS,denied,40.713295,-73.916238,18,22,0,0
+Furmanville Avenue,SRTS,denied,40.71783,-73.87239099999998,18,23,2,0
+Forest Avenue,SRTS,denied,40.710755,-73.905092,18,27,4,0
+Metropolitan Avenue & Flushing Avenue,Signal Study,denied,40.713295,-73.916238,18,22,0,0
+69 Place,SRTS,denied,40.719502,-73.889156,18,26,3,0
+60 Place,SRTS,denied,40.720096,-73.90561599999998,18,26,4,0
+Putnam Avenue,SRTS,denied,40.705148,-73.902121,18,21,6,0
+88 Street,SRTS,denied,40.704745,-73.860157,18,23,3,0
+Eliot Avenue & 69 Lane,Signal Study,denied,40.720535,-73.88885,18,26,3,0
+Penelope Avenue & 80 Street,Signal Study,denied,40.719395,-73.87471,18,27,2,0
+Eliot Avenue,SRTS,denied,40.720537,-73.88884,18,26,3,0
+88 Street,SRTS,denied,40.704745,-73.860157,18,23,3,0
+Penelope Avenue,SRTS,denied,40.719397,-73.87470399999998,18,27,2,0
+Cypress Avenue,SRTS,denied,40.6931942297256,-73.8957444841335,18,19,3,0
+George Street,SRTS,approved,40.699161,-73.90152299999998,18,29,4,0
+69 Street,SRTS,denied,40.723921,-73.894336,18,25,2,0
+Penelope Avenue,SRTS,denied,40.719014,-73.875538,18,27,2,0
+80 Street,SRTS,denied,40.71879,-73.874218,18,21,3,0
+Fairview Avenue,SRTS,denied,40.705047,-73.90303,18,20,5,0
+88 Street,SRTS,denied,40.704745,-73.860157,18,23,3,0
+Metropolitan Avenue & Grandview Avenue,Signal Study,denied,40.713333,-73.91305,17,20,1,0
+Grand Avenue & 72 Street,Signal Study,denied,40.72816,-73.891525,17,19,3,0
+Metropolitan Avenue & 65 Place,Signal Study,denied,40.71248,-73.895035,17,19,1,0
+Grandview Avenue & Rene Court,Signal Study,denied,40.712215,-73.91116,17,22,2,0
+Myrtle Avenue & 79 Lane,Signal Study,denied,40.702892,-73.86916,17,22,4,0
+Metropolitan Avenue & 65 Lane,Signal Study,approved,40.71244,-73.894025,17,19,2,0
+60 Street,SRTS,approved,40.725883,-73.90609499999998,17,22,2,0
+64 Road,SRTS,denied,40.718654,-73.87271099999998,17,20,1,0
+62 Street,SRTS,denied,40.704181,-73.894808,17,18,6,0
+57 Avenue,SRTS,denied,40.728268,-73.890628,17,19,6,0
+64 Road,SRTS,denied,40.718654,-73.87271099999998,17,20,1,0
+65 Street,SRTS,denied,40.7158210445534,-73.897642610173,17,28,2,0
+Grandview Avenue,SRTS,denied,40.7122146723285,-73.9111604011758,17,22,2,0
+65 Street,SRTS,denied,40.716236,-73.897822,17,28,2,0
+Grandview Avenue,SRTS,denied,40.713333224777,-73.91303824862598,17,20,1,0
+Metropolitan Avenue & 65 Lane,Signal Study,denied,40.71244,-73.894025,17,19,2,0
+Grandview Avenue,SRTS,denied,40.713334,-73.913038,17,20,1,0
+Grandview Avenue,SRTS,denied,40.712215,-73.91116,17,22,2,0
+65 Place,SRTS,denied,40.712479,-73.895025,17,19,1,0
+65 Lane,SRTS,approved,40.712442,-73.894019,17,19,2,0
+Grand Avenue,SRTS,denied,40.728597,-73.890851,17,19,6,0
+Eliot Avenue,SRTS,denied,40.715866,-73.898602,17,28,2,0
+73 Avenue & Woodhaven Boulevard,Signal Study,denied,40.71042,-73.85964,17,21,0,0
+Furmanville Avenue,SRTS,denied,40.717994,-73.871431,17,22,2,0
+Harman Street,SRTS,denied,40.706784,-73.91195,17,21,3,0
+Rene Court,SRTS,denied,40.712215,-73.91116,17,22,2,0
+Catalpa Avenue & 62 Street,Signal Study,approved,40.704178,-73.89481,17,18,6,0
+Eliot Avenue,SRTS,denied,40.716236,-73.897822,17,28,2,0
+65 Place,SRTS,approved,40.7025483824448,-73.8898294700137,17,18,0,0
+Grove Street,SRTS,denied,40.70616,-73.907836,16,17,4,0
+Norman Street,SRTS,approved,40.6966853223999,-73.9016929852356,16,24,7,0
+Cypress Hills Street,SRTS,denied,40.700474,-73.889692,16,19,7,0
+Grand Avenue,SRTS,denied,40.717765,-73.91805,16,19,4,0
+Norman Street,SRTS,denied,40.6966853223999,-73.9016929852356,16,24,7,0
+66 Place,SRTS,denied,40.702972098105,-73.8880434950077,16,22,5,0
+Grove Street,SRTS,approved,40.70616,-73.907836,16,17,4,0
+55 Avenue,SRTS,denied,40.7270095300624,-73.9017600968902,16,25,1,0
+Putnam Avenue,SRTS,denied,40.7024,-73.904541,16,16,4,0
+64 Street,SRTS,denied,40.699905,-73.892301,16,16,5,0
+69 Street,SRTS,denied,40.703995,-73.88373199999998,16,17,2,1
+Onderdonk Avenue,SRTS,denied,40.7024,-73.904541,16,16,4,0
+Greene Avenue,SRTS,denied,40.708555,-73.908961,16,19,5,0
+Norman Street,SRTS,approved,40.697171,-73.90121999999998,16,24,7,0
+Cypress Avenue,SRTS,denied,40.697171,-73.90122,16,24,7,0
+66 Street,SRTS,approved,40.7027616143833,-73.8889346797629,16,18,5,0
+Fairview Avenue & Greene Avenue,Signal Study,denied,40.708553,-73.908966,16,19,5,0
+56 Avenue,SRTS,approved,40.725205,-73.906172,16,20,3,0
+Caldwell Avenue,SRTS,approved,40.723215,-73.894114,16,21,2,0
+Flushing Avenue & Onderdonk Avenue,Signal Study,denied,40.711452,-73.91987,16,21,1,0
+Cypress Hills Street,SRTS,denied,40.700474,-73.889692,16,19,7,0
+69 Street,SRTS,denied,40.723215,-73.894114,16,21,2,0
+Fairview Avenue,SRTS,denied,40.708555,-73.908961,16,19,5,0
+Grand Avenue,SRTS,denied,40.717417,-73.91931,16,18,5,0
+64 Road,SRTS,denied,40.718941,-73.87209,16,19,1,0
+64 Road,SRTS,denied,40.718941,-73.87209,16,19,1,0
+66 Place,SRTS,denied,40.702972,-73.888043,16,22,5,0
+60 Street,SRTS,denied,40.725205,-73.906172,16,20,3,0
+Norman Street,SRTS,approved,40.6966853223999,-73.9016929852356,16,24,7,0
+Onderdonk Avenue,SRTS,denied,40.711456,-73.919858,16,21,1,0
+Starr Street,SRTS,denied,40.711404,-73.916749,16,20,1,0
+Onderdonk Avenue,SRTS,denied,40.7024,-73.90454099999998,16,16,4,0
+Grandview Avenue,SRTS,denied,40.7120387790092,-73.91086485297939,16,21,2,0
+Central Avenue,SRTS,denied,40.702762,-73.888935,16,18,5,0
+Stanhope Street,SRTS,denied,40.70766,-73.913435,16,24,5,0
+Fairview Avenue,SRTS,denied,40.708555,-73.908961,16,19,5,0
+Grand Avenue,SRTS,denied,40.72945,-73.890009,16,18,7,0
+Stanhope Street,SRTS,denied,40.70766,-73.913435,16,24,5,0
+Seneca Avenue & Stockholm Street,Signal Study,approved,40.70719,-73.91511,16,27,5,0
+69 Street,SRTS,denied,40.703995,-73.883732,16,17,2,1
+88 Street,SRTS,denied,40.710779,-73.86501,16,21,3,1
+78 Avenue,SRTS,denied,40.697758,-73.88900099999998,15,20,1,0
+82 Avenue,SRTS,denied,40.7029505872635,-73.85853059710301,15,18,2,0
+69 Lane,SRTS,denied,40.7268049019615,-73.8938663022074,15,16,2,0
+Cooper Avenue,SRTS,denied,40.698347,-73.890197,15,17,2,0
+71 Street,SRTS,denied,40.7277048530387,-73.89058163067939,15,17,3,0
+Cypress Avenue,SRTS,denied,40.697592,-73.90193,15,25,7,0
+59 Road,SRTS,denied,40.7179917983556,-73.9069284030287,15,20,2,0
+Fresh Pond Road,SRTS,denied,40.718276,-73.902184,15,20,1,0
+75 Street,SRTS,denied,40.712195,-73.877542,15,23,8,0
+Mt Olivet Crescent,SRTS,denied,40.716931,-73.898204,15,20,2,0
+Weirfield Street,SRTS,approved,40.698859,-73.90407,15,19,1,0
+Cooper Avenue,SRTS,denied,40.6985514835962,-73.88929151202198,15,19,2,0
+82 Street,SRTS,denied,40.725752,-73.87755699999998,15,18,7,0
+Cooper Avenue,SRTS,denied,40.697934,-73.892001,15,22,2,0
+69 Place,SRTS,approved,40.722716,-73.891712,15,17,2,0
+71 Street,SRTS,denied,40.7277048530387,-73.89058163067939,15,17,3,0
+Cooper Avenue & 65 Street,Signal Study,denied,40.69855,-73.8893,15,19,2,0
+69 Place,SRTS,approved,40.722716,-73.891712,15,17,2,0
+Mt Olivet Crescent,SRTS,denied,40.716931,-73.898204,15,20,2,0
+82 Avenue,SRTS,denied,40.7029505872635,-73.85853059710301,15,18,2,0
+Borden Avenue,SRTS,denied,40.7269575171825,-73.90519851473958,15,20,2,0
+69 Avenue,SRTS,denied,40.702206,-73.899189,15,19,3,0
+78 Avenue,SRTS,denied,40.697758,-73.88900099999998,15,20,1,0
+Woodward Avenue,SRTS,denied,40.7111178463514,-73.91626223921011,15,17,1,0
+82 Street,SRTS,denied,40.725752,-73.877557,15,18,7,0
+82 Street,SRTS,approved,40.725752,-73.87755699999998,15,18,7,0
+59 Drive,SRTS,denied,40.717857,-73.90306099999998,15,23,1,0
+69 Lane,SRTS,denied,40.7268049019615,-73.8938663022074,15,16,2,0
+Mt Olivet Crescent,SRTS,denied,40.716931,-73.898204,15,20,2,0
+82 Avenue,SRTS,approved,40.7029505872635,-73.85853059710301,15,18,2,0
+60 Street,SRTS,denied,40.7046605130931,-73.9004080569593,15,17,6,0
+70 Street,SRTS,denied,40.704405,-73.882011,15,15,3,1
+60 Street & 67 Avenue,Signal Study,denied,40.7046605130931,-73.9004080569593,15,17,6,0
+Eliot Avenue,SRTS,denied,40.716384,-73.897501,15,20,2,0
+71 Street,SRTS,denied,40.7277048530387,-73.89058163067939,15,17,3,0
+78 Avenue,SRTS,denied,40.697758,-73.88900099999998,15,20,1,0
+Cooper Avenue,SRTS,denied,40.698552,-73.889292,15,19,2,0
+60 Street,SRTS,denied,40.704661,-73.900408,15,17,6,0
+Greene Avenue,SRTS,denied,40.707471,-73.910063,15,15,4,0
+Cypress Avenue,SRTS,denied,40.698859,-73.90407,15,19,1,0
+Page Place,SRTS,denied,40.718008481235,-73.91804286622019,15,18,3,0
+Mt Olivet Crescent,SRTS,denied,40.716384,-73.897501,15,20,2,0
+70 Street,SRTS,denied,40.704405,-73.882011,15,15,3,1
+69 Place,SRTS,denied,40.722716,-73.891712,15,17,2,0
+Cypress Avenue,SRTS,denied,40.698859,-73.90407,15,19,1,0
+70 Street,SRTS,denied,40.704405,-73.882011,15,15,3,1
+Cooper Avenue & 64 Lane,Signal Study,denied,40.698345,-73.890205,15,17,2,0
+Myrtle Avenue,SRTS,denied,40.701233,-73.889298,15,18,5,0
+Wyckoff Avenue & Madison Street,Signal Study,denied,40.698677,-73.90954,15,15,5,0
+60 Street,SRTS,denied,40.702206,-73.899189,15,19,3,0
+Cooper Avenue & 64 Street,Signal Study,denied,40.697933,-73.892006,15,22,2,0
+70 Street & Central Avenue,Signal Study,denied,40.704403,-73.88202,15,15,3,1
+67 Avenue & 60 Street,Signal Study,denied,40.7046605130931,-73.9004080569593,15,17,6,0
+Mt Olivet Crescent,SRTS,approved,40.716384,-73.897501,15,20,2,0
+82 Street,SRTS,denied,40.725752,-73.877557,15,18,7,0
+Eliot Avenue,SRTS,denied,40.725752,-73.877557,15,18,7,0
+Mount Olivet Crescent,SRTS,denied,40.716384,-73.897501,15,20,2,0
+Fresh Pond Road,SRTS,denied,40.71868,-73.902292,15,20,1,0
+71 Street,SRTS,denied,40.7277048530387,-73.89058163067939,15,17,3,0
+67 Road,SRTS,denied,40.712195,-73.877542,15,23,8,0
+Cypress Hills Street,SRTS,denied,40.698858,-73.88818,14,19,1,0
+Cypress Hills Street,SRTS,denied,40.700292,-73.889527,14,17,5,0
+Fairview Avenue,SRTS,denied,40.708992,-73.9097,14,17,4,0
+69 Place,SRTS,denied,40.723889,-73.892655,14,17,2,0
+68 Road & 60 Street,Signal Study,denied,40.704068,-73.900113,14,16,4,0
+Norman Street,SRTS,denied,40.695117,-73.903217,14,15,7,0
+Eliot Avenue & 74 Street,Signal Study,denied,40.72202,-73.88565,14,17,3,0
+Fairview Avenue,SRTS,denied,40.709429,-73.910443,14,16,3,0
+59 Street,SRTS,denied,40.724694,-73.908766,14,23,0,0
+56 Drive,SRTS,denied,40.723921,-73.907566,14,18,3,0
+69 Place,SRTS,denied,40.723889,-73.892655,14,17,2,0
+Cooper Avenue,SRTS,denied,40.698882550838,-73.8882054375238,14,19,1,0
+Harman Street,SRTS,denied,40.708992,-73.9097,14,17,4,0
+56 Drive,SRTS,denied,40.723921,-73.907566,14,18,3,0
+60 Lane,SRTS,denied,40.6997123825435,-73.89500218391478,14,19,1,0
+Harman Street,SRTS,denied,40.708992,-73.9097,14,17,4,0
+Caldwell Avenue,SRTS,denied,40.723889,-73.892655,14,17,2,0
+Flushing Avenue & 54 Street,Signal Study,denied,40.7148898460946,-73.91349073239209,14,24,2,0
+56 Road,SRTS,denied,40.724641,-73.90795799999998,14,20,1,0
+69 Place & Caldwell Avenue,Signal Study,denied,40.72389,-73.892654,14,17,2,0
+56 Road,SRTS,denied,40.724694,-73.908766,14,23,0,0
+74 Street,SRTS,denied,40.7305899656587,-73.8881125538588,14,14,10,0
+74 Street,SRTS,denied,40.722021,-73.885641,14,17,3,0
+Centre Street,SRTS,approved,40.698435,-73.903357,14,20,2,0
+Shaler Avenue,SRTS,denied,40.702568,-73.893133,14,18,3,0
+78 Avenue,SRTS,denied,40.705446,-73.867766,14,20,3,0
+69 Place,SRTS,approved,40.723889,-73.892655,14,17,2,0
+Cypress Avenue,SRTS,denied,40.698435,-73.903357,14,20,2,0
+54 Street,SRTS,approved,40.7148898460946,-73.91349073239209,14,24,2,0
+68 Avenue,SRTS,denied,40.704068,-73.900113,14,16,4,0
+56 Drive,SRTS,denied,40.723921,-73.907566,14,18,3,0
+Himrod Street,SRTS,approved,40.709429,-73.910443,14,16,3,0
+74 Street,SRTS,denied,40.73059,-73.888113,14,14,10,0
+70 Avenue,SRTS,denied,40.706514,-73.87813,14,14,6,0
+Cypress Avenue,SRTS,denied,40.698435,-73.903357,14,20,2,0
+Cypress Avenue,SRTS,denied,40.698435,-73.903357,14,20,2,0
+58 Avenue,SRTS,denied,40.721162,-73.906332,14,18,3,0
+Cooper Avenue,SRTS,denied,40.707555,-73.87377399999998,14,15,1,0
+Eliot Avenue & 72 Street,Signal Study,denied,40.7216515,-73.88644199999999,14,21,2,0
+Cooper Avenue & Cypress Hills Street,Signal Study,denied,40.698882550838,-73.8882054375238,14,19,1,0
+Eliot Avenue,SRTS,denied,40.721652,-73.886439,14,21,2,0
+68 Avenue,SRTS,denied,40.704068,-73.900113,14,16,4,0
+65 Street,SRTS,denied,40.700292,-73.889527,14,17,5,0
+Flushing Avenue & 54 Street,Signal Study,denied,40.7148898460946,-73.91349073239209,14,24,2,0
+60 Street,SRTS,denied,40.704068,-73.900113,14,16,4,0
+69 Place,SRTS,denied,40.723889,-73.892655,14,17,2,0
+60 Street,SRTS,denied,40.705026,-73.900591,13,14,6,0
+78 Avenue & 80 Street,Signal Study,denied,40.705376,-73.86861,13,16,3,0
+78 Avenue,SRTS,denied,40.697551,-73.889899,13,15,2,0
+Greene Avenue,SRTS,denied,40.71096,-73.906498,13,14,3,0
+79 Lane,SRTS,denied,40.7048,-73.869437,13,17,3,0
+68 Street,SRTS,denied,40.7016618306215,-73.8842443970355,13,13,4,0
+79 Avenue,SRTS,denied,40.705418,-73.860693,13,19,6,0
+78 Avenue,SRTS,denied,40.697551,-73.889899,13,15,2,0
+Catalpa Avenue,SRTS,denied,40.702873,-73.899524,13,14,2,0
+Borden Avenue,SRTS,denied,40.726446,-73.90315699999998,13,24,0,0
+Lutheran Avenue & Eliot Avenue,Signal Study,denied,40.722525000000005,-73.884555,13,16,3,0
+75 Street,SRTS,denied,40.722062,-73.88458799999998,13,16,3,0
+Juniper Blvd North,SRTS,denied,40.721219,-73.884697,13,16,3,0
+Cooper Avenue,SRTS,denied,40.698772868795295,-73.888317419491,13,18,1,0
+69 Place,SRTS,denied,40.724984823030496,-73.8935372826134,13,16,0,0
+85 Street,SRTS,denied,40.727912,-73.87324099999998,13,15,7,0
+78 Avenue & 65 Street,Signal Study,denied,40.697551,-73.889899,13,15,2,0
+73 Street,SRTS,denied,40.705432,-73.877688,13,13,6,0
+Lutheran Avenue,SRTS,denied,40.722062,-73.884588,13,16,3,0
+79 Lane,SRTS,approved,40.704528,-73.869387,13,17,3,0
+Lutheran Avenue,SRTS,denied,40.722525,-73.884551,13,16,3,0
+Central Avenue & 69 Place,Signal Study,denied,40.7042,-73.88288,13,13,3,1
+60 Street,SRTS,denied,40.702873,-73.899524,13,14,2,0
+88 Street,SRTS,denied,40.705418,-73.860693,13,19,6,0
+Fresh Pond Road & Menahan Street,Signal Study,denied,40.710851,-73.901268,13,16,5,0
+88 Street,SRTS,denied,40.705418,-73.860693,13,19,6,0
+Central Avenue,SRTS,denied,40.705432,-73.877688,13,13,6,0
+Borden Avenue,SRTS,denied,40.7265005970772,-73.90364416488,13,24,0,0
+62 Street,SRTS,denied,40.700183,-73.89324899999998,13,13,3,0
+69 Place,SRTS,denied,40.704202,-73.882873,13,13,3,1
+75 Place & Juniper Boulevard North,Signal Study,denied,40.72167925541021,-73.88396912157482,13,16,3,0
+69 Place,SRTS,denied,40.733556,-73.894985,13,14,2,0
+Greene Avenue,SRTS,denied,40.71096,-73.906498,13,14,3,0
+69 Place,SRTS,approved,40.704202,-73.882873,13,13,3,1
+73 Street,SRTS,denied,40.705432,-73.877688,13,13,6,0
+Troutman Street,SRTS,denied,40.710727,-73.918622,13,21,2,0
+Summerfield Street,SRTS,denied,40.694694,-73.902511,13,14,7,0
+Juniper Blvd North,SRTS,denied,40.721219,-73.884697,13,16,3,0
+Dry Harbor Road,SRTS,denied,40.72048,-73.873587,13,22,2,0
+Greene Avenue,SRTS,denied,40.71096,-73.906498,13,14,3,0
+88 Street,SRTS,denied,40.705418,-73.860693,13,19,6,0
+Juniper Blvd North,SRTS,denied,40.721219,-73.884697,13,16,3,0
+78 Avenue,SRTS,denied,40.697551,-73.889899,13,15,2,0
+Caldwell Avenue,SRTS,denied,40.723144,-73.894265,13,17,2,0
+59 Drive,SRTS,denied,40.717996,-73.902102,13,18,1,0
+Cypress Hills Street,SRTS,approved,40.698015,-73.887882,13,18,1,0
+Cooper Avenue,SRTS,denied,40.698139,-73.891106,13,19,1,0
+79 Lane,SRTS,denied,40.7048,-73.869437,13,17,3,0
+Eliot Avenue,SRTS,denied,40.727912,-73.873241,13,15,7,0
+Menahan Street,SRTS,denied,40.710851,-73.901268,13,16,5,0
+Eliot Avenue & Lutheran Avenue,Signal Study,denied,40.722525000000005,-73.884555,13,16,3,0
+Troutman Street,SRTS,approved,40.709822,-73.91954599999998,13,16,2,0
+78 Avenue,SRTS,denied,40.697348,-73.890797,12,18,1,0
+Fresh Pond Road,SRTS,denied,40.719408,-73.902496,12,13,0,0
+Caldwell Avenue,SRTS,denied,40.7257064240748,-73.87675603681798,12,15,5,0
+Forest Avenue,SRTS,denied,40.708463,-73.904009,12,13,4,0
+Forest Avenue,SRTS,denied,40.708638,-73.904114,12,13,4,0
+Pleasantview Street,SRTS,denied,40.7130917823325,-73.8822730717148,12,16,3,0
+58 Street & 57 Drive,Signal Study,denied,40.721636,-73.91198799999998,12,14,1,0
+60 Street & 60 Avenue,Signal Study,approved,40.71642,-73.90618,12,13,5,0
+Myrtle Avenue & 72 Place,Signal Study,denied,40.70222,-73.87734,12,16,2,0
+78 Avenue,SRTS,denied,40.695157,-73.898616,12,16,4,0
+60 Street,SRTS,denied,40.704771,-73.900466,12,12,6,0
+68 Street,SRTS,denied,40.722824,-73.89497299999998,12,16,2,0
+De Kalb Avenue,SRTS,approved,40.707632,-73.915841,12,16,4,0
+73 Place & Cooper Avenue,Signal Study,denied,40.70547251451677,-73.87649615255108,12,16,4,0
+54 Avenue,SRTS,denied,40.728967,-73.895587,12,15,2,0
+68 Street,SRTS,denied,40.722824,-73.894973,12,16,2,0
+Juniper Boulevard North,SRTS,denied,40.72175,-73.87545,12,16,3,1
+Linden Street,SRTS,denied,40.7084623282839,-73.90400928896558,12,13,4,0
+61 Street,SRTS,denied,40.725763,-73.90420399999998,12,22,0,0
+60 Street,SRTS,denied,40.7047703535237,-73.9004656002603,12,12,6,0
+Linden Street,SRTS,denied,40.708463,-73.904009,12,13,4,0
+82 Street,SRTS,denied,40.726375,-73.87805,12,18,4,0
+Dekalb Avenue & Onderdonk Avenue,Signal Study,denied,40.707632,-73.915841,12,16,4,0
+Grand Avenue & 74 Street,Signal Study,denied,40.7301969282631,-73.8875611761351,12,12,9,0
+Fresh Pond Road & 59 Avenue,Signal Study,denied,40.719406,-73.902504,12,13,0,0
+78 Avenue & 64 Place,Signal Study,denied,40.697346,-73.89081,12,18,1,0
+74 Street,SRTS,approved,40.7301969282631,-73.8875611761351,12,12,9,0
+60 Drive,SRTS,denied,40.728435,-73.873908,12,14,6,0
+Caldwell Avenue,SRTS,denied,40.7257064240748,-73.87675603681798,12,15,5,0
+78 Avenue,SRTS,denied,40.695157,-73.898616,12,16,4,0
+54 Avenue,SRTS,denied,40.728967,-73.895587,12,15,2,0
+71 Street,SRTS,denied,40.727759,-73.892284,12,13,1,0
+Harman Street,SRTS,denied,40.710952,-73.907696,12,14,5,0
+Grand Avenue & 74 Street,Signal Study,denied,40.7301969282631,-73.8875611761351,12,12,9,0
+60 Street & 59 Road,Signal Study,denied,40.718044,-73.90655,12,16,2,0
+Harman Street,SRTS,approved,40.710952,-73.907696,12,14,5,0
+59 Avenue,SRTS,denied,40.719408,-73.902496,12,13,0,0
+Dekalb Avenue,SRTS,denied,40.707632,-73.915841,12,16,4,0
+83 Street,SRTS,denied,40.710402,-73.86662,12,16,3,1
+Seneca Avenue,SRTS,denied,40.707632,-73.915841,12,16,4,0
+Cooper Avenue,SRTS,denied,40.700476,-73.883431,12,14,3,0
+60 Street,SRTS,approved,40.716422,-73.906177,12,13,5,0
+55 Avenue,SRTS,denied,40.7270401185164,-73.90222547317141,12,21,0,0
+69 Place,SRTS,denied,40.724463,-73.893127,12,15,0,0
+71 Street,SRTS,denied,40.727759,-73.892284,12,13,1,0
+Grand Avenue & 74 Street,Signal Study,denied,40.7301969282631,-73.8875611761351,12,12,9,0
+Cooper Avenue,SRTS,denied,40.69774,-73.892885,12,18,1,0
+Caldwell Avenue,SRTS,denied,40.722824,-73.89497299999998,12,16,2,0
+81 Street,SRTS,denied,40.704677,-73.867601,12,18,3,0
+64 Place,SRTS,denied,40.697348,-73.890797,12,18,1,0
+68 Street,SRTS,denied,40.722824,-73.89497299999998,12,16,2,0
+60 Street,SRTS,denied,40.716422,-73.906177,12,13,5,0
+78 Avenue & 64 Place,Signal Study,denied,40.697346,-73.89081,12,18,1,0
+78 Avenue,SRTS,denied,40.697348,-73.890797,12,18,1,0
+78 Avenue,SRTS,denied,40.697348,-73.890797,12,18,1,0
+Cooper Avenue & 68 Street,Signal Study,denied,40.700474,-73.88344,12,14,3,0
+60 Avenue,SRTS,approved,40.716422,-73.906177,12,13,5,0
+60 Avenue,SRTS,denied,40.7168657667469,-73.9027851110418,12,18,3,0
+82 Street,SRTS,denied,40.726113808784,-73.8778448597815,12,18,4,0
+Metropolitan Avenue,SRTS,denied,40.712455,-73.882054,12,16,3,0
+Cooper Avenue & 83 Street,Signal Study,denied,40.7104,-73.866625,12,16,3,1
+Linden Street,SRTS,denied,40.707991,-73.904778,12,13,4,0
+58 Street,SRTS,denied,40.721636,-73.911988,12,14,1,0
+58 Street,SRTS,approved,40.721636,-73.91198799999998,12,14,1,0
+79 Street,SRTS,denied,40.712509,-73.873541,12,12,4,0
+70 Street,SRTS,denied,40.713293,-73.88514,12,19,1,0
+Harman Street,SRTS,denied,40.707908,-73.910805,12,12,3,0
+54 Street & Grand Avenue,Signal Study,denied,40.718555,-73.91518,11,15,0,0
+Gates Avenue,SRTS,denied,40.706361,-73.905257,11,11,3,0
+Myrtle Avenue & 81 Street,Signal Study,denied,40.7030515,-73.867253,11,13,3,0
+Juniper Valley Road,SRTS,denied,40.7158953974547,-73.87308028681421,11,14,0,0
+Grand Avenue,SRTS,denied,40.71881,-73.914265,11,15,0,0
+78 Avenue,SRTS,denied,40.697143,-73.89169599999998,11,18,0,0
+Starr Street,SRTS,approved,40.71029,-73.917883,11,17,4,0
+Fairview Avenue,SRTS,denied,40.708115,-73.908215,11,15,3,0
+61 Street,SRTS,denied,40.72301,-73.904573,11,13,4,0
+Fairview Avenue,SRTS,denied,40.706361,-73.905257,11,11,3,0
+72 Place,SRTS,denied,40.705225,-73.878565,11,11,3,0
+Cooper Avenue,SRTS,denied,40.7003466819351,-73.8838427554706,11,13,2,0
+Himrod Street,SRTS,approved,40.710622,-73.909222,11,15,3,0
+56 Street,SRTS,denied,40.719051,-73.913399,11,12,0,0
+Pleasant View Street,SRTS,denied,40.71343,-73.882294,11,15,3,0
+79 Street,SRTS,denied,40.713233541568,-73.8735939666082,11,11,2,0
+Juniper Valley Road,SRTS,denied,40.7158845654911,-73.87321377810649,11,14,0,0
+Grand Avenue,SRTS,denied,40.719051,-73.913399,11,12,0,0
+Linden Street,SRTS,denied,40.70898,-73.90183,11,11,2,0
+Himrod Street,SRTS,approved,40.710622,-73.909222,11,15,3,0
+Himrod Street,SRTS,denied,40.708345,-73.91154799999998,11,11,2,0
+57 Road & 61 Street,Signal Study,denied,40.722599,-73.90456299999998,11,13,3,0
+Rust Street & Maspeth Avenue,Signal Study,approved,40.72205984333144,-73.91329813158207,11,13,1,0
+Brown Place,SRTS,denied,40.724243,-73.895819,11,13,3,0
+69 Place,SRTS,approved,40.721524,-73.89075099999998,11,13,2,0
+58 Road,SRTS,denied,40.723425,-73.89541599999998,11,15,2,0
+57 Avenue,SRTS,denied,40.7284066182757,-73.8896460084337,11,12,5,0
+Onderdonk Avenue & Starr Street,Signal Study,approved,40.71029,-73.91789,11,17,4,0
+Linden Street,SRTS,denied,40.70898,-73.90183,11,11,2,0
+Himrod Street,SRTS,denied,40.711836,-73.907983,11,11,4,0
+Grand Avenue,SRTS,denied,40.718556,-73.915167,11,15,0,0
+Brown Place,SRTS,denied,40.7242430800018,-73.89581857601078,11,13,3,0
+Himrod Street & Fairview Avenue,Signal Study,approved,40.708345,-73.91154799999998,11,11,2,0
+68 Avenue & 80 Street,Signal Study,denied,40.711246,-73.87095,11,16,2,0
+58 Road,SRTS,denied,40.723425,-73.895416,11,15,2,0
+Cooper Avenue & 65 Place,Signal Study,denied,40.699539,-73.888615,11,13,2,0
+69 Place,SRTS,denied,40.721524,-73.890751,11,13,2,0
+69 Place,SRTS,approved,40.721524,-73.89075099999998,11,13,2,0
+Forest Avenue,SRTS,denied,40.707894,-73.903678,11,11,6,0
+78 Avenue & 64 Street,Signal Study,denied,40.697144,-73.89169,11,18,0,0
+77 Avenue & 81 Street,Signal Study,denied,40.7066131053992,-73.8686363313541,11,11,4,0
+56 Street & Grand Avenue,Signal Study,denied,40.719051,-73.913399,11,12,0,0
+Grandview Avenue & Grove Street,Signal Study,denied,40.708427,-73.905525,11,13,3,0
+72 Place,SRTS,denied,40.705225,-73.87856499999998,11,11,3,0
+77 Avenue,SRTS,denied,40.706613,-73.868636,11,11,4,0
+Linden Street,SRTS,approved,40.70898,-73.90183,11,11,2,0
+60 Place,SRTS,denied,40.70898,-73.90183,11,11,2,0
+Brown Place,SRTS,denied,40.723425,-73.895416,11,15,2,0
+78 Avenue,SRTS,denied,40.697143,-73.89169599999998,11,18,0,0
+Juniper Valley Road,SRTS,denied,40.7158845654911,-73.87321377810649,11,14,0,0
+60 Avenue,SRTS,denied,40.716893,-73.901797,11,17,2,0
+61 Street,SRTS,denied,40.72301,-73.904573,11,13,4,0
+78 Avenue,SRTS,denied,40.697143,-73.89169599999998,11,18,0,0
+Grandview Avenue,SRTS,denied,40.708428,-73.905517,11,13,3,0
+Juniper Valley Road,SRTS,denied,40.7158953974547,-73.87308028681421,11,14,0,0
+74 Street,SRTS,denied,40.731194,-73.88818,11,11,9,0
+Maspeth Avenue,SRTS,approved,40.72301,-73.904573,11,13,4,0
+74 Street,SRTS,denied,40.731194,-73.88818,11,11,9,0
+Penelope Avenue,SRTS,denied,40.720019,-73.873368,11,12,4,0
+Juniper Valley Road,SRTS,denied,40.7158845654911,-73.87321377810649,11,14,0,0
+74 Street,SRTS,approved,40.7274024515934,-73.8872411767173,11,13,4,0
+88 Street,SRTS,denied,40.7099320188978,-73.8643266473765,11,15,3,1
+Caldwell Avenue,SRTS,approved,40.725318517806095,-73.881125831003,11,17,1,0
+Bleecker Street,SRTS,denied,40.708115,-73.908215,11,15,3,0
+72 Place,SRTS,denied,40.705225,-73.87856499999998,11,11,3,0
+61 Street,SRTS,denied,40.722599,-73.90456299999998,11,13,3,0
+63 Avenue,SRTS,denied,40.722193,-73.874161,11,19,1,0
+Myrtle Avenue & 73 Place,Signal Study,denied,40.702374,-73.87544,11,14,1,0
+Juniper Boulevard North,SRTS,denied,40.722007,-73.874555,11,19,1,0
+66 Drive & Pleasantview Street,Signal Study,denied,40.71343,-73.882295,11,15,3,0
+Dry Harbor Road & 63 Avenue,Signal Study,denied,40.72219,-73.87417,11,19,1,0
+Woodward Avenue,SRTS,denied,40.708345,-73.911548,11,11,2,0
+57 Avenue,SRTS,denied,40.7284066182757,-73.8896460084337,11,12,5,0
+Stephen Street,SRTS,denied,40.698741,-73.900814,11,18,1,0
+60 Place,SRTS,denied,40.70898,-73.90183,11,11,2,0
+72 Place,SRTS,denied,40.705225,-73.87856499999998,11,11,3,0
+78 Avenue & 64 Street,Signal Study,denied,40.697144,-73.89169,11,18,0,0
+Cooper Avenue,SRTS,denied,40.699539,-73.888615,11,13,2,0
+Penelope Avenue,SRTS,denied,40.720019,-73.873368,11,12,4,0
+61 Street & 57 Road,Signal Study,denied,40.722599,-73.90456299999998,11,13,3,0
+Starr Street,SRTS,denied,40.71029,-73.917883,11,17,4,0
+Starr Street & Onderdonk Avenue,Signal Study,denied,40.71029,-73.91789,11,17,4,0
+Juniper Valley Road & 80 Street,Signal Study,denied,40.71599,-73.87209,11,14,1,0
+62 Street,SRTS,denied,40.733659,-73.900069,10,13,0,0
+Putnam Avenue & Forest Avenue,Signal Study,denied,40.705684,-73.902372,10,12,3,0
+65 Place,SRTS,denied,40.733658621000494,-73.9000688373264,10,13,0,0
+Forest Avenue,SRTS,denied,40.705684,-73.902372,10,12,3,0
+60 Place,SRTS,denied,40.708323,-73.901438,10,10,2,0
+Forest Avenue,SRTS,denied,40.698754,-73.897258,10,10,0,0
+Forest Avenue & Putnam Avenue,Signal Study,denied,40.705684,-73.902372,10,12,3,0
+Forest Avenue & Madison Street,Signal Study,denied,40.705684,-73.902372,10,12,3,0
+Decatur Street & Forest Avenue,Signal Study,denied,40.698753,-73.89726,10,10,0,0
+69 Lane,SRTS,denied,40.729098,-73.894505,10,13,4,0
+56 Avenue,SRTS,approved,40.725071,-73.90428799999998,10,13,2,0
+58 Avenue,SRTS,denied,40.7240673764602,-73.8957755575985,10,12,2,0
+60 Road & 60 Street,Signal Study,approved,40.71574,-73.90603,10,11,5,0
+Cypress Avenue,SRTS,approved,40.6926361295418,-73.8947428731522,10,10,3,0
+58 Avenue,SRTS,denied,40.724068,-73.895776,10,12,2,0
+60 Place,SRTS,denied,40.707013,-73.900661,10,11,2,0
+Onderdonk Avenue,SRTS,approved,40.7100592566313,-73.91749355532971,10,16,4,0
+Fairview Avenue & Linden Street,Signal Study,denied,40.7068,-73.906006,10,10,3,0
+Eliot Avenue,SRTS,denied,40.726354,-73.876297,10,12,4,0
+Fairview Avenue & Menahan Street,Signal Study,approved,40.707676,-73.907486,10,11,3,0
+74 Street,SRTS,denied,40.7280117516385,-73.887204066027,10,12,4,0
+74 Street,SRTS,denied,40.7276851400581,-73.8872190506702,10,12,4,0
+74 Street,SRTS,denied,40.7280913459656,-73.8872003233278,10,12,4,0
+57 Avenue,SRTS,denied,40.7284935649785,-73.88872582522819,10,11,4,0
+54 Avenue,SRTS,denied,40.729084,-73.89462399999998,10,13,4,0
+Cooper Avenue,SRTS,denied,40.6995062166784,-73.8888283037934,10,12,2,0
+54 Avenue,SRTS,denied,40.729098,-73.89450499999998,10,13,4,0
+Aubrey Avenue,SRTS,denied,40.710083,-73.864445,10,14,2,1
+Brown Place,SRTS,denied,40.724068,-73.895776,10,12,2,0
+Fairview Avenue,SRTS,denied,40.705484,-73.903772,10,12,3,0
+60 Place,SRTS,denied,40.708323,-73.901438,10,10,2,0
+60 Road,SRTS,approved,40.715743,-73.906023,10,11,5,0
+Caldwell Avenue,SRTS,denied,40.725613,-73.87634099999998,10,12,4,0
+75 Avenue,SRTS,denied,40.698739,-73.893042,10,13,1,0
+60 Road & 60 Street,Signal Study,denied,40.71574,-73.90603,10,11,5,0
+60 Street & 59 Avenue,Signal Study,denied,40.718796,-73.90671,10,15,1,0
+60 Street,SRTS,denied,40.715743,-73.906023,10,11,5,0
+60 Street,SRTS,denied,40.718796,-73.906707,10,15,1,0
+57 Avenue,SRTS,approved,40.7285315092971,-73.88822785800099,10,11,4,0
+Eliot Avenue,SRTS,denied,40.720909,-73.888042,10,17,1,0
+65 Place,SRTS,approved,40.7333018125967,-73.9000801972023,10,13,0,0
+54 Avenue,SRTS,denied,40.729098,-73.894505,10,13,4,0
+Eliot Avenue,SRTS,denied,40.715546,-73.899263,10,16,0,0
+54 Avenue,SRTS,denied,40.729084,-73.89462399999998,10,13,4,0
+59 Street,SRTS,denied,40.719711,-73.908257,10,15,2,0
+65 Place,SRTS,denied,40.73434,-73.900028,10,15,0,0
+Palmetto Street,SRTS,denied,40.707131,-73.903257,10,10,6,0
+71 Street,SRTS,denied,40.713303,-73.88426,10,13,2,0
+62 Street,SRTS,denied,40.733659,-73.900069,10,13,0,0
+Gates Avenue,SRTS,denied,40.708323,-73.901438,10,10,2,0
+70 Street,SRTS,denied,40.726804,-73.892542,10,11,0,0
+60 Street,SRTS,denied,40.718796,-73.90670699999998,10,15,1,0
+82 Street,SRTS,denied,40.705519,-73.866878,10,13,3,0
+57 Avenue,SRTS,denied,40.7284935649785,-73.88872582522819,10,11,4,0
+Gates Avenue,SRTS,denied,40.708323,-73.901438,10,10,2,0
+71 Street,SRTS,denied,40.713303,-73.88426,10,13,2,0
+59 Street,SRTS,denied,40.718523,-73.908309,10,11,2,0
+Eliot Avenue,SRTS,denied,40.715546,-73.899263,10,16,0,0
+59 Street,SRTS,denied,40.719028,-73.908215,10,15,1,0
+58 Drive,SRTS,denied,40.719711,-73.908257,10,15,2,0
+61 Street,SRTS,denied,40.725071,-73.90428799999998,10,13,2,0
+60 Street,SRTS,approved,40.715743,-73.906023,10,11,5,0
+Forest Avenue,SRTS,denied,40.707131,-73.903257,10,10,6,0
+65 Place,SRTS,approved,40.7333018125967,-73.9000801972023,10,13,0,0
+Brown Place & 58 Avenue,Signal Study,denied,40.724068,-73.895776,10,12,2,0
+59 Street & 59 Avenue,Signal Study,denied,40.719028,-73.908215,10,15,1,0
+64 Street & 75 Avenue,Signal Study,denied,40.698814,-73.89215,10,13,2,0
+Gates Avenue & 60 Place,Signal Study,denied,40.70832,-73.90144,10,10,2,0
+59 Avenue,SRTS,denied,40.7189814212081,-73.9054118789648,10,16,1,0
+64 Street,SRTS,denied,40.698815,-73.89214699999998,10,13,2,0
+71 Street,SRTS,denied,40.713303,-73.88426,10,13,2,0
+70 Avenue,SRTS,denied,40.703818,-73.89105399999998,10,11,1,0
+54 Avenue,SRTS,denied,40.729098,-73.89450499999998,10,13,4,0
+Woodward Avenue,SRTS,denied,40.7107468400511,-73.9156278671046,10,10,0,0
+Caldwell Avenue,SRTS,denied,40.725613,-73.87634099999998,10,12,4,0
+65 Place,SRTS,denied,40.73434,-73.900028,10,15,0,0
+Fairview Avenue,SRTS,denied,40.707678,-73.907477,10,11,3,0
+Fairview Avenue,SRTS,denied,40.707238,-73.906738,10,11,3,0
+59 Street,SRTS,denied,40.719711,-73.908257,10,15,2,0
+78 Avenue & 82 Street,Signal Study,denied,40.705519,-73.866878,10,13,3,0
+Fairview Avenue,SRTS,denied,40.706798,-73.905995,10,10,3,0
+Fairview Avenue,SRTS,denied,40.705484,-73.903772,10,12,3,0
+Woodbine Street,SRTS,denied,40.707013,-73.900661,10,11,2,0
+77 Road & 80 Street,Signal Study,denied,40.70608,-73.86882,10,10,3,0
+61 Street,SRTS,approved,40.725071,-73.90428799999998,10,13,2,0
+65 Place,SRTS,denied,40.733658621000494,-73.9000688373264,10,13,0,0
+60 Road,SRTS,denied,40.715743,-73.906023,10,11,5,0
+Flushing Avenue & 58 Drive,Signal Study,denied,40.719711,-73.908257,10,15,2,0
+Metropolitan Avenue,SRTS,denied,40.71223,-73.884352,10,13,2,0
+60 Avenue,SRTS,denied,40.7227088247667,-73.8899873500536,10,12,3,0
+54 Avenue,SRTS,denied,40.729084,-73.894624,10,13,4,0
+Woodbine Street,SRTS,approved,40.7054840595291,-73.9037719252398,10,12,3,0
+78 Avenue,SRTS,approved,40.705519,-73.866878,10,13,3,0
+54 Avenue,SRTS,denied,40.729098,-73.89450499999998,10,13,4,0
+69 Lane,SRTS,denied,40.729097361853,-73.894504880278,10,13,4,0
+57 Avenue,SRTS,denied,40.7285315092971,-73.88822785800099,10,11,4,0
+60 Place,SRTS,denied,40.707013,-73.900661,10,11,2,0
+Grove Street,SRTS,denied,40.70989,-73.901147,9,10,1,0
+61 Road,SRTS,denied,40.718182,-73.891997,9,22,0,0
+Central Avenue,SRTS,denied,40.704607,-73.881148,9,9,2,0
+Grove Street & 60 Place,Signal Study,denied,40.709633,-73.90223,9,10,1,0
+Madison Street,SRTS,denied,40.7058370258301,-73.9024549446711,9,11,2,0
+83 Place,SRTS,denied,40.7203631117342,-73.86994041854268,9,10,1,0
+Palmetto Street,SRTS,denied,40.70767,-73.901049,9,9,2,0
+59 Drive,SRTS,approved,40.717363,-73.90639199999998,9,9,2,0
+70 Street,SRTS,denied,40.717786,-73.88550399999998,9,10,2,0
+Andrews Avenue,SRTS,denied,40.714455,-73.908275,9,10,4,0
+71 Street,SRTS,approved,40.704607,-73.88114799999998,9,9,2,0
+68 Avenue,SRTS,approved,40.711139,-73.873436,9,9,3,0
+58 Avenue & 69 Street,Signal Study,denied,40.72462,-73.89455,9,11,1,0
+Flushing Avenue & 60 Street,Signal Study,denied,40.719334,-73.906845,9,13,1,0
+59 Drive & 60 Street,Signal Study,denied,40.71736,-73.9064,9,9,2,0
+Andrews Avenue,SRTS,denied,40.714455,-73.908275,9,10,4,0
+73 Place,SRTS,denied,40.714323,-73.880561,9,11,4,0
+60 Place,SRTS,denied,40.709636,-73.902222,9,10,1,0
+73 Place,SRTS,denied,40.714323,-73.880561,9,11,4,0
+Forest Avenue & Gates Avenue,Signal Study,denied,40.707804,-73.903624,9,9,5,0
+65 Place,SRTS,denied,40.728076,-73.900272,9,9,1,0
+Grove Street,SRTS,denied,40.70989,-73.90114699999998,9,10,1,0
+81 Street,SRTS,denied,40.723486,-73.87684,9,11,0,0
+47 Street,SRTS,denied,40.720153,-73.923159,9,10,2,0
+59 Drive,SRTS,denied,40.717381,-73.907683,9,10,1,0
+Forest Avenue,SRTS,denied,40.707804,-73.903624,9,9,5,0
+Forest Avenue,SRTS,denied,40.705837,-73.902455,9,11,2,0
+Grove Street,SRTS,denied,40.709636,-73.902222,9,10,1,0
+81 Street,SRTS,denied,40.723486,-73.87684,9,11,0,0
+Putnam Avenue & 60 Place,Signal Study,denied,40.705772,-73.89997,9,10,4,0
+Putnam Avenue & 60 Lane,Signal Study,denied,40.706017,-73.89896,9,10,4,0
+69 Street & Juniper Valley Road,Signal Study,denied,40.72184062371875,-73.89068898306941,9,11,3,0
+56 Street,SRTS,denied,40.714455,-73.908275,9,10,4,0
+82 Place,SRTS,denied,40.72238,-73.873753,9,17,1,0
+Cooper Avenue,SRTS,denied,40.693437,-73.900032,9,10,1,0
+56 Street,SRTS,approved,40.714455,-73.908275,9,10,4,0
+63 Avenue,SRTS,approved,40.72238,-73.87375299999998,9,17,1,0
+60 Place,SRTS,denied,40.70767,-73.901049,9,9,2,0
+Forest Avenue,SRTS,denied,40.7058370258301,-73.9024549446711,9,11,2,0
+73 Place,SRTS,denied,40.714323,-73.880561,9,11,4,0
+Harman Street,SRTS,denied,40.710185,-73.908479,9,11,3,0
+54 Place,SRTS,approved,40.7154135972207,-73.9128299189381,9,19,1,0
+56 Street,SRTS,denied,40.714455,-73.908275,9,10,4,0
+72 Place,SRTS,denied,40.729690177207,-73.8914948184579,9,10,6,0
+Penelope Avenue,SRTS,denied,40.722012,-73.869068,9,10,3,0
+60 Place,SRTS,denied,40.709636,-73.90222199999998,9,10,1,0
+68 Avenue,SRTS,approved,40.711139,-73.873436,9,9,3,0
+59 Road,SRTS,denied,40.718143926150496,-73.9083819872191,9,10,2,0
+71 Street,SRTS,denied,40.71815,-73.88473899999998,9,10,3,0
+47 Street,SRTS,denied,40.720153,-73.923159,9,10,2,0
+70 Avenue,SRTS,denied,40.704179,-73.889517,9,10,0,0
+60 Place,SRTS,denied,40.70767,-73.901049,9,9,2,0
+Putnam Avenue,SRTS,denied,40.706018,-73.898945,9,10,4,0
+59 Place,SRTS,denied,40.716261,-73.907436,9,10,4,0
+63 Avenue,SRTS,denied,40.722752,-73.872955,9,16,1,0
+Palmetto Street & 60 Place,Signal Study,approved,40.70767,-73.901054,9,9,2,0
+Metropolitan Avenue & 64 Street,Signal Study,denied,40.712555,-73.89711,9,10,0,0
+82 Place & Penelope Avenue,Signal Study,denied,40.72238,-73.873753,9,17,1,0
+Fairview Avenue & Palmetto Street,Signal Study,approved,40.70592,-73.90452,9,9,2,0
+81 Street,SRTS,denied,40.723486,-73.87684,9,11,0,0
+Putnam Avenue,SRTS,denied,40.705772,-73.899963,9,10,4,0
+65 Place,SRTS,denied,40.728076,-73.900272,9,9,1,0
+67 Place,SRTS,approved,40.7033793780244,-73.8863188381383,9,13,2,0
+57 Avenue & 74 Street,Signal Study,denied,40.72861,-73.88721,9,10,4,0
+68 Street,SRTS,approved,40.7035871254295,-73.88545649472718,9,10,3,0
+84 Place & Penelope Avenue,Signal Study,denied,40.72201,-73.86907,9,10,3,0
+60 Road & 59 Place,Signal Study,denied,40.715538,-73.90725,9,10,5,0
+47 Street,SRTS,denied,40.720153,-73.923159,9,10,2,0
+59 Drive,SRTS,denied,40.717381,-73.907683,9,10,1,0
+Gates Avenue,SRTS,denied,40.707804,-73.903624,9,9,5,0
+61 Road,SRTS,denied,40.718182,-73.891997,9,22,0,0
+54 Place,SRTS,denied,40.7147238297825,-73.9117378241305,9,19,1,0
+Onderdonk Avenue,SRTS,denied,40.708537,-73.914916,9,10,4,0
+59 Place,SRTS,denied,40.717381,-73.907683,9,10,1,0
+68 Street,SRTS,approved,40.7035871254295,-73.88545649472718,9,10,3,0
+59 Drive,SRTS,approved,40.717363,-73.90639199999998,9,9,2,0
+Juniper Blvd South,SRTS,denied,40.7173485282438,-73.88460675151849,9,11,3,0
+57 Avenue,SRTS,approved,40.7286128491747,-73.8871994405781,9,10,4,0
+Grove Street,SRTS,denied,40.709636,-73.90222199999998,9,10,1,0
+60 Street,SRTS,approved,40.717363,-73.90639199999998,9,9,2,0
+Gates Avenue,SRTS,denied,40.7078032629805,-73.90362430225461,9,9,5,0
+59 Place,SRTS,denied,40.717381,-73.907683,9,10,1,0
+73 Place,SRTS,denied,40.714323,-73.880561,9,11,4,0
+57 Avenue & 74 Street,Signal Study,denied,40.72861,-73.88721,9,10,4,0
+59 Drive,SRTS,denied,40.717363,-73.906392,9,9,2,0
+Eliot Avenue,SRTS,denied,40.726726,-73.875499,9,14,2,0
+66 Street,SRTS,approved,40.704179,-73.889517,9,10,0,0
+Putnam Avenue,SRTS,denied,40.706018,-73.898945,9,10,4,0
+Putnam Avenue,SRTS,denied,40.705772,-73.899963,9,10,4,0
+62 Avenue & 56 Street,Signal Study,denied,40.714455,-73.908275,9,10,4,0
+69 Street & Juniper Valley Road,Signal Study,denied,40.72184062371875,-73.89068898306941,9,11,3,0
+68 Street & 61 Road,Signal Study,denied,40.718182,-73.891997,9,22,0,0
+Cypress Hills Street,SRTS,denied,40.699394,-73.88867,9,11,1,0
+81 Street,SRTS,denied,40.723486,-73.87684,9,11,0,0
+47 Street,SRTS,denied,40.720153,-73.923159,9,10,2,0
+60 Place & Grove Street,Signal Study,denied,40.709633,-73.90223,9,10,1,0
+79 Street,SRTS,denied,40.711139,-73.873436,9,9,3,0
+Fairview Avenue,SRTS,denied,40.705924,-73.904514,9,9,2,0
+59 Street,SRTS,denied,40.718143926150496,-73.9083819872191,9,10,2,0
+Cooper Avenue & 60 Street,Signal Study,denied,40.69513,-73.895615,8,8,3,0
+70 Avenue,SRTS,denied,40.7066750190508,-73.8749373186542,8,12,1,0
+Willoughby Avenue,SRTS,denied,40.709851,-73.91714,8,12,2,0
+71 Street,SRTS,denied,40.717524,-73.88422799999998,8,9,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+70 Avenue,SRTS,denied,40.7066750190508,-73.8749373186542,8,12,1,0
+75 Avenue,SRTS,denied,40.698511,-73.895779,8,10,0,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+60 Place,SRTS,denied,40.698511,-73.895779,8,10,0,0
+60 Street & 56 Drive,Signal Study,denied,40.7238375,-73.90633700000001,8,10,2,0
+Gates Avenue & Grandview Avenue,Signal Study,denied,40.70755,-73.90404,8,8,5,0
+72 Street & Central Avenue,Signal Study,denied,40.705017,-73.87944,8,8,2,0
+73 Place & 66 Road,Signal Study,denied,40.715053,-73.881151,8,9,4,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+60 Drive,SRTS,denied,40.715068,-73.905868,8,9,5,0
+Juniper Blvd South,SRTS,denied,40.718096230524,-73.88300375611918,8,9,4,0
+73 Place,SRTS,denied,40.715053,-73.881151,8,9,4,0
+65 Place,SRTS,denied,40.703971,-73.890408,8,9,0,0
+70 Avenue,SRTS,denied,40.7066750190508,-73.8749373186542,8,12,1,0
+Cooper Avenue,SRTS,denied,40.7001034811577,-73.8849215109729,8,10,2,0
+67 Street,SRTS,denied,40.701508,-73.88607,8,8,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+Harman Street,SRTS,denied,40.711397,-73.907244,8,8,4,0
+65 Place,SRTS,denied,40.7284135571498,-73.90026071036611,8,8,1,0
+Myrtle Avenue,SRTS,denied,40.701402,-73.887401,8,8,4,0
+73 Place,SRTS,denied,40.715053,-73.881151,8,9,4,0
+Stephen Street,SRTS,approved,40.695527,-73.90394899999998,8,9,4,0
+75 Avenue & 60 Place,Signal Study,denied,40.698405,-73.896663,8,8,0,0
+71 Street,SRTS,denied,40.717524,-73.884228,8,9,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+76 Street,SRTS,denied,40.706729,-73.874241,8,9,1,0
+Juniper Blvd South,SRTS,denied,40.718096230524,-73.88300375611918,8,9,4,0
+Juniper Blvd South,SRTS,denied,40.717524,-73.88422799999998,8,9,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+75 Avenue,SRTS,denied,40.698405,-73.896663,8,8,0,0
+56 Road & 60 Street,Signal Study,approved,40.72452,-73.90626,8,10,2,0
+60 Street & 60 Drive,Signal Study,denied,40.715068,-73.905868,8,9,5,0
+61 Road,SRTS,denied,40.717574,-73.893322,8,21,0,0
+68 Avenue,SRTS,denied,40.705734,-73.894488,8,8,3,0
+65 Place,SRTS,denied,40.729018,-73.900242,8,8,1,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+70 Avenue,SRTS,denied,40.7066750190508,-73.8749373186542,8,12,1,0
+84 Street & 63 Avenue,Signal Study,denied,40.72349,-73.87136,8,10,1,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+71 Street,SRTS,denied,40.7212788920683,-73.8872407143608,8,13,1,0
+Cooper Avenue,SRTS,denied,40.693352,-73.900403,8,9,1,0
+68 Place,SRTS,denied,40.70379,-73.884594,8,9,2,0
+56 Drive,SRTS,denied,40.723838,-73.90633599999998,8,10,2,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+66 Place,SRTS,denied,40.701432,-73.887,8,8,4,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+71 Street,SRTS,denied,40.7212788920683,-73.8872407143608,8,13,1,0
+Decatur Street,SRTS,denied,40.69285,-73.903541,8,10,3,0
+66 Place,SRTS,denied,40.704389,-73.888622,8,8,1,0
+71 Street,SRTS,denied,40.7212788920683,-73.8872407143608,8,13,1,0
+56 Road,SRTS,denied,40.7248566885679,-73.9006520682268,8,9,1,0
+56 Drive,SRTS,denied,40.723838,-73.90633599999998,8,10,2,0
+71 Street,SRTS,approved,40.7212788920683,-73.8872407143608,8,13,1,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+73 Place,SRTS,denied,40.715053,-73.881151,8,9,4,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+69 Lane,SRTS,approved,40.722509,-73.890421,8,10,3,0
+Central Avenue,SRTS,denied,40.70502,-73.879431,8,8,2,0
+70 Avenue,SRTS,denied,40.703971,-73.89040799999998,8,9,0,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+51 Road & 69 Street,Signal Study,denied,40.734257,-73.89603,8,9,1,0
+Juniper Boulevard South & 71 Street,Signal Study,denied,40.71752,-73.88423,8,9,3,0
+Starr Street,SRTS,approved,40.709383,-73.918811,8,10,2,0
+Dana Court,SRTS,denied,40.722619,-73.869554,8,9,3,0
+71 Street,SRTS,denied,40.717524,-73.884228,8,9,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+59 Road,SRTS,denied,40.718117345238895,-73.9060516211487,8,8,1,0
+Juniper Blvd South,SRTS,denied,40.717524,-73.88422799999998,8,9,3,0
+69 Lane,SRTS,denied,40.722509,-73.890421,8,10,3,0
+68 Avenue & 64 Street,Signal Study,denied,40.705734,-73.89449,8,8,3,0
+60 Avenue,SRTS,denied,40.7223198626752,-73.8908213621957,8,10,3,0
+53 Drive,SRTS,approved,40.729699501819695,-73.8956440745958,8,11,1,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+70 Avenue,SRTS,denied,40.704389,-73.888622,8,8,1,0
+Myrtle Avenue,SRTS,denied,40.701432,-73.887,8,8,4,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+56 Drive,SRTS,denied,40.723838,-73.906336,8,10,2,0
+56 Road,SRTS,approved,40.724521,-73.90625199999998,8,10,2,0
+65 Place,SRTS,denied,40.729018,-73.900242,8,8,1,0
+Dana Court & 84 Place,Signal Study,denied,40.722619,-73.869554,8,9,3,0
+60 Drive,SRTS,denied,40.715068,-73.905868,8,9,5,0
+77 Avenue,SRTS,denied,40.70652,-73.873214,8,9,1,0
+Eliot Avenue & 71 Street,Signal Study,denied,40.72128,-73.887245,8,13,1,0
+60 Avenue & 69 Lane,Signal Study,approved,40.722507,-73.89043,8,10,3,0
+70 Avenue & 65 Place,Signal Study,denied,40.703968,-73.89041,8,9,0,0
+63 Avenue,SRTS,denied,40.723494,-73.871352,8,10,1,0
+Admiral Avenue,SRTS,approved,40.711533,-73.895943,8,10,0,0
+70 Street,SRTS,denied,40.717143,-73.88504399999998,8,10,2,0
+Admiral Avenue,SRTS,approved,40.711533,-73.895943,8,10,0,0
+Juniper Valley Road,SRTS,denied,40.715053,-73.881151,8,9,4,0
+Mt Olivet Crescent,SRTS,denied,40.7180192187358,-73.90033759153769,8,12,1,0
+60 Street,SRTS,approved,40.7150677650012,-73.9058683416023,8,9,5,0
+Gates Avenue & Grandview Avenue,Signal Study,approved,40.70755,-73.90404,8,8,5,0
+59 Drive & Mt Olivet Crescent,Signal Study,denied,40.7180192187358,-73.90033759153769,8,12,1,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+69 Lane,SRTS,denied,40.722509,-73.890421,8,10,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+Cooper Avenue,SRTS,denied,40.695132,-73.895604,8,8,3,0
+76 Street,SRTS,denied,40.706729,-73.874241,8,9,1,0
+63 Avenue,SRTS,approved,40.723494,-73.871352,8,10,1,0
+65 Place,SRTS,denied,40.7293193009758,-73.900230490383,8,8,1,0
+Mt Oliver Crescent,SRTS,denied,40.71802,-73.900338,8,12,1,0
+Stephen Street,SRTS,approved,40.695527,-73.90394899999998,8,9,4,0
+71 Street,SRTS,approved,40.717368,-73.88409799999998,8,9,3,0
+Woodhaven Boulevard & Dana Court,Signal Study,denied,40.722619,-73.869554,8,9,3,0
+77 Avenue & 78 Street,Signal Study,denied,40.70652,-73.87322,8,9,1,0
+60 Street & 56 Drive,Signal Study,denied,40.7238375,-73.90633700000001,8,10,2,0
+Wyckoff Avenue & Cooper Avenue,Signal Study,denied,40.69335,-73.90041,8,9,1,0
+68 Avenue,SRTS,approved,40.705734,-73.89448799999998,8,8,3,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+Catalpa Avenue,SRTS,denied,40.704403,-73.893916,8,9,2,0
+65 Place,SRTS,denied,40.7293193009758,-73.900230490383,8,8,1,0
+77 Avenue,SRTS,denied,40.706519426378094,-73.8732135561223,8,9,1,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+54 Place,SRTS,approved,40.714641376278095,-73.9115936434735,8,18,1,0
+73 Place,SRTS,denied,40.715053,-73.881151,8,9,4,0
+Eliot Avenue,SRTS,denied,40.721279,-73.887241,8,13,1,0
+Stephen Street & Wyckoff Avenue,Signal Study,denied,40.695526,-73.903946,8,9,4,0
+59 Street,SRTS,denied,40.7174798838337,-73.90862098840819,8,9,2,0
+Shaler Avenue,SRTS,denied,40.704269,-73.891846,8,9,1,0
+71 Street,SRTS,denied,40.7212788920683,-73.8872407143608,8,13,1,0
+69 Lane,SRTS,denied,40.722509,-73.890421,8,10,3,0
+56 Road,SRTS,approved,40.724521,-73.90625199999998,8,10,2,0
+71 Street,SRTS,denied,40.717368,-73.88409799999998,8,9,3,0
+Cooper Avenue,SRTS,denied,40.6952772981128,-73.8955104301028,8,8,3,0
+Woodward Avenue,SRTS,denied,40.7103098786731,-73.9148889828331,7,7,1,0
+Juniper Valley Road,SRTS,denied,40.715245,-73.880206,7,8,4,0
+61 Street & 56 Drive,Signal Study,denied,40.723705,-73.90446,7,10,4,0
+65 Street,SRTS,denied,40.704846,-73.89213,7,7,3,0
+Juniper Boulevard South & 69 Place,Signal Study,denied,40.716393,-73.886665,7,9,1,0
+56 Drive,SRTS,denied,40.7237071033617,-73.90444912144369,7,10,4,0
+Traffic Avenue,SRTS,denied,40.709352,-73.89423999999998,7,10,0,0
+67 Place,SRTS,approved,40.7015858732864,-73.8851389510745,7,7,4,0
+Juniper Blvd North,SRTS,denied,40.721595,-73.876464,7,7,2,1
+59 Drive,SRTS,denied,40.717582,-73.909433,7,8,2,0
+Vermont Place,SRTS,denied,40.6888165749279,-73.8901189913556,7,11,0,0
+Cooper Avenue,SRTS,denied,40.697167,-73.893355,7,13,1,0
+Queens Midtown Expressway Sr S,SRTS,denied,40.725596,-73.90178,7,9,0,0
+Menahan Street,SRTS,denied,40.703435,-73.911807,7,10,1,0
+60 Lane,SRTS,denied,40.718393,-73.904157,7,9,0,0
+81 Street & 58 Avenue,Signal Study,denied,40.727367,-73.87995,7,10,0,0
+67 Street & Eliot Avenue,Signal Study,denied,40.718204,-73.89377,7,20,0,0
+60 Place,SRTS,denied,40.706357,-73.900268,7,8,3,0
+69 Place,SRTS,denied,40.7153687310896,-73.8865400774605,7,9,1,0
+Penelope Avenue,SRTS,denied,40.716187,-73.884111,7,9,1,0
+Admiral Avenue,SRTS,approved,40.712283,-73.89770199999998,7,8,0,0
+Admiral Avenue,SRTS,denied,40.712283,-73.89770199999998,7,8,0,0
+56 Drive,SRTS,denied,40.724057,-73.90954999999998,7,9,1,0
+Admiral Avenue,SRTS,denied,40.71258,-73.897684,7,8,0,0
+Penelope Avenue & 72 Street,Signal Study,denied,40.716187,-73.884111,7,9,1,0
+58 Avenue & 81 Street,Signal Study,denied,40.727367,-73.87995,7,10,0,0
+Metropolitan Avenue & Admiral Avenue,Signal Study,denied,40.71258,-73.897684,7,8,0,0
+78 Avenue,SRTS,denied,40.696936,-73.892598,7,13,0,0
+71 Street,SRTS,denied,40.723251,-73.888818,7,9,2,0
+72 Street,SRTS,denied,40.7238956188204,-73.8882356331475,7,8,2,0
+Admiral Avenue,SRTS,denied,40.712283,-73.89770199999998,7,8,0,0
+64 Street,SRTS,denied,40.71354561352209,-73.8976172469447,7,8,0,0
+78 Avenue,SRTS,denied,40.696936,-73.892598,7,13,0,0
+65 Drive,SRTS,denied,40.715369,-73.88653999999998,7,9,1,0
+78 Avenue & 62 Street,Signal Study,denied,40.696936,-73.892598,7,13,0,0
+60 Place & Madison Street,Signal Study,approved,40.706356,-73.900276,7,8,3,0
+Juniper Blvd South,SRTS,denied,40.716396,-73.886661,7,9,1,0
+64 Street,SRTS,denied,40.725596,-73.90178,7,9,0,0
+65 Street & Shaler Avenue,Signal Study,approved,40.704846,-73.89212999999998,7,7,3,0
+60 Avenue,SRTS,denied,40.723251,-73.888818,7,9,2,0
+Juniper Blvd North,SRTS,denied,40.7215814813106,-73.8771605033867,7,7,2,1
+59 Drive,SRTS,denied,40.717582,-73.909433,7,8,2,0
+Vermont Place,SRTS,denied,40.6885474636331,-73.88998962475,7,11,0,0
+65 Drive & 70 Street,Signal Study,approved,40.715369,-73.88653999999998,7,9,1,0
+Catalpa Avenue & 65 Street,Signal Study,denied,40.704845,-73.892136,7,7,3,0
+60 Lane,SRTS,denied,40.718393,-73.904157,7,9,0,0
+74 Street,SRTS,approved,40.715245,-73.880206,7,8,4,0
+Admiral Avenue,SRTS,denied,40.712283,-73.89770199999998,7,8,0,0
+Juniper Boulevard North & 80 Street,Signal Study,denied,40.721592,-73.87647,7,7,2,1
+71 Street,SRTS,denied,40.714716,-73.884139,7,14,1,0
+Juniper Boulevard North,SRTS,denied,40.721595,-73.876464,7,7,2,1
+73 Place,SRTS,denied,40.7153360840914,-73.88138171549798,7,8,4,0
+56 Street,SRTS,denied,40.716404,-73.911959,7,18,2,0
+Admiral Avenue,SRTS,denied,40.712283,-73.89770199999998,7,8,0,0
+Myrtle Avenue,SRTS,denied,40.701356,-73.887931,7,7,4,0
+68 Place,SRTS,denied,40.705207,-73.885176,7,9,1,0
+70 Street,SRTS,denied,40.722882,-73.889619,7,8,2,0
+65 Drive,SRTS,denied,40.715369,-73.88653999999998,7,9,1,0
+Vermont Place,SRTS,denied,40.688492544138,-73.8899644745313,7,11,0,0
+Penelope Avenue & 69 Place,Signal Study,denied,40.716017,-73.886351,7,9,1,0
+71 Street,SRTS,denied,40.716187,-73.884111,7,9,1,0
+78 Avenue,SRTS,denied,40.696936,-73.892598,7,13,0,0
+60 Place,SRTS,denied,40.710446,-73.90265,7,8,1,0
+65 Drive,SRTS,denied,40.715369,-73.88653999999998,7,9,1,0
+Woodward Avenue,SRTS,denied,40.709219,-73.913033,7,7,0,0
+75 Avenue,SRTS,denied,40.698666,-73.893936,7,10,1,0
+Eliot Avenue,SRTS,denied,40.718206,-73.893757,7,20,0,0
+59 Drive,SRTS,denied,40.717582,-73.909433,7,8,2,0
+60 Place,SRTS,approved,40.706357,-73.90026799999998,7,8,3,0
+56 Drive,SRTS,denied,40.724057,-73.90954999999998,7,9,1,0
+56 Drive,SRTS,approved,40.7237071033617,-73.90444912144369,7,10,4,0
+69 Place,SRTS,denied,40.716017,-73.886351,7,9,1,0
+60 Avenue,SRTS,denied,40.716626,-73.90461399999998,7,8,2,0
+72 Street,SRTS,denied,40.7238956188204,-73.8882356331475,7,8,2,0
+60 Street,SRTS,denied,40.7145159650522,-73.9057428675058,7,7,4,0
+66 Street,SRTS,approved,40.704972,-73.889843,7,8,0,0
+59 Road & 60 Lane,Signal Study,denied,40.71839,-73.90417,7,9,0,0
+61 Street,SRTS,denied,40.698666,-73.893936,7,10,1,0
+71 Street,SRTS,denied,40.714716,-73.884139,7,14,1,0
+61 Street,SRTS,denied,40.723707,-73.904449,7,10,4,0
+Menahan Street,SRTS,denied,40.710446,-73.90265,7,8,1,0
+Stanhope Street,SRTS,denied,40.708782,-73.91229,7,7,0,0
+69 Place,SRTS,denied,40.7153687310896,-73.8865400774605,7,9,1,0
+56 Drive,SRTS,denied,40.723707,-73.904449,7,10,4,0
+69 Place,SRTS,denied,40.716017,-73.886351,7,9,1,0
+Otto Road,SRTS,denied,40.704972,-73.889843,7,8,0,0
+64 Street,SRTS,denied,40.7134740635153,-73.89740814020348,7,8,0,0
+Otto Road,SRTS,denied,40.704972,-73.889843,7,8,0,0
+73 Place,SRTS,denied,40.7153360840914,-73.88138171549798,7,8,4,0
+65 Street,SRTS,denied,40.704846,-73.89212999999998,7,7,3,0
+69 Place,SRTS,denied,40.716396,-73.886661,7,9,1,0
+70 Street,SRTS,denied,40.713962,-73.885092,7,17,1,0
+71 Street,SRTS,denied,40.723251,-73.888818,7,9,2,0
+Penelope Avenue,SRTS,denied,40.716017,-73.886351,7,9,1,0
+60 Avenue & 71 Street,Signal Study,denied,40.72325,-73.888824,7,9,2,0
+59 Drive,SRTS,denied,40.717582,-73.909433,7,8,2,0
+69 Place,SRTS,denied,40.716396,-73.886661,7,9,1,0
+81 Street,SRTS,denied,40.727368,-73.879946,7,10,0,0
+70 Avenue,SRTS,denied,40.705207,-73.885176,7,9,1,0
+Norman Street,SRTS,denied,40.69832,-73.9001,7,13,0,0
+61 Street,SRTS,approved,40.723707,-73.904449,7,10,4,0
+Myrtle Avenue,SRTS,denied,40.701478,-73.886484,7,7,3,0
+60 Avenue,SRTS,denied,40.722882,-73.88961899999998,7,8,2,0
+60 Place,SRTS,denied,40.706357,-73.900268,7,8,3,0
+74 Street,SRTS,approved,40.715245,-73.880206,7,8,4,0
+68 Place & 70 Avenue,Signal Study,denied,40.705204,-73.885185,7,9,1,0
+56 Street,SRTS,denied,40.715736,-73.910506,7,10,1,0
+61 Street,SRTS,denied,40.698666,-73.893936,7,10,1,0
+55 Drive,SRTS,denied,40.725596,-73.90178,7,9,0,0
+59 Drive,SRTS,denied,40.717582,-73.909433,7,8,2,0
+66 Road,SRTS,denied,40.713962,-73.885092,7,17,1,0
+73 Street,SRTS,denied,40.7302986314962,-73.89056293930878,7,8,4,0
+60 Avenue,SRTS,denied,40.716626,-73.90461399999998,7,8,2,0
+65 Drive,SRTS,denied,40.715369,-73.88653999999998,7,9,1,0
+Juniper Blvd North,SRTS,denied,40.7215814813106,-73.8771605033867,7,7,2,1
+Cypress Hills Street,SRTS,approved,40.696669,-73.88681,7,10,0,0
+60 Avenue & 71 Street,Signal Study,denied,40.72325,-73.888824,7,9,2,0
+Flushing Avenue & 56 Street,Signal Study,denied,40.716404,-73.911959,7,18,2,0
+69 Place & 65 Drive,Signal Study,denied,40.715369,-73.88653999999998,7,9,1,0
+Admiral Avenue,SRTS,denied,40.712283,-73.89770199999998,7,8,0,0
+68 Place,SRTS,denied,40.705207,-73.885176,7,9,1,0
+65 Street & Catalpa Avenue,Signal Study,denied,40.704845,-73.892136,7,7,3,0
+Woodward Avenue & Stockholm Street,Signal Study,denied,40.709219,-73.913033,7,7,0,0
+Menahan Street & 60 Place,Signal Study,denied,40.710445,-73.902655,7,8,1,0
+Eliot Avenue,SRTS,denied,40.718206,-73.893757,7,20,0,0
+81 Street,SRTS,denied,40.727368,-73.879946,7,10,0,0
+66 Street & 53 Avenue,Signal Study,denied,40.731358,-73.89918,7,9,2,0
+81 Street,SRTS,denied,40.727368,-73.879946,7,10,0,0
+74 Street,SRTS,approved,40.715245,-73.880206,7,8,4,0
+Palmetto Street & 64 Street,Signal Study,denied,40.708942,-73.895872,6,9,0,0
+Fresh Pond Road & 60 Road,Signal Study,denied,40.716143,-73.901585,6,7,1,0
+Edsall Avenue & 75 Street,Signal Study,denied,40.706541,-73.87515,6,10,1,0
+Traffic Avenue,SRTS,denied,40.709825,-73.895354,6,9,1,0
+St Felix Avenue & 60 Street,Signal Study,denied,40.696482,-73.897564,6,7,3,0
+66 Road,SRTS,denied,40.714589,-73.87529,6,7,1,0
+Greene Avenue,SRTS,denied,40.710258,-73.907217,6,7,4,0
+St Felix Avenue,SRTS,denied,40.696482,-73.897564,6,7,3,0
+69 Street,SRTS,denied,40.706123,-73.884597,6,7,1,0
+53 Road,SRTS,denied,40.730565,-73.890555,6,7,4,0
+69 Road,SRTS,denied,40.708693,-73.87537,6,6,2,0
+St Felix Avenue,SRTS,denied,40.696482,-73.897564,6,7,3,0
+69 Lane,SRTS,denied,40.724256,-73.891818,6,7,0,0
+Grandview Avenue,SRTS,denied,40.709745,-73.907741,6,7,3,0
+Greene Avenue,SRTS,denied,40.710258,-73.907217,6,7,4,0
+Fairview Avenue,SRTS,denied,40.709868,-73.911178,6,8,2,0
+Eliot Avenue & 84 Street,Signal Study,denied,40.72709,-73.87472,6,9,1,0
+Eliot Avenue & 84 Street,Signal Study,denied,40.72709,-73.87472,6,9,1,0
+77 Street,SRTS,approved,40.716504,-73.877206,6,7,1,0
+73 Street,SRTS,denied,40.730564865686894,-73.89055528585689,6,7,4,0
+Forest Avenue,SRTS,denied,40.706428,-73.9028,6,7,2,0
+69 Street & 53 Road,Signal Study,denied,40.73037303589712,-73.89340819721393,6,7,3,0
+67 Drive & 78 Street,Signal Study,denied,40.71171,-73.8754,6,8,2,0
+82 Street,SRTS,denied,40.726982,-73.87854,6,10,0,0
+Edsall Avenue,SRTS,denied,40.706541,-73.87515,6,10,1,0
+70 Avenue,SRTS,denied,40.706540756759,-73.87515037230659,6,10,1,0
+Juniper Valley Road,SRTS,denied,40.715482,-73.8793,6,7,3,0
+69 Lane,SRTS,denied,40.724256,-73.891818,6,7,0,0
+Greene Avenue,SRTS,denied,40.710258,-73.907217,6,7,4,0
+Juniper Valley Road,SRTS,denied,40.715537,-73.879091,6,7,3,0
+60 Street,SRTS,denied,40.705518,-73.900836,6,8,2,0
+59 Street,SRTS,denied,40.720461,-73.908303,6,7,1,0
+69 Lane,SRTS,denied,40.724256,-73.891818,6,7,0,0
+67 Drive,SRTS,approved,40.711712,-73.87538999999998,6,8,2,0
+69 Road,SRTS,denied,40.708948,-73.874507,6,6,2,0
+Andrews Avenue,SRTS,denied,40.715314,-73.907484,6,7,4,0
+Greene Avenue,SRTS,denied,40.709745,-73.907741,6,7,3,0
+56 Road,SRTS,approved,40.7243904817063,-73.9043687706066,6,9,3,0
+Juniper Blvd South,SRTS,denied,40.7163077473164,-73.8868523173364,6,7,1,0
+66 Road & 78 Street,Signal Study,denied,40.714589,-73.87529,6,7,1,0
+Stanhope Street & Fairview Avenue,Signal Study,approved,40.709868,-73.911185,6,8,2,0
+78 Street & 69 Road,Signal Study,denied,40.708946,-73.87451,6,6,2,0
+Juniper Valley Road,SRTS,denied,40.715697969325,-73.8757753196832,6,7,1,0
+Juniper Valley Road,SRTS,denied,40.7146347909681,-73.8854411164976,6,15,1,0
+66 Road,SRTS,denied,40.714582,-73.876232,6,7,2,0
+56 Drive,SRTS,denied,40.724138,-73.910758,6,6,1,0
+56 Drive,SRTS,denied,40.724138,-73.910758,6,6,1,0
+69 Place,SRTS,approved,40.723299,-73.892183,6,7,0,0
+69 Place,SRTS,denied,40.723299,-73.892183,6,7,0,0
+63 Street,SRTS,denied,40.719692,-73.90158,6,7,0,0
+58 Place,SRTS,denied,40.722991,-73.910684,6,6,1,0
+58 Place,SRTS,denied,40.724138,-73.910758,6,6,1,0
+Willoughby Avenue,SRTS,approved,40.708946,-73.91807199999998,6,7,2,0
+Greene Avenue,SRTS,denied,40.710258,-73.907217,6,7,4,0
+59 Drive,SRTS,denied,40.717587,-73.90486199999998,6,9,1,0
+64 Street,SRTS,denied,40.725105,-73.901795,6,8,0,0
+Caldwell Avenue,SRTS,denied,40.7249241488426,-73.89030478755059,6,6,1,0
+Caldwell Avenue,SRTS,denied,40.724256,-73.891818,6,7,0,0
+56 Road,SRTS,denied,40.724391,-73.904369,6,9,3,0
+60 Lane,SRTS,denied,40.719137,-73.904369,6,8,0,0
+Butler Avenue,SRTS,denied,40.710258,-73.907217,6,7,4,0
+59 Street,SRTS,denied,40.721084,-73.908342,6,7,1,0
+Otto Road,SRTS,denied,40.706123,-73.884597,6,7,1,0
+76 Street,SRTS,denied,40.708693,-73.87537,6,6,2,0
+69 Place,SRTS,denied,40.723299,-73.892183,6,7,0,0
+56 Drive,SRTS,denied,40.723996,-73.90863,6,8,1,0
+59 Street,SRTS,denied,40.72177,-73.908384,6,7,1,0
+Myrtle Avenue,SRTS,denied,40.701277,-73.888861,6,8,2,0
+59 Street,SRTS,denied,40.721084,-73.908342,6,7,1,0
+Greene Avenue,SRTS,denied,40.709745,-73.907741,6,7,3,0
+57 Drive,SRTS,approved,40.72177,-73.908384,6,7,1,0
+58 Road,SRTS,denied,40.720461,-73.908303,6,7,1,0
+58 Road,SRTS,denied,40.720398,-73.908191,6,7,1,0
+78 Street,SRTS,denied,40.708948,-73.874507,6,6,2,0
+Caldwell Avenue,SRTS,denied,40.7249241488426,-73.89030478755059,6,6,1,0
+69 Lane,SRTS,denied,40.724256,-73.891818,6,7,0,0
+61 Street,SRTS,denied,40.724391,-73.904369,6,9,3,0
+58 Place,SRTS,approved,40.721687,-73.91060299999998,6,6,1,0
+Caldwell Avenue,SRTS,denied,40.7254498931055,-73.8755767498794,6,8,2,0
+Greene Avenue,SRTS,denied,40.709745,-73.907741,6,7,3,0
+Fresh Pond Road & 60 Road,Signal Study,denied,40.716143,-73.901585,6,7,1,0
+Pleasantview Street,SRTS,denied,40.714838,-73.882389,6,11,2,0
+70 Avenue,SRTS,denied,40.706540756759,-73.87515037230659,6,10,1,0
+79 Street,SRTS,denied,40.7067243387506,-73.8723583501385,6,7,0,0
+69 Road,SRTS,denied,40.708948,-73.87450699999998,6,6,2,0
+70 Avenue,SRTS,denied,40.706455,-73.879064,6,6,2,0
+76 Street,SRTS,denied,40.708693,-73.87537,6,6,2,0
+59 Street,SRTS,denied,40.720461,-73.908303,6,7,1,0
+Andrews Avenue,SRTS,denied,40.715314,-73.90748399999998,6,7,4,0
+Fleet Court,SRTS,approved,40.721402,-73.868575,6,7,1,0
+63 Street,SRTS,denied,40.730764,-73.901145,6,6,1,0
+82 Street,SRTS,denied,40.726982,-73.87854,6,10,0,0
+Greene Avenue,SRTS,denied,40.710258,-73.907217,6,7,4,0
+Putnam Avenue,SRTS,denied,40.705518,-73.900836,6,8,2,0
+77 Street,SRTS,denied,40.714569,-73.877166,6,7,1,0
+Caldwell Avenue,SRTS,denied,40.724946,-73.890175,6,6,1,0
+Shaler Avenue,SRTS,denied,40.703366,-73.89247899999998,6,6,1,0
+Caldwell Avenue,SRTS,denied,40.7249241488426,-73.89030478755059,6,6,1,0
+69 Road,SRTS,denied,40.708693,-73.87537,6,6,2,0
+69 Place,SRTS,denied,40.723299,-73.892183,6,7,0,0
+60 Street,SRTS,denied,40.703477,-73.899818,6,8,0,0
+Juniper Valley Road & 75 Street,Signal Study,denied,40.715482,-73.8793,6,7,3,0
+Pleasant View Street,SRTS,denied,40.714838,-73.882389,6,11,2,0
+69 Street,SRTS,denied,40.705412,-73.884314,6,7,1,0
+Caldwell Avenue & 71 Street,Signal Study,denied,40.7249241488426,-73.89030478755059,6,6,1,0
+59 Street,SRTS,denied,40.723996,-73.90863,6,8,1,0
+Greene Avenue,SRTS,denied,40.709745,-73.907741,6,7,3,0
+60 Avenue,SRTS,denied,40.723623674195,-73.88801601747468,6,7,2,0
+59 Street,SRTS,denied,40.7143378151446,-73.9060605556645,6,6,3,0
+Bleecker Street,SRTS,denied,40.709305,-73.906998,6,7,4,0
+63 Street & 59 Avenue,Signal Study,denied,40.719692,-73.90158,6,7,0,0
+Caldwell Avenue,SRTS,denied,40.7254498931055,-73.8755767498794,6,8,2,0
+Caldwell Avenue,SRTS,denied,40.7249459830723,-73.89017487063708,6,6,1,0
+56 Drive,SRTS,denied,40.723996,-73.90863,6,8,1,0
+Greene Avenue,SRTS,denied,40.710258,-73.907217,6,7,4,0
+Greene Avenue,SRTS,denied,40.710258,-73.907217,6,7,4,0
+76 Street,SRTS,denied,40.708693,-73.87537,6,6,2,0
+59 Drive,SRTS,denied,40.717587,-73.90486199999998,6,9,1,0
+Traffic Avenue,SRTS,denied,40.709825,-73.895354,6,9,1,0
+Greene Avenue,SRTS,denied,40.709745,-73.907741,6,7,3,0
+69 Place,SRTS,approved,40.716547,-73.886783,6,7,1,0
+70 Avenue,SRTS,denied,40.705412,-73.884314,6,7,1,0
+59 Street,SRTS,denied,40.720461,-73.908303,6,7,1,0
+67 Drive,SRTS,approved,40.711826,-73.873492,6,6,3,0
+59 Street & 58 Drive,Signal Study,denied,40.720461,-73.908303,6,7,1,0
+77 Street & 62 Avenue,Signal Study,denied,40.72605634929975,-73.8744731422483,6,9,2,0
+69 Lane,SRTS,denied,40.724256,-73.891818,6,7,0,0
+70 Avenue,SRTS,denied,40.706540756759,-73.87515037230659,6,10,1,0
+Stanhope Street,SRTS,denied,40.709868,-73.911178,6,8,2,0
+Myrtle Avenue,SRTS,approved,40.703182,-73.865639,6,7,2,0
+Juniper Valley Road,SRTS,denied,40.715646834863,-73.8767205281744,6,7,1,0
+72 Street,SRTS,denied,40.73116,-73.89233299999998,6,7,1,0
+70 Street,SRTS,denied,40.7150269139268,-73.88506167937742,6,14,1,0
+58 Avenue,SRTS,denied,40.721084,-73.908342,6,7,1,0
+79 Street,SRTS,denied,40.711826,-73.873492,6,6,3,0
+72 Street,SRTS,denied,40.73116,-73.89233299999998,6,7,1,0
+69 Road,SRTS,denied,40.708948,-73.87450699999998,6,6,2,0
+Eliot Avenue,SRTS,denied,40.727091,-73.874708,6,9,1,0
+Putnam Avenue,SRTS,denied,40.705518,-73.900836,6,8,2,0
+59 Drive,SRTS,denied,40.717587,-73.904862,6,9,1,0
+59 Street & 56 Drive,Signal Study,denied,40.723995,-73.90864,6,8,1,0
+Woodbine Street,SRTS,denied,40.708266,-73.895577,6,7,3,0
+Forest Avenue,SRTS,denied,40.7064274426595,-73.90280033370628,6,7,2,0
+Pleasantview Street,SRTS,denied,40.714838,-73.882389,6,11,2,0
+60 Lane,SRTS,approved,40.719137,-73.904369,6,8,0,0
+Palmetto Street,SRTS,approved,40.708944,-73.89586799999998,6,9,0,0
+70 Avenue,SRTS,denied,40.706540756759,-73.87515037230659,6,10,1,0
+72 Street,SRTS,denied,40.723624,-73.88801599999998,6,7,2,0
+72 Street,SRTS,denied,40.723624,-73.888016,6,7,2,0
+63 Street,SRTS,denied,40.7196918468815,-73.901579684719,6,7,0,0
+77 Street,SRTS,denied,40.715623,-73.87718599999998,6,7,1,0
+58 Place,SRTS,denied,40.722991,-73.910684,6,6,1,0
+60 Road,SRTS,denied,40.716143,-73.901585,6,7,1,0
+59 Avenue,SRTS,denied,40.719692,-73.90158,6,7,0,0
+Fresh Pond Road & 60 Road,Signal Study,denied,40.716143,-73.901585,6,7,1,0
+72 Place & Cooper Avenue,Signal Study,denied,40.70352,-73.877875,5,8,1,0
+78 Avenue & 60 Street,Signal Study,denied,40.69609,-73.89632,5,5,1,0
+Caldwell Avenue & 69 Lane,Signal Study,denied,40.724839,-73.892293,5,6,0,0
+52 Road & 66 Street,Signal Study,denied,40.73294,-73.89911,5,7,0,0
+55 Street,SRTS,denied,40.71519,-73.911052,5,13,0,0
+66 Road & 71 Street,Signal Study,denied,40.71395,-73.884209,5,12,1,0
+67 Place,SRTS,approved,40.704797,-73.88690099999998,5,6,1,0
+79 Street,SRTS,denied,40.710456,-73.87338599999998,5,5,1,0
+60 Lane,SRTS,denied,40.716746,-73.903698,5,7,1,0
+83 Street,SRTS,denied,40.709084,-73.86628,5,6,0,0
+Caldwell Avenue,SRTS,denied,40.7246174043567,-73.89100881092588,5,5,0,0
+70 Street,SRTS,denied,40.732248,-73.893955,5,6,1,0
+59 Drive,SRTS,denied,40.717721,-73.903971,5,8,0,0
+Juniper Valley Road,SRTS,denied,40.714741,-73.886974,5,8,1,0
+79 Street,SRTS,approved,40.717574,-73.874401,5,5,0,0
+70 Avenue & 60 Lane,Signal Study,denied,40.702076,-73.89698,5,5,1,0
+70 Avenue,SRTS,denied,40.705002,-73.886038,5,7,1,0
+Juniper Valley Road,SRTS,denied,40.714679,-73.885059,5,12,1,0
+69 Lane,SRTS,denied,40.725077,-73.89248,5,6,0,0
+Furmanville Avenue,SRTS,denied,40.717574,-73.874401,5,5,0,0
+71 Street,SRTS,denied,40.71395,-73.884209,5,12,1,0
+Cooper Avenue,SRTS,denied,40.703522,-73.877872,5,8,1,0
+78 Avenue & 60 Street,Signal Study,denied,40.69609,-73.89632,5,5,1,0
+Myrtle Avenue,SRTS,denied,40.70132,-73.888353,5,6,2,0
+Maspeth Avenue,SRTS,denied,40.723183,-73.90716299999998,5,7,2,0
+60 Lane,SRTS,denied,40.704019,-73.897946,5,5,2,0
+71 Street,SRTS,denied,40.7268373631607,-73.890427915016,5,5,1,0
+60 Lane,SRTS,denied,40.717721,-73.903971,5,8,0,0
+58 Place,SRTS,denied,40.721001,-73.910561,5,5,0,0
+68 Road,SRTS,approved,40.710456,-73.87338599999998,5,5,1,0
+72 Street,SRTS,approved,40.73087396169,-73.8923408004234,5,6,1,0
+60 Lane,SRTS,denied,40.704607,-73.898244,5,5,2,0
+69 Street,SRTS,denied,40.714758,-73.88718,5,8,1,0
+Pleasantview Street,SRTS,denied,40.714146,-73.882343,5,7,1,0
+72 Street,SRTS,approved,40.73087396169,-73.8923408004234,5,6,1,0
+83 Street,SRTS,denied,40.709084,-73.86628,5,6,0,0
+69 Road,SRTS,denied,40.708184,-73.877041,5,8,2,0
+78 Street,SRTS,denied,40.704628,-73.872442,5,8,1,0
+Penelope Avenue,SRTS,denied,40.721267,-73.87066699999998,5,6,1,0
+79 Street,SRTS,denied,40.70977,-73.873334,5,5,2,0
+Greene Avenue,SRTS,denied,40.710156,-73.907329,5,6,4,0
+68 Road,SRTS,approved,40.704019,-73.897946,5,5,2,0
+Greene Avenue,SRTS,denied,40.710156,-73.907329,5,6,4,0
+Woodbine Street,SRTS,denied,40.7064933504511,-73.902839912466,5,5,2,0
+Woodbine Street,SRTS,approved,40.7064933504511,-73.902839912466,5,5,2,0
+Maspeth Avenue & Maurice Avenue,Signal Study,denied,40.723238,-73.91257250000001,5,5,0,0
+Pleasant View Street,SRTS,denied,40.714146,-73.882343,5,7,1,0
+Greene Avenue,SRTS,denied,40.710156,-73.907329,5,6,4,0
+73 Place,SRTS,denied,40.710484,-73.87892999999998,5,6,3,0
+St Felix Avenue,SRTS,denied,40.6971273389305,-73.8955832629069,5,5,2,0
+Central Avenue,SRTS,denied,40.704815,-73.880286,5,5,0,0
+Juniper Valley Road & 77 Place,Signal Study,denied,40.71567,-73.87626,5,6,1,0
+69 Road,SRTS,denied,40.708184,-73.877041,5,8,2,0
+75 Street,SRTS,denied,40.709584,-73.876811,5,5,1,0
+70 Street,SRTS,denied,40.72978,-73.89375699999998,5,5,3,0
+79 Street,SRTS,denied,40.717574,-73.874401,5,5,0,0
+57 Drive,SRTS,approved,40.721735,-73.909228,5,6,0,0
+69 Lane,SRTS,denied,40.724839,-73.892293,5,6,0,0
+Forest Avenue,SRTS,denied,40.706494,-73.90284,5,5,2,0
+79 Street,SRTS,approved,40.710456,-73.87338599999998,5,5,1,0
+74 Avenue,SRTS,denied,40.7092887182013,-73.861164653685,5,5,0,0
+83 Street,SRTS,denied,40.709084,-73.86628,5,6,0,0
+73 Place,SRTS,denied,40.710484,-73.87893,5,6,3,0
+70 Street,SRTS,denied,40.731147,-73.89387,5,6,1,0
+Greene Avenue,SRTS,denied,40.710156,-73.907329,5,6,4,0
+Pleasantview Street,SRTS,denied,40.714146,-73.882343,5,7,1,0
+70 Avenue,SRTS,denied,40.704797,-73.88690099999998,5,6,1,0
+Caldwell Avenue,SRTS,denied,40.7246174043567,-73.89100881092588,5,5,0,0
+71 Place,SRTS,denied,40.704815,-73.880286,5,5,0,0
+69 Lane,SRTS,denied,40.726025,-73.893236,5,6,1,0
+70 Avenue,SRTS,denied,40.704594,-73.887763,5,5,1,0
+58 Avenue,SRTS,denied,40.721001,-73.910561,5,5,0,0
+73 Place,SRTS,denied,40.710484,-73.87892999999998,5,6,3,0
+83 Street,SRTS,denied,40.709084,-73.86628,5,6,0,0
+Greene Avenue,SRTS,denied,40.710156,-73.907329,5,6,4,0
+Penelope Avenue,SRTS,denied,40.72164,-73.86986899999998,5,6,2,0
+82 Street,SRTS,denied,40.7233007618494,-73.8755915854123,5,6,1,0
+60 Place,SRTS,denied,40.7112721505036,-73.9030349423478,5,7,1,0
+66 Street,SRTS,denied,40.732942,-73.89910299999998,5,7,0,0
+69 Street & Long Island Expressway,Signal Study,denied,40.73288011770822,-73.89420718490693,5,5,2,0
+Juniper Valley Road,SRTS,denied,40.715723,-73.875314,5,6,0,0
+74 Avenue,SRTS,denied,40.7092887182013,-73.861164653685,5,5,0,0
+70 Street,SRTS,denied,40.732248,-73.893955,5,6,1,0
+79 Street,SRTS,denied,40.717574,-73.874401,5,5,0,0
+52 Drive & 70 Street,Signal Study,denied,40.732248,-73.893955,5,6,1,0
+79 Street & 68 Road,Signal Study,denied,40.710453,-73.87339,5,5,1,0
+69 Street & Long Island Expressway,Signal Study,denied,40.73288011770822,-73.89420718490693,5,5,2,0
+Maspeth Avenue,SRTS,denied,40.723159,-73.90847599999998,5,7,1,0
+70 Avenue,SRTS,denied,40.702078,-73.89698199999998,5,5,1,0
+79 Street,SRTS,approved,40.70977,-73.873334,5,5,2,0
+60 Lane,SRTS,denied,40.717721,-73.903971,5,8,0,0
+Juniper Valley Road,SRTS,denied,40.714679,-73.885059,5,12,1,0
+63 Avenue,SRTS,approved,40.723122,-73.87215399999998,5,7,1,0
+60 Lane,SRTS,denied,40.716746,-73.903698,5,7,1,0
+83 Street,SRTS,denied,40.709084,-73.86628,5,6,0,0
+59 Street,SRTS,denied,40.723159,-73.90847599999998,5,7,1,0
+Nurge Avenue,SRTS,denied,40.71519,-73.911052,5,13,0,0
+79 Street,SRTS,denied,40.717574,-73.874401,5,5,0,0
+59 Drive,SRTS,denied,40.717721,-73.903971,5,8,0,0
+60 Avenue,SRTS,denied,40.716746,-73.903698,5,7,1,0
+Greene Avenue,SRTS,denied,40.710156,-73.907329,5,6,4,0
+78 Avenue,SRTS,denied,40.696094,-73.89631,5,5,1,0
+Juniper Blvd South,SRTS,denied,40.7158064975054,-73.8879173247841,5,6,1,0
+68 Avenue,SRTS,approved,40.7046064698938,-73.8982441155351,5,5,2,0
+79 Street,SRTS,approved,40.717574,-73.874401,5,5,0,0
+83 Street,SRTS,denied,40.709084,-73.86628,5,6,0,0
+Bleecker Street,SRTS,denied,40.7110881816292,-73.9029522477214,5,7,1,0
+79 Street,SRTS,approved,40.710456,-73.87338599999998,5,5,1,0
+Cypress Avenue,SRTS,approved,40.6922010912943,-73.89326148043729,5,5,1,0
+Admiral Avenue,SRTS,approved,40.711136,-73.895027,5,8,1,0
+60 Avenue & 60 Lane,Signal Study,denied,40.716746,-73.903698,5,7,1,0
+Caldwell Avenue,SRTS,approved,40.7251603236049,-73.88210022374598,5,9,0,0
+Cooper Avenue,SRTS,denied,40.699965,-73.885841,5,7,0,0
+Cooper Avenue & 67 Street,Signal Study,denied,40.699963,-73.88585,5,7,0,0
+79 Street,SRTS,denied,40.717574,-73.874401,5,5,0,0
+68 Avenue,SRTS,denied,40.704607,-73.898244,5,5,2,0
+64 Road,SRTS,denied,40.719308,-73.871295,5,6,1,0
+Woodward Avenue,SRTS,denied,40.710093,-73.914518,5,5,1,0
+79 Street,SRTS,approved,40.70977,-73.873334,5,5,2,0
+68 Road,SRTS,approved,40.710456,-73.87338599999998,5,5,1,0
+69 Lane,SRTS,denied,40.725077,-73.89248,5,6,0,0
+82 Street,SRTS,denied,40.723859,-73.876042,5,6,1,0
+Furmanville Avenue & 79 Street,Signal Study,approved,40.7175725,-73.8744025,5,5,0,0
+70 Street,SRTS,denied,40.732248,-73.893955,5,6,1,0
+Forest Avenue,SRTS,denied,40.7064933504511,-73.902839912466,5,5,2,0
+73 Place,SRTS,approved,40.710484,-73.87892999999998,5,6,3,0
+69 Road,SRTS,denied,40.708184,-73.877041,5,8,2,0
+Juniper Valley Road,SRTS,denied,40.7147406071624,-73.8869740169996,5,8,1,0
+71 Street,SRTS,denied,40.7268373631607,-73.890427915016,5,5,1,0
+79 Street,SRTS,denied,40.70977,-73.873334,5,5,2,0
+69 Street,SRTS,denied,40.715189,-73.887424,5,6,1,0
+69 Street,SRTS,denied,40.715807,-73.887917,5,6,1,0
+71 Street,SRTS,denied,40.7256543017832,-73.8903540954926,5,5,1,0
+69 Avenue,SRTS,denied,40.70977,-73.873334,5,5,2,0
+83 Street,SRTS,denied,40.709084,-73.86628,5,6,0,0
+73 Place,SRTS,denied,40.710484,-73.87893,5,6,3,0
+Greene Avenue,SRTS,denied,40.710156,-73.907329,5,6,4,0
+52 Road,SRTS,denied,40.732942,-73.899103,5,7,0,0
+71 Street,SRTS,denied,40.71395,-73.884209,5,12,1,0
+79 Street,SRTS,denied,40.717574,-73.874401,5,5,0,0
+63 Avenue & 83 Place,Signal Study,denied,40.72312,-73.87216,5,7,1,0
+Dry Harbor Road & Furmanville Avenue,Signal Study,denied,40.716160233060826,-73.88138506979227,5,6,4,0
+71 Street,SRTS,denied,40.7256543017832,-73.8903540954926,5,5,1,0
+Admiral Avenue,SRTS,approved,40.711136,-73.895027,5,8,1,0
+Pleasantview Street,SRTS,denied,40.714146,-73.882343,5,7,1,0
+Otto Road,SRTS,denied,40.705811,-73.888262,4,4,0,0
+72 Street & Caldwell Avenue,Signal Study,denied,40.72482,-73.888985,4,4,1,0
+76 Street & 78 Avenue,Signal Study,denied,40.70455,-73.873355,4,7,1,0
+69 Avenue,SRTS,denied,40.7097880861423,-73.8728899242574,4,4,2,0
+68 Avenue,SRTS,denied,40.711015,-73.875355,4,4,1,0
+69 Road & 74 Street,Signal Study,denied,40.70796,-73.877777,4,7,1,0
+69 Road & 73 Place,Signal Study,denied,40.70796,-73.877785,4,7,1,0
+73 Place,SRTS,approved,40.70916,-73.878276,4,7,0,0
+Juniper Blvd North,SRTS,approved,40.721259,-73.883954,4,5,2,0
+72 Place & 53 Road,Signal Study,denied,40.7308484188404,-73.8914460268618,4,6,1,0
+69 Road & 75 Street,Signal Study,denied,40.70844,-73.87621,4,7,2,0
+68 Avenue,SRTS,denied,40.705956,-73.893593,4,4,1,0
+Juniper Boulevard North,SRTS,denied,40.721416,-73.881306,4,4,1,0
+69 Street & 62 Avenue,Signal Study,denied,40.717617,-73.88954,4,7,2,0
+57 Drive,SRTS,denied,40.726372491168,-73.89226869918451,4,4,0,0
+Catalpa Avenue,SRTS,denied,40.703415,-73.897647,4,4,1,0
+Putnam Avenue,SRTS,denied,40.698256,-73.908774,4,4,3,0
+69 Avenue & 73 Place,Signal Study,denied,40.709814,-73.87853099999998,4,4,1,0
+Caldwell Avenue,SRTS,denied,40.724971,-73.873644,4,4,1,0
+68 Avenue,SRTS,denied,40.711015,-73.875355,4,4,1,0
+71 Street,SRTS,denied,40.729297,-73.893292,4,4,3,0
+Juniper Blvd North,SRTS,denied,40.721416,-73.88130599999998,4,4,1,0
+71 Street,SRTS,denied,40.729297,-73.893292,4,4,3,0
+69 Street,SRTS,denied,40.716436,-73.888443,4,5,1,0
+70 Street,SRTS,approved,40.71618,-73.88504899999998,4,6,0,0
+69 Street,SRTS,denied,40.718208,-73.890089,4,7,0,0
+69 Street,SRTS,denied,40.716436,-73.888443,4,5,1,0
+68 Avenue & 64 Place,Signal Study,denied,40.705956,-73.8936,4,4,1,0
+Otto Road & 68 Place,Signal Study,denied,40.706154,-73.88555,4,5,1,0
+Borden Avenue & 69 Street,Signal Study,denied,40.72371262222595,-73.89128557459745,4,5,0,0
+68 Place,SRTS,denied,40.706154,-73.88554899999998,4,5,1,0
+74 Street,SRTS,denied,40.7238011459366,-73.8870560596256,4,5,1,0
+75 Street,SRTS,approved,40.708439,-73.876204,4,7,2,0
+73 Place,SRTS,denied,40.70796,-73.87777699999998,4,7,1,0
+72 Street,SRTS,approved,40.7295592822212,-73.8924042613276,4,4,3,0
+69 Road,SRTS,denied,40.708439,-73.876204,4,7,2,0
+54 Avenue,SRTS,denied,40.729209,-73.893693,4,4,3,0
+77 Avenue,SRTS,denied,40.7067617540583,-73.86901475472028,4,4,1,0
+62 Avenue & 69 Place,Signal Study,denied,40.718254,-73.8881475,4,7,2,0
+Queens Midtown Expressway & 73 Place,Signal Study,denied,40.7271691486146,-73.88727206550593,4,6,2,0
+Cooper Avenue & 66 Street,Signal Study,denied,40.699678,-73.887714,4,4,0,0
+Caldwell Avenue,SRTS,denied,40.7246383175267,-73.88707628754649,4,5,2,0
+Aubrey Avenue,SRTS,denied,40.7107978594148,-73.8630552067531,4,5,0,0
+79 Street,SRTS,approved,40.704706,-73.87152899999998,4,6,0,0
+77 Place,SRTS,denied,40.723881,-73.88163299999998,4,8,0,0
+68 Avenue,SRTS,denied,40.705956,-73.893593,4,4,1,0
+88 Street,SRTS,denied,40.705899,-73.86108199999998,4,9,4,0
+63 Street,SRTS,denied,40.7195463408032,-73.90154021695878,4,5,0,0
+88 Street,SRTS,denied,40.705899,-73.86108199999998,4,9,4,0
+Juniper Blvd South,SRTS,denied,40.716776,-73.885838,4,6,0,0
+Traffic Avenue,SRTS,denied,40.708859,-73.89315899999998,4,7,0,0
+Otto Road,SRTS,denied,40.706154,-73.885549,4,5,1,0
+Otto Road,SRTS,denied,40.705811,-73.888262,4,4,0,0
+79 Street,SRTS,denied,40.7145985197643,-73.8743525067838,4,4,1,0
+73 Place,SRTS,denied,40.709814,-73.87853099999998,4,4,1,0
+Caldwell Avenue,SRTS,denied,40.724819,-73.888974,4,4,1,0
+72 Place,SRTS,denied,40.730849,-73.891446,4,6,1,0
+73 Place,SRTS,denied,40.708562,-73.878021,4,7,0,0
+82 Street,SRTS,approved,40.704748,-73.86676799999998,4,10,0,0
+68 Avenue,SRTS,denied,40.711015,-73.875355,4,4,1,0
+68 Avenue,SRTS,denied,40.711015,-73.875355,4,4,1,0
+68 Avenue,SRTS,denied,40.710854,-73.8763,4,4,1,0
+73 Place,SRTS,denied,40.709814,-73.878531,4,4,1,0
+Juniper Valley Road,SRTS,denied,40.715561,-73.87827199999998,4,4,1,0
+71 Street,SRTS,denied,40.733642,-73.89316599999998,4,7,2,0
+69 Street,SRTS,denied,40.718208,-73.890089,4,7,0,0
+78 Street & 68 Avenue,Signal Study,denied,40.711015,-73.875355,4,4,1,0
+Mazeau Street & Queens Midtown Expressway,Signal Study,denied,40.726981372775455,-73.88825085688839,4,5,1,0
+70 Street,SRTS,denied,40.730467,-73.893814,4,5,1,0
+88 Street,SRTS,denied,40.705899,-73.86108199999998,4,9,4,0
+69 Place,SRTS,denied,40.718255,-73.888144,4,7,2,0
+70 Street,SRTS,denied,40.71618,-73.88504899999998,4,6,0,0
+68 Avenue,SRTS,denied,40.705956,-73.89359299999998,4,4,1,0
+69 Road,SRTS,denied,40.708439,-73.876204,4,7,2,0
+Cooper Avenue,SRTS,denied,40.696912,-73.893564,4,5,1,0
+69 Road,SRTS,denied,40.70796,-73.877777,4,7,1,0
+Woodward Avenue,SRTS,denied,40.709653,-73.913775,4,4,1,0
+69 Avenue,SRTS,denied,40.702745,-73.897313,4,4,1,0
+74 Street,SRTS,denied,40.723994,-73.887204,4,5,1,0
+Juniper Blvd South,SRTS,approved,40.719612,-73.878214,4,5,0,0
+Hancock Street,SRTS,approved,40.697165,-73.906846,4,5,1,0
+63 Street,SRTS,denied,40.728759,-73.903035,4,5,1,0
+69 Street & Borden Avenue,Signal Study,denied,40.723712622225975,-73.89128557459745,4,5,0,0
+Caldwell Avenue,SRTS,denied,40.7251411170432,-73.8743218063233,4,4,2,0
+73 Place,SRTS,denied,40.7072,-73.877429,4,7,1,0
+57 Road & 59 Street,Signal Study,approved,40.722373,-73.910645,4,4,1,0
+73 Place,SRTS,approved,40.70796,-73.87777699999998,4,7,1,0
+Juniper Blvd South,SRTS,denied,40.7195381646523,-73.8786036670368,4,5,0,0
+69 Street & 62 Avenue,Signal Study,denied,40.717617,-73.88954,4,7,2,0
+Caldwell Avenue,SRTS,denied,40.724639,-73.887076,4,5,2,0
+78 Avenue,SRTS,denied,40.705899,-73.861082,4,9,4,0
+63 Street,SRTS,denied,40.719547,-73.90154,4,5,0,0
+Otto Road,SRTS,denied,40.705811,-73.888262,4,4,0,0
+71 Street,SRTS,denied,40.733642,-73.89316599999998,4,7,2,0
+88 Street,SRTS,denied,40.705899,-73.86108199999998,4,9,4,0
+73 Place,SRTS,denied,40.7072,-73.877429,4,7,1,0
+73 Place,SRTS,denied,40.708562,-73.878021,4,7,0,0
+57 Road,SRTS,denied,40.722373,-73.910645,4,4,1,0
+74 Street,SRTS,denied,40.7240344536832,-73.887059271983,4,5,1,0
+54 Avenue,SRTS,denied,40.729209,-73.893693,4,4,3,0
+78 Avenue,SRTS,approved,40.705899,-73.86108199999998,4,9,4,0
+76 Street,SRTS,approved,40.704552,-73.873354,4,7,1,0
+69 Road,SRTS,denied,40.708439,-73.876204,4,7,2,0
+72 Place,SRTS,denied,40.7308484188404,-73.8914460268618,4,6,1,0
+74 Street,SRTS,denied,40.724639,-73.887076,4,5,2,0
+Caldwell Avenue,SRTS,denied,40.724819,-73.888974,4,4,1,0
+Caldwell Avenue,SRTS,denied,40.724971,-73.873644,4,4,1,0
+77 Avenue,SRTS,approved,40.7066825576691,-73.86936837845901,4,4,1,0
+Otto Road,SRTS,denied,40.706154,-73.88554899999998,4,5,1,0
+Maspeth Avenue,SRTS,approved,40.723141,-73.90641599999998,4,6,1,0
+Cooper Avenue,SRTS,denied,40.699678,-73.887714,4,4,0,0
+74 Street,SRTS,denied,40.724363834933,-73.88706953709779,4,5,2,0
+64 Road,SRTS,denied,40.72005,-73.86968899999998,4,4,0,0
+79 Street & 78 Avenue,Signal Study,denied,40.704704,-73.87154,4,6,0,0
+Cooper Avenue & 61 Street,Signal Study,approved,40.696912,-73.893564,4,5,1,0
+63 Street & 59 Drive,Signal Study,denied,40.719547,-73.90154,4,5,0,0
+60 Lane,SRTS,denied,40.703415,-73.897647,4,4,1,0
+63 Street,SRTS,approved,40.728759,-73.903035,4,5,1,0
+69 Road,SRTS,denied,40.70796,-73.87777699999998,4,7,1,0
+Juniper Blvd North,SRTS,denied,40.721416,-73.88130599999998,4,4,1,0
+74 Street,SRTS,denied,40.7240344536832,-73.887059271983,4,5,1,0
+63 Street,SRTS,denied,40.728759,-73.903035,4,5,1,0
+79 Street,SRTS,denied,40.704706,-73.87152899999998,4,6,0,0
+73 Place,SRTS,approved,40.709814,-73.87853099999998,4,4,1,0
+Caldwell Avenue,SRTS,denied,40.724819,-73.888974,4,4,1,0
+Juniper Blvd North,SRTS,denied,40.721259,-73.883954,4,5,2,0
+62 Avenue,SRTS,denied,40.717617,-73.889534,4,7,2,0
+73 Place,SRTS,denied,40.70916,-73.878276,4,7,0,0
+Juniper Blvd North,SRTS,denied,40.721259,-73.883954,4,5,2,0
+54 Avenue,SRTS,denied,40.729209,-73.893693,4,4,3,0
+Jefferson Avenue,SRTS,denied,40.697572,-73.90757,4,5,1,0
+63 Street,SRTS,denied,40.728759,-73.903035,4,5,1,0
+Juniper Blvd South,SRTS,approved,40.719612,-73.878214,4,5,0,0
+69 Avenue,SRTS,denied,40.7027446908956,-73.8973128471499,4,4,1,0
+84 Street,SRTS,denied,40.725304,-73.872803,4,4,1,0
+62 Avenue,SRTS,denied,40.718255,-73.888144,4,7,2,0
+69 Street,SRTS,denied,40.717617,-73.889534,4,7,2,0
+58 Avenue & 69 Lane,Signal Study,denied,40.72603245689385,-73.89294966706467,4,4,0,0
+58 Place,SRTS,approved,40.722373,-73.910645,4,4,1,0
+Juniper Blvd North,SRTS,approved,40.72144,-73.880841,4,4,1,0
+77 Avenue,SRTS,denied,40.7067617540583,-73.86901475472028,4,4,1,0
+Caldwell Avenue,SRTS,denied,40.7251411170432,-73.8743218063233,4,4,2,0
+73 Place,SRTS,denied,40.709814,-73.87853099999998,4,4,1,0
+76 Street,SRTS,denied,40.704552,-73.873354,4,7,1,0
+St Felix Avenue,SRTS,denied,40.696799,-73.89677399999998,4,4,1,0
+Decatur Street,SRTS,denied,40.697435,-73.898601,4,5,3,0
+72 Street,SRTS,denied,40.7295592822212,-73.8924042613276,4,4,3,0
+54 Avenue,SRTS,denied,40.729209,-73.893693,4,4,3,0
+Cooper Avenue,SRTS,denied,40.696786,-73.893669,4,5,1,0
+63 Street,SRTS,denied,40.719547,-73.90154,4,5,0,0
+Hancock Street,SRTS,approved,40.697165,-73.906846,4,5,1,0
+74 Street,SRTS,denied,40.724363834933,-73.88706953709779,4,5,2,0
+Juniper Blvd North,SRTS,denied,40.72144,-73.880841,4,4,1,0
+73 Place,SRTS,denied,40.708562,-73.878021,4,7,0,0
+73 Place,SRTS,approved,40.709814,-73.878531,4,4,1,0
+88 Street,SRTS,denied,40.705899,-73.86108199999998,4,9,4,0
+82 Street,SRTS,denied,40.704748,-73.86676799999998,4,10,0,0
+72 Street,SRTS,denied,40.7295592822212,-73.8924042613276,4,4,3,0
+Aubrey Avenue,SRTS,denied,40.7107978594148,-73.8630552067531,4,5,0,0
+88 Street,SRTS,denied,40.705899,-73.86108199999998,4,9,4,0
+69 Road,SRTS,denied,40.70796,-73.877777,4,7,1,0
+Juniper Blvd South,SRTS,denied,40.7195381646523,-73.8786036670368,4,5,0,0
+Otto Road,SRTS,denied,40.705811,-73.88826199999998,4,4,0,0
+69 Road & 76 Street,Signal Study,denied,40.708439,-73.876204,4,7,2,0
+77 Avenue,SRTS,denied,40.706762,-73.869015,4,4,1,0
+69 Street,SRTS,denied,40.717617,-73.889534,4,7,2,0
+Jefferson Avenue,SRTS,denied,40.697572,-73.90757,4,5,1,0
+Otto Road,SRTS,denied,40.705811,-73.88826199999998,4,4,0,0
+Penelope Avenue,SRTS,denied,40.720528,-73.872271,4,4,2,0
+69 Lane & Long Island Expressway,Signal Study,approved,40.73248713329137,-73.89772588651475,3,3,0,0
+69 Place,SRTS,denied,40.718871,-73.888637,3,3,2,0
+74 Street,SRTS,denied,40.726143,-73.88713099999998,3,5,2,0
+77 Avenue,SRTS,denied,40.7064593049998,-73.8615312271111,3,5,3,0
+74 Street,SRTS,denied,40.725319,-73.8871,3,4,3,0
+69 Place,SRTS,denied,40.71764,-73.887658,3,3,2,0
+73 Place,SRTS,denied,40.711162,-73.87907,3,4,4,0
+78 Avenue,SRTS,denied,40.704473,-73.874307,3,5,1,0
+67 Drive,SRTS,denied,40.711162,-73.87907,3,4,4,0
+74 Avenue,SRTS,approved,40.708500074635694,-73.8627064495367,3,3,1,0
+79 Place,SRTS,approved,40.705579,-73.87094299999998,3,4,0,0
+68 Avenue,SRTS,denied,40.706177,-73.892702,3,3,1,0
+79 Avenue,SRTS,denied,40.7048,-73.86211199999998,3,3,0,0
+53 Avenue & 62 Street,Signal Study,denied,40.73172,-73.901767,3,3,1,0
+77 Avenue & 88 Street,Signal Study,denied,40.7064593049998,-73.8615312271111,3,5,3,0
+73 Place,SRTS,denied,40.711162,-73.87907,3,4,4,0
+Juniper Blvd North,SRTS,approved,40.721556,-73.878679,3,3,0,0
+72 Place,SRTS,approved,40.7305712055887,-73.89145369467148,3,5,1,0
+70 Street,SRTS,denied,40.733596,-73.894065,3,5,2,0
+69 Lane & Long Island Expressway,Signal Study,denied,40.73248713329137,-73.89772588651475,3,3,0,0
+69 Place & Queens Midtown Expressway,Signal Study,denied,40.72618992958762,-73.89237629589852,3,3,0,0
+70 Street,SRTS,denied,40.733596,-73.894065,3,5,2,0
+74 Street,SRTS,denied,40.718272,-73.882628,3,3,2,0
+Pleasantview Street,SRTS,denied,40.716172,-73.882379,3,3,0,0
+74 Street,SRTS,denied,40.725319,-73.8871,3,4,3,0
+Penelope Avenue,SRTS,denied,40.716172,-73.882379,3,3,0,0
+74 Street & 58 Avenue,Signal Study,denied,40.726143,-73.88714,3,5,2,0
+73 Place,SRTS,denied,40.711162,-73.87907,3,4,4,0
+Penelope Avenue,SRTS,denied,40.718641,-73.876336,3,4,0,0
+78 Avenue,SRTS,denied,40.705858523160096,-73.8617993762821,3,5,3,0
+64 Street,SRTS,denied,40.724902,-73.901803,3,4,0,0
+83 Street,SRTS,approved,40.704821,-73.86587,3,6,0,0
+77 Avenue,SRTS,denied,40.706315,-73.87408,3,3,1,0
+77 Avenue,SRTS,denied,40.7064593049998,-73.8615312271111,3,5,3,0
+73 Place,SRTS,denied,40.711162,-73.87907,3,4,4,0
+78 Avenue,SRTS,denied,40.704898,-73.870667,3,4,0,0
+64 Road,SRTS,denied,40.72042,-73.868891,3,3,0,0
+Cooper Avenue,SRTS,denied,40.699826,-73.886768,3,4,0,0
+Juniper Blvd North,SRTS,denied,40.721378,-73.881844,3,3,1,0
+69 Lane & Long Island Expressway,Signal Study,approved,40.73248713329137,-73.89772588651475,3,3,0,0
+75 Avenue,SRTS,denied,40.69859,-73.894849,3,5,0,0
+78 Street,SRTS,denied,40.719792,-73.877258,3,4,0,0
+76 Street,SRTS,denied,40.723136,-73.883237,3,4,2,0
+Furmanville Avenue,SRTS,denied,40.717452,-73.87536799999998,3,3,0,0
+Juniper Blvd North,SRTS,denied,40.721378,-73.881844,3,3,1,0
+77 Avenue,SRTS,denied,40.7067260103769,-73.86191660288969,3,5,3,0
+76 Street,SRTS,denied,40.706315,-73.87408,3,3,1,0
+87 Street,SRTS,denied,40.7048,-73.86211199999998,3,3,0,0
+60 Lane,SRTS,denied,40.69859,-73.89484899999998,3,5,0,0
+80 Avenue,SRTS,denied,40.696287,-73.88843,3,4,0,0
+77 Road,SRTS,denied,40.705579,-73.87094299999998,3,4,0,0
+69 Lane & Long Island Expressway,Signal Study,approved,40.73248713329137,-73.89772588651475,3,3,0,0
+79 Place,SRTS,denied,40.704898,-73.870667,3,4,0,0
+85 Street,SRTS,approved,40.705722,-73.864137,3,3,0,0
+Juniper Blvd North,SRTS,denied,40.721508,-73.879733,3,3,1,0
+76 Street,SRTS,denied,40.706315,-73.87408,3,3,1,0
+71 Street,SRTS,denied,40.718909,-73.885318,3,3,1,0
+Juniper Blvd North,SRTS,denied,40.721556,-73.878679,3,3,0,0
+85 Street,SRTS,denied,40.705722,-73.864137,3,3,0,0
+60 Lane,SRTS,denied,40.7157134963596,-73.9034144626589,3,4,1,0
+78 Street & Furmanville Avenue,Signal Study,denied,40.71745,-73.875374,3,3,0,0
+76 Street & Juniper Boulevard North,Signal Study,denied,40.72138,-73.88185,3,3,1,0
+84 Street,SRTS,denied,40.72042,-73.868891,3,3,0,0
+76 Street,SRTS,denied,40.7231358487323,-73.8832366252968,3,4,2,0
+75 Street,SRTS,denied,40.726157998599,-73.88614648969299,3,5,2,0
+69 Place,SRTS,denied,40.718871,-73.888637,3,3,2,0
+83 Street,SRTS,denied,40.704821,-73.86587,3,6,0,0
+58 Road & 69 Lane,Signal Study,denied,40.72583856349958,-73.89280619319487,3,3,0,0
+69 Place & Queens Midtown Expressway,Signal Study,denied,40.72618992958762,-73.89237629589852,3,3,0,0
+88 Street & 77 Avenue,Signal Study,denied,40.7064593049998,-73.8615312271111,3,5,3,0
+Eliot Avenue & 76 Street,Signal Study,denied,40.723136,-73.883237,3,4,2,0
+78 Avenue,SRTS,denied,40.7058047457163,-73.8627336413342,3,3,0,0
+78 Avenue,SRTS,denied,40.705722,-73.864137,3,3,0,0
+Juniper Blvd North,SRTS,denied,40.721508,-73.879733,3,3,1,0
+77 Avenue,SRTS,denied,40.7067260103769,-73.86191660288969,3,5,3,0
+69 Place,SRTS,denied,40.717028,-73.887161,3,4,0,0
+60 Drive,SRTS,denied,40.715284,-73.904223,3,3,2,0
+88 Street,SRTS,denied,40.709248,-73.863776,3,3,1,0
+85 Street,SRTS,approved,40.705722,-73.864137,3,3,0,0
+Juniper Blvd South,SRTS,denied,40.719792,-73.877258,3,4,0,0
+60 Lane,SRTS,denied,40.7157134963596,-73.9034144626589,3,4,1,0
+60 Lane,SRTS,denied,40.69859,-73.894849,3,5,0,0
+Penelope Avenue,SRTS,denied,40.716172,-73.882379,3,3,0,0
+69 Place,SRTS,denied,40.718871,-73.888637,3,3,2,0
+Juniper Boulevard North & 76 Street,Signal Study,denied,40.72138,-73.88185,3,3,1,0
+76 Street,SRTS,approved,40.706315,-73.87408,3,3,1,0
+66 Road,SRTS,denied,40.714047,-73.887,3,6,0,0
+Pleasantview Street,SRTS,approved,40.716172,-73.882379,3,3,0,0
+70 Street,SRTS,denied,40.733596,-73.894065,3,5,2,0
+80 Avenue,SRTS,denied,40.6951471909563,-73.8943025596502,3,3,1,0
+88 Street,SRTS,denied,40.708331,-73.86304199999998,3,3,1,0
+88 Street,SRTS,denied,40.708331,-73.86304199999998,3,3,1,0
+88 Street,SRTS,denied,40.7067313007505,-73.8617506781801,3,5,3,0
+Penelope Avenue,SRTS,denied,40.7209,-73.87147299999998,3,3,1,0
+62 Avenue,SRTS,denied,40.718631,-73.887314,3,3,2,0
+73 Place & 67 Drive,Signal Study,denied,40.711163,-73.87907,3,4,4,0
+75 Street & 78 Avenue,Signal Study,approved,40.704473,-73.874307,3,5,1,0
+88 Street,SRTS,denied,40.7093275968515,-73.8638409378547,3,3,1,0
+78 Street,SRTS,denied,40.717452,-73.87536799999998,3,3,0,0
+65 Street,SRTS,approved,40.706177,-73.892702,3,3,1,0
+88 Street,SRTS,denied,40.7064593049998,-73.8615312271111,3,5,3,0
+Juniper Blvd South,SRTS,approved,40.719792,-73.877258,3,4,0,0
+77 Avenue,SRTS,denied,40.7067260103769,-73.86191660288969,3,5,3,0
+78 Street,SRTS,denied,40.717452,-73.87536799999998,3,3,0,0
+70 Avenue,SRTS,denied,40.705617,-73.883455,3,3,1,0
+74 Avenue,SRTS,denied,40.708331,-73.863042,3,3,1,0
+62 Street,SRTS,denied,40.73172,-73.901764,3,3,1,0
+69 Street,SRTS,denied,40.714047,-73.887,3,6,0,0
+75 Street,SRTS,denied,40.704473,-73.874307,3,5,1,0
+68 Avenue,SRTS,denied,40.706177,-73.892702,3,3,1,0
+Rust Street & Flushing Avenue,Signal Study,denied,40.71677820600362,-73.9090663474871,3,3,2,0
+77 Avenue & 76 Street,Signal Study,denied,40.706315,-73.87408,3,3,1,0
+73 Place,SRTS,denied,40.711162,-73.87907,3,4,4,0
+78 Street & Juniper Boulevard South,Signal Study,denied,40.71979,-73.877266,3,4,0,0
+79 Place,SRTS,denied,40.704898,-73.870667,3,4,0,0
+69 Place,SRTS,approved,40.705617,-73.883455,3,3,1,0
+75 Street,SRTS,denied,40.710128,-73.877041,3,3,0,0
+Juniper Boulevard North,SRTS,denied,40.721378,-73.881844,3,3,1,0
+78 Avenue & 87 Street,Signal Study,approved,40.705832,-73.862265,2,2,0,0
+Cooper Avenue & 60 Lane,Signal Study,denied,40.6965692144966,-73.8945563503407,2,2,1,0
+81 Street,SRTS,denied,40.728415,-73.880778,2,2,0,0
+87 Street,SRTS,denied,40.705832,-73.862265,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+53 Avenue,SRTS,denied,40.731251,-73.890522,2,3,0,0
+Juniper Blvd North,SRTS,denied,40.721319,-73.88289,2,2,0,0
+52 Court & 74 Street,Signal Study,denied,40.731895,-73.88826,2,2,1,0
+67 Street & Otto Road,Signal Study,denied,40.7056,-73.889118,2,2,0,0
+86 Street,SRTS,denied,40.705775,-73.863199,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Doran Avenue,SRTS,denied,40.7094924402107,-73.8639740590255,2,2,1,0
+74 Street,SRTS,denied,40.731897,-73.888255,2,2,1,0
+74 Street,SRTS,approved,40.717917,-73.882355,2,2,2,0
+Furmanville Avenue,SRTS,denied,40.717329,-73.87638599999998,2,2,0,0
+80 Avenue,SRTS,denied,40.695874,-73.890223,2,2,0,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+74 Street,SRTS,denied,40.732515,-73.888308,2,2,1,0
+Juniper Blvd North,SRTS,approved,40.721319,-73.88289,2,2,0,0
+74 Street,SRTS,denied,40.7327612820513,-73.8883326181025,2,2,1,0
+68 Road,SRTS,denied,40.710348,-73.875241,2,2,0,0
+Doran Avenue,SRTS,denied,40.7094924402107,-73.8639740590255,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+75 Avenue,SRTS,denied,40.707751,-73.862575,2,2,0,0
+71 Street,SRTS,denied,40.734561,-73.89323299999998,2,5,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Lutheran Avenue,SRTS,denied,40.720818135979,-73.88483523698771,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Rutledge Avenue,SRTS,denied,40.70891,-73.863506,2,2,1,0
+Rutledge Avenue,SRTS,denied,40.70891,-73.863506,2,2,1,0
+64 Road,SRTS,approved,40.72079,-73.868089,2,2,0,0
+78 Avenue,SRTS,denied,40.705832,-73.862265,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+77 Avenue,SRTS,denied,40.7066337156201,-73.8674604690496,2,2,0,0
+60 Lane,SRTS,denied,40.714225472848895,-73.9029837520428,2,7,0,0
+77 Avenue,SRTS,denied,40.706701,-73.863327,2,2,0,0
+81 Street,SRTS,denied,40.7284142459796,-73.8807775493373,2,2,0,0
+Otto Road,SRTS,denied,40.706226,-73.886527,2,3,0,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+St Felix Avenue,SRTS,denied,40.697061,-73.894631,2,2,1,0
+Otto Road,SRTS,denied,40.7056,-73.889118,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+73 Street,SRTS,denied,40.731251,-73.890522,2,3,0,0
+64 Road,SRTS,denied,40.719678,-73.87049,2,2,0,0
+77 Avenue,SRTS,denied,40.706707926767,-73.86286162702419,2,2,0,0
+64 Street,SRTS,denied,40.720743,-73.900914,2,2,0,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+64 Street,SRTS,denied,40.720743,-73.900914,2,2,0,0
+75 Street,SRTS,denied,40.70895,-73.876477,2,2,1,0
+88 Street,SRTS,denied,40.7072807977602,-73.8622040017077,2,2,0,0
+Juniper Blvd North,SRTS,denied,40.721319,-73.88289,2,2,0,0
+49 Street,SRTS,approved,40.719328,-73.920238,2,2,1,0
+64 Street,SRTS,denied,40.720743,-73.900914,2,2,0,0
+71 Street,SRTS,denied,40.732659,-73.89309199999998,2,2,1,0
+Juniper Blvd South,SRTS,denied,40.719344358877294,-73.87962494316838,2,3,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+60 Drive,SRTS,denied,40.715398,-73.903328,2,2,1,0
+77 Avenue,SRTS,denied,40.706716,-73.862389,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+78 Avenue,SRTS,denied,40.705665,-73.865071,2,2,0,0
+Penelope Avenue,SRTS,denied,40.718269,-73.877141,2,2,0,0
+60 Lane,SRTS,denied,40.714225472848895,-73.9029837520428,2,7,0,0
+Juniper Blvd South,SRTS,denied,40.719344358877294,-73.87962494316838,2,3,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+77 Avenue,SRTS,denied,40.706707926767,-73.86286162702419,2,2,0,0
+60 Lane,SRTS,denied,40.715398,-73.903328,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+58 Avenue,SRTS,approved,40.72852,-73.879035,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+60 Lane,SRTS,denied,40.714225472848895,-73.9029837520428,2,7,0,0
+88 Street,SRTS,denied,40.70891,-73.863506,2,2,1,0
+Furmanville Avenue,SRTS,denied,40.719269,-73.867969,2,2,0,0
+Cooper Avenue,SRTS,denied,40.696144,-73.89442,2,2,1,0
+60 Lane,SRTS,denied,40.697061,-73.894631,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+65 Place,SRTS,denied,40.707201,-73.892155,2,3,0,0
+Rutledge Avenue,SRTS,denied,40.709858,-73.861672,2,2,0,0
+Otto Road,SRTS,denied,40.7056,-73.889118,2,2,0,0
+St Felix Avenue,SRTS,denied,40.6970471203485,-73.8949017988131,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Otto Road,SRTS,denied,40.706226,-73.886527,2,3,0,0
+84 Place,SRTS,denied,40.720185,-73.867603,2,2,0,0
+Otto Road,SRTS,denied,40.7056,-73.88911799999998,2,2,0,0
+66 Place,SRTS,denied,40.7056,-73.889118,2,2,0,0
+81 Street,SRTS,denied,40.7284142459796,-73.8807775493373,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+87 Street,SRTS,denied,40.705832,-73.86226499999998,2,2,0,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+Juniper Valley Road,SRTS,denied,40.7157733037706,-73.8743755433233,2,2,0,0
+79 Street,SRTS,approved,40.7065925222123,-73.87229728672638,2,3,0,0
+77 Avenue & 87 Street,Signal Study,denied,40.706707926767,-73.86286162702419,2,2,0,0
+Doran Avenue,SRTS,denied,40.7091040213171,-73.865111040547,2,2,1,0
+88 Street,SRTS,denied,40.7096215717286,-73.86408200482019,2,2,1,0
+Juniper Blvd South,SRTS,denied,40.7184440534259,-73.8822564027201,2,2,2,0
+64 Street,SRTS,denied,40.7186697232472,-73.9003330113506,2,2,0,0
+78 Avenue,SRTS,denied,40.705592,-73.86597999999998,2,5,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+65 Place,SRTS,denied,40.706399,-73.89181399999998,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Cooper Avenue,SRTS,denied,40.696251,-73.894286,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Otto Road,SRTS,denied,40.7056,-73.88911799999998,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+79 Street,SRTS,denied,40.715774,-73.874376,2,2,0,0
+65 Place,SRTS,denied,40.706399,-73.891814,2,2,1,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+77 Avenue,SRTS,denied,40.7066337156201,-73.8674604690496,2,2,0,0
+58 Road & 64 Street,Signal Study,denied,40.720743,-73.900914,2,2,0,0
+Furmanville Avenue,SRTS,denied,40.717329,-73.87638599999998,2,2,0,0
+Otto Road,SRTS,denied,40.706226,-73.886527,2,3,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+Penelope Avenue,SRTS,denied,40.716169,-73.881882,2,2,1,0
+Juniper Blvd South,SRTS,denied,40.7184440534259,-73.8822564027201,2,2,2,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+64 Street,SRTS,denied,40.7138201920778,-73.8977322556533,2,2,0,0
+76 Street,SRTS,denied,40.726478,-73.884475,2,3,3,0
+Juniper Valley Road,SRTS,denied,40.7157733037706,-73.8743755433233,2,2,0,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+60 Lane & St Felix Avenue,Signal Study,approved,40.697061,-73.894631,2,2,1,0
+61 Street & St Felix Avenue,Signal Study,approved,40.697061,-73.894631,2,2,1,0
+64 Street,SRTS,denied,40.720743,-73.900914,2,2,0,0
+83 Street,SRTS,denied,40.705592,-73.86597999999998,2,5,0,0
+60 Lane,SRTS,denied,40.714225472848895,-73.9029837520428,2,7,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+77 Avenue,SRTS,denied,40.706707926767,-73.86286162702419,2,2,0,0
+52 Road,SRTS,denied,40.732924,-73.897919,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+60 Lane,SRTS,denied,40.6965692144966,-73.8945563503407,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+74 Street,SRTS,denied,40.733206,-73.888375,2,2,1,0
+Cooper Avenue & 60 Lane,Signal Study,approved,40.6965692144966,-73.8945563503407,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Cooper Avenue,SRTS,denied,40.6961436501946,-73.8944199860379,2,2,1,0
+64 Street,SRTS,denied,40.7186697232472,-73.9003330113506,2,2,0,0
+Furmanville Avenue,SRTS,denied,40.717329,-73.87638599999998,2,2,0,0
+73 Place,SRTS,denied,40.7161682613593,-73.8818816533785,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+72 Street,SRTS,approved,40.733682,-73.892131,2,5,0,0
+74 Street,SRTS,denied,40.731897,-73.888255,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Pleasantview Street,SRTS,denied,40.717917,-73.882355,2,2,2,0
+71 Street,SRTS,denied,40.732659,-73.89309199999998,2,2,1,0
+62 Avenue,SRTS,approved,40.714224523278,-73.8986947641141,2,2,0,0
+72 Street,SRTS,denied,40.733682,-73.892131,2,5,0,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+87 Street,SRTS,approved,40.706716,-73.86238899999998,2,2,0,0
+87 Street,SRTS,denied,40.705832,-73.86226499999998,2,2,0,0
+Penelope Avenue & 79 Street,Signal Study,approved,40.716185,-73.88164,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+77 Avenue,SRTS,denied,40.706707926767,-73.86286162702419,2,2,0,0
+66 Place,SRTS,approved,40.7056,-73.88911799999998,2,2,0,0
+81 Street,SRTS,denied,40.728415,-73.880778,2,2,0,0
+60 Lane,SRTS,denied,40.696250573573295,-73.8942863853982,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+76 Avenue,SRTS,denied,40.707377,-73.862283,2,2,0,0
+76 Street,SRTS,approved,40.7101017556502,-73.8761103791373,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+88 Street,SRTS,denied,40.707751,-73.862575,2,2,0,0
+49 Street,SRTS,approved,40.719328,-73.920238,2,2,1,0
+St Felix Avenue,SRTS,denied,40.6972011231344,-73.89522612333381,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+65 Street,SRTS,approved,40.7146101363799,-73.89711781196499,2,2,0,0
+88 Street,SRTS,denied,40.707377,-73.862283,2,2,0,0
+84 Place,SRTS,denied,40.72079,-73.868089,2,2,0,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Penelope Avenue,SRTS,denied,40.716185,-73.88164,2,2,1,0
+49 Street,SRTS,denied,40.719328,-73.920238,2,2,1,0
+Furmanville Avenue,SRTS,denied,40.717329,-73.87638599999998,2,2,0,0
+76 Street & 58 Avenue,Signal Study,denied,40.726478,-73.884475,2,3,3,0
+52 Road & 67 Street,Signal Study,denied,40.732924,-73.897919,2,2,0,0
+Traffic Avenue,SRTS,denied,40.710298,-73.896461,1,2,0,0
+52 Avenue,SRTS,denied,40.733605,-73.897893,1,1,0,0
+77 Place,SRTS,denied,40.725084,-73.882587,1,1,1,0
+70 Avenue,SRTS,approved,40.70639,-73.87999499999998,1,1,0,0
+80 Avenue,SRTS,denied,40.695674,-73.891121,1,1,0,0
+74 Street,SRTS,denied,40.7322616916538,-73.8882865487045,1,1,1,0
+77 Avenue,SRTS,denied,40.706649167493296,-73.866580375248,1,1,0,0
+77 Avenue,SRTS,denied,40.706685,-73.86426799999998,1,1,0,0
+74 Street,SRTS,denied,40.7341585041071,-73.88847821701901,1,1,0,0
+67 Drive,SRTS,approved,40.711407,-73.877352,1,2,2,0
+74 Street,SRTS,denied,40.716412,-73.881142,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.7172038251902,-73.87738501479049,1,1,0,0
+Otto Road,SRTS,denied,40.706018,-73.88739599999998,1,1,0,0
+77 Street,SRTS,denied,40.717225606398095,-73.8772190348891,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+80 Avenue,SRTS,approved,40.696082,-73.88932099999998,1,1,0,0
+Caldwell Avenue,SRTS,denied,40.724951,-73.883583,1,1,1,0
+77 Avenue,SRTS,denied,40.706649167493296,-73.866580375248,1,1,0,0
+80 Road,SRTS,denied,40.694763,-73.89157299999998,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+73 Street,SRTS,denied,40.73264,-73.890422,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+77 Avenue,SRTS,denied,40.706685,-73.86426799999998,1,1,0,0
+68 Avenue,SRTS,denied,40.710735,-73.877184,1,1,0,0
+Doran Avenue,SRTS,denied,40.710427,-73.862179,1,1,0,0
+70 Street,SRTS,approved,40.7058,-73.882614,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.7172038251902,-73.87738501479049,1,1,0,0
+54 Avenue,SRTS,approved,40.727841,-73.904075,1,1,0,0
+59 Avenue & 64 Street,Signal Study,denied,40.719765,-73.900635,1,1,0,0
+Penelope Avenue,SRTS,denied,40.716412,-73.88114199999998,1,1,0,0
+Mt Oliver Crescent,SRTS,denied,40.717967,-73.900049,1,1,0,0
+54 Avenue & 61 Street,Signal Study,denied,40.72784,-73.904076,1,1,0,0
+74 Street & Long Island Expressway,Signal Study,denied,40.73325234109461,-73.89087437329368,1,1,0,0
+72 Place,SRTS,denied,40.734513,-73.891137,1,2,0,0
+85 Street,SRTS,denied,40.706685,-73.86426799999998,1,1,0,0
+Mt Olivet Crescent,SRTS,denied,40.717540729921694,-73.8993029822208,1,1,0,0
+Mt Olivet Crescent,SRTS,denied,40.7179668181462,-73.9000490757694,1,1,0,0
+78 Avenue & 74 Street,Signal Study,approved,40.704215,-73.876161,1,1,1,0
+Otto Road,SRTS,denied,40.706018,-73.88739599999998,1,1,0,0
+Mt Olivet Crescent,SRTS,denied,40.7178348847818,-73.89983643587678,1,1,0,0
+69 Street & 52 Avenue,Signal Study,approved,40.733605,-73.897893,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+Otto Road & 68 Street,Signal Study,denied,40.706018,-73.88739599999998,1,1,0,0
+Otto Road,SRTS,denied,40.706018,-73.887396,1,1,0,0
+Traffic Avenue,SRTS,denied,40.710298,-73.896461,1,2,0,0
+78 Avenue,SRTS,denied,40.704215,-73.876161,1,1,1,0
+Pleasant View Street & Penelope Avenue,Signal Study,denied,40.71637375498335,-73.8824929995786,1,1,0,0
+Mt Olivet Crescent,SRTS,approved,40.717967,-73.90004899999998,1,1,0,0
+73 Place,SRTS,denied,40.704215,-73.876161,1,1,1,0
+59 Avenue,SRTS,denied,40.719765,-73.900627,1,1,0,0
+52 Avenue & 74 Street,Signal Study,denied,40.733852,-73.88845,1,1,0,0
+52 Court,SRTS,denied,40.731959,-73.890477,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+Mt Olivet Crescent,SRTS,denied,40.7179668181462,-73.9000490757694,1,1,0,0
+Mt Olivet Crescent,SRTS,approved,40.717381284328894,-73.8990182389183,1,1,0,0
+70 Street,SRTS,denied,40.7058,-73.882614,1,1,0,0
+Doran Avenue,SRTS,denied,40.710427,-73.862179,1,1,0,0
+Mt Olivet Crescent,SRTS,denied,40.717967,-73.90004899999998,1,1,0,0
+Juniper Blvd South,SRTS,denied,40.718642,-73.88182999999998,1,1,1,0
+Mt Olivet Crescent,SRTS,denied,40.717967,-73.90004899999998,1,1,0,0
+Caldwell Avenue & 76 Street,Signal Study,denied,40.7247871573391,-73.88493300424899,1,1,1,0
+76 Street & 60 Road,Signal Study,denied,40.71487910247034,-73.9170547061539,1,1,0,0
+75 Street,SRTS,denied,40.710735,-73.877184,1,1,0,0
+57 Road,SRTS,approved,40.722448,-73.908423,1,1,1,0
+53 Drive & 67 Street,Signal Study,denied,40.729603,-73.89784,1,1,0,0
+77 Avenue,SRTS,denied,40.706642,-73.867038,1,1,0,0
+77 Avenue & 82 Street,Signal Study,denied,40.7066414632302,-73.86703845623569,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+67 Street,SRTS,denied,40.734291,-73.897863,1,3,0,0
+Juniper Blvd South,SRTS,denied,40.718642,-73.88182999999998,1,1,1,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+62 Road,SRTS,denied,40.717021,-73.888987,1,4,0,0
+Furmanville Avenue,SRTS,denied,40.7172038251902,-73.87738501479049,1,1,0,0
+69 Street,SRTS,denied,40.717021,-73.888987,1,4,0,0
+67 Street,SRTS,denied,40.734291,-73.897863,1,3,0,0
+51 Road,SRTS,approved,40.734291,-73.897863,1,3,0,0
+Mt Olivet Crescent,SRTS,approved,40.717381284328894,-73.8990182389183,1,1,0,0
+Juniper Blvd South,SRTS,denied,40.7191669452444,-73.8805812491238,1,1,0,0
+Caldwell Avenue,SRTS,denied,40.724951,-73.883583,1,1,1,0
+74 Street,SRTS,denied,40.733854,-73.888443,1,1,0,0
+Caldwell Avenue,SRTS,approved,40.7247871573391,-73.88493300424899,1,1,1,0
+75 Place,SRTS,denied,40.716981,-73.879135,1,1,0,0
+Doran Avenue,SRTS,denied,40.710427,-73.862179,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.7169806051454,-73.87913500198388,1,1,0,0
+77 Avenue & 83 Street,Signal Study,denied,40.706649167493296,-73.866580375248,1,1,0,0
+56 Road,SRTS,denied,40.7242703073576,-73.90181464357411,1,1,0,0
+77 Avenue,SRTS,denied,40.706685,-73.86426799999998,1,1,0,0
+77 Avenue & 85 Street,Signal Study,denied,40.706685,-73.86426799999998,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+77 Avenue & 86 Street,Signal Study,denied,40.706685,-73.86426799999998,1,1,0,0
+77 Avenue,SRTS,denied,40.706685,-73.864268,1,1,0,0
+76 Street,SRTS,denied,40.719252,-73.880123,1,1,0,0
+74 Street & Calamus Avenue,Signal Study,denied,40.73437626541044,-73.88953953143351,1,1,0,0
+Mt Olivet Crescent,SRTS,denied,40.714818,-73.89628399999998,1,1,0,0
+Mt Olivet Crescent,SRTS,denied,40.717540729921694,-73.8993029822208,1,1,0,0
+77 Place,SRTS,denied,40.725722,-73.883109,1,1,1,0
+Furmanville Avenue,SRTS,approved,40.718905,-73.868778,1,1,0,0
+80 Avenue,SRTS,denied,40.695257,-73.893888,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.7169806051454,-73.87913500198388,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.718546,-73.86958699999998,1,1,0,0
+Otto Road,SRTS,denied,40.706018,-73.887396,1,1,0,0
+67 Place,SRTS,approved,40.706018,-73.88739599999998,1,1,0,0
+Mt Olivet Crescent,SRTS,approved,40.714818,-73.89628399999998,1,1,0,0
+76 Street,SRTS,denied,40.725569,-73.8843,1,1,1,0
+Furmanville Avenue,SRTS,denied,40.716981,-73.879135,1,1,0,0
+59 Street,SRTS,denied,40.722448,-73.908423,1,1,1,0
+77 Avenue,SRTS,denied,40.706649167493296,-73.866580375248,1,1,0,0
+Mt Olivet Crescent,SRTS,denied,40.7178348847818,-73.89983643587678,1,1,0,0
+77 Avenue,SRTS,denied,40.706685,-73.86426799999998,1,1,0,0
+75 Street,SRTS,denied,40.718642,-73.88183,1,1,1,0
+67 Street,SRTS,denied,40.734291,-73.897863,1,3,0,0
+74 Street,SRTS,denied,40.7334475365076,-73.88840002509379,1,1,0,0
+Otto Road,SRTS,denied,40.706018,-73.887396,1,1,0,0
+69 Street,SRTS,denied,40.717021,-73.888987,1,4,0,0
+72 Place,SRTS,denied,40.734512376982096,-73.89113695866821,1,2,0,0
+Juniper Blvd South,SRTS,denied,40.7191669452444,-73.8805812491238,1,1,0,0
+Caldwell Avenue,SRTS,denied,40.724883,-73.884136,1,1,1,0
+77 Avenue,SRTS,denied,40.706649167493296,-73.866580375248,1,1,0,0
+Furmanville Avenue,SRTS,approved,40.71816,-73.870529,1,1,0,0
+Mount Olivet Crescent,SRTS,denied,40.714818,-73.896284,1,1,0,0
+64 Street,SRTS,denied,40.7242703073576,-73.90181464357411,1,1,0,0
+73 Street,SRTS,denied,40.731959,-73.890477,1,1,0,0
+Furmanville Avenue,SRTS,denied,40.7169806051454,-73.87913500198388,1,1,0,0
+71 Street,SRTS,denied,40.706070134307,-73.88174806145788,1,1,0,0
+77 Avenue,SRTS,denied,40.70667,-73.865206,0,0,0,0
+Cody Avenue & Wyckoff Avenue,Signal Study,denied,40.68692617586851,-73.88898363304652,0,0,0,0
+77 Avenue,SRTS,denied,40.70667,-73.865206,0,0,0,0
+77 Avenue,SRTS,denied,40.706262,-73.871219,0,0,0,0
+79 Place,SRTS,denied,40.706262,-73.871219,0,0,0,0
+80 Avenue,SRTS,denied,40.695492,-73.893004,0,0,0,0
+77 Avenue,SRTS,denied,40.706657,-73.86613,0,0,0,0
+Traffic Avenue,SRTS,denied,40.710774,-73.897575,0,0,0,0
+64 Street,SRTS,denied,40.7242154122412,-73.9018147244509,0,0,0,0
+58 Avenue,SRTS,denied,40.7289963729949,-73.87838077946,0,0,0,0
+Penelope Avenue,SRTS,denied,40.716785,-73.88034399999998,0,0,0,0
+77 Avenue,SRTS,denied,40.70667,-73.865206,0,0,0,0
+84 Street,SRTS,denied,40.70667,-73.865206,0,0,0,0
+70 Avenue,SRTS,denied,40.706314,-73.880904,0,0,0,0
+77 Avenue,SRTS,denied,40.706657,-73.86613,0,0,0,0
+Caldwell Avenue,SRTS,denied,40.724609988993,-73.8861816044145,0,0,0,0
+77 Avenue,SRTS,denied,40.70667,-73.865206,0,0,0,0
+Vermont Place,SRTS,approved,40.688020278375,-73.88979217513598,0,0,0,0
+Vermont Place,SRTS,denied,40.6855298993555,-73.88888766164531,0,0,0,0
+84 Street & 78 Avenue,Signal Study,approved,40.70667,-73.865206,0,0,0,0
+Furmanville Avenue,SRTS,approved,40.719641,-73.867168,0,0,0,0
+64 Street,SRTS,denied,40.724216,-73.901815,0,0,0,0
+73 Street,SRTS,denied,40.73379,-73.89031199999998,0,0,0,0
+77 Avenue,SRTS,denied,40.706657,-73.86613,0,0,0,0
+77 Avenue,SRTS,denied,40.706657,-73.86613,0,0,0,0
+77 Avenue,SRTS,denied,40.706657,-73.86613,0,0,0,0
+80 Avenue,SRTS,denied,40.695469,-73.892016,0,0,0,0
+75 Place,SRTS,denied,40.719014,-73.881025,0,0,0,0
+61 Drive,SRTS,denied,40.71667,-73.892692,0,0,0,0
+80 Avenue,SRTS,approved,40.695469,-73.892016,0,0,0,0
+79 Place,SRTS,denied,40.706798,-73.871442,0,0,0,0
+78 Avenue,SRTS,denied,40.704392,-73.875255,0,0,0,0
+64 Street,SRTS,denied,40.724216,-73.901815,0,0,0,0
+77 Avenue,SRTS,approved,40.70667,-73.865206,0,0,0,0
+83 Street,SRTS,denied,40.706657,-73.86613,0,0,0,0
+77 Avenue,SRTS,denied,40.70667,-73.865206,0,0,0,0
+75 Place,SRTS,denied,40.717152,-73.879557,0,0,0,0
+Caldwell Avenue,SRTS,denied,40.7246208966634,-73.88610943003651,0,0,0,0
+Doran Avenue,SRTS,denied,40.708674,-73.865949,0,0,0,0
+77 Avenue,SRTS,denied,40.706657,-73.86613,0,0,0,0
+80 Avenue,SRTS,denied,40.6953742217711,-73.893451135484,0,0,0,0
+73 Street,SRTS,denied,40.733323,-73.89035199999998,0,0,0,0
+Traffic Avenue,SRTS,denied,40.710774,-73.897575,0,0,0,0
+80 Avenue,SRTS,denied,40.695492,-73.893004,0,0,0,0
+Woodhaven Boulevard & Furmanville Avenue,Signal Study,denied,40.719641,-73.867168,0,0,0,0
+78 Avenue & 84 Street,Signal Study,denied,40.70667,-73.865206,0,0,0,0

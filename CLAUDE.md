@@ -4,86 +4,63 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Geospatial analysis correlating rejected NYC DOT safety requests with traffic accidents in Queens Community Board 5. Uses NYC Open Data APIs to demonstrate potential correlations between denied safety infrastructure requests and subsequent vehicle collisions.
+This is a data analysis project examining NYC DOT safety infrastructure request outcomes for Queens Community Board 5 (CB5). The analysis calculates "batting average" (approval rates) for traffic signals, stop signs, speed bumps, and other safety requests, comparing CB5 to citywide baselines.
 
-## Tech Stack
-
-- **Python 3.x** with pandas, numpy, geopandas
-- **Visualization:** matplotlib, seaborn, folium (interactive maps)
-- **Data Source:** NYC Open Data Socrata API
-
-## Running Analysis Scripts
+## Commands
 
 ```bash
-# Generate visualization charts
-python chart_builder.py
+# Activate virtual environment
+source .venv/bin/activate
 
-# Main correlation analysis
-python correlation_analysis.py
+# Fetch fresh data from NYC Open Data API
+python scripts_fetch_data.py
 
-# Build interactive map (outputs index.html)
-python map_builder.py
+# Generate all charts (Part 1)
+python generate_charts.py
 
-# Launch local server at http://localhost:8000
-python start_server.py
+# Generate maps & crash-denial correlation analysis (Part 2)
+python generate_maps.py
 
-# Specialized analyses
-python infrastructure_analysis.py
-python maintenance_analysis.py
-python identify_denied_crashes.py
-python identify_pending_risks.py
-python baseline_benchmark.py
-
-# Data quality audits
-python data_dictionary_audit.py
-python check_complaint_types.py
+# View analysis notebook (displays charts, doesn't generate them)
+jupyter notebook analysis_notebook.ipynb
 ```
 
-## Architecture
+## Data Pipeline
 
-### Data Pipeline
-`chart_builder.fetch_data()` is the central data fetching function used across all analysis modules. It queries NYC Open Data via Socrata API with SQL-like WHERE clauses.
+1. **Data Fetching**: `scripts_fetch_data.py` downloads from NYC Open Data Socrata API
+2. **Raw Storage**: CSV files saved to `data_raw/`
+3. **Chart Generation**: `generate_charts.py` creates all charts from raw data (Part 1)
+4. **Map & Correlation Generation**: `generate_maps.py` geocodes intersections, runs proximity analysis, generates interactive maps and correlation charts (Part 2)
+5. **Analysis**: `analysis_notebook.ipynb` displays charts and summary statistics
+6. **Output**: Charts (PNG), maps (HTML), and processed data saved to `output/`
 
-### Analysis Modules
-Each analysis script is standalone and follows the pattern:
-1. Fetch data via `chart_builder.fetch_data()` or direct API calls
-2. Apply spatial/temporal correlation logic
-3. Output results as CSV + PNG charts
+## Key Datasets
 
-### Key Constants (found at top of each module)
-- **RADIUS_METERS:** 150m spatial correlation threshold
-- **TIME_WINDOW_DAYS:** 180 days post-decision window
-- **TARGET_ZIPS:** ['11378', '11379', '11385']
-- **REJECTION_KEYWORDS:** ["not warranted", "condition not found", "insufficient", "denied", "no action necessary"]
+| Dataset | Endpoint ID | Purpose |
+|---------|-------------|---------|
+| Signal Studies | `w76s-c5u4` | Primary - traffic signals, stop signs, APS requests |
+| Speed Reducers (SRTS) | `9n6h-pt9g` | Speed bump/hump requests |
+| APS Installed | `de3m-c5p4` | Installed accessible pedestrian signals |
+| Motor Vehicle Crashes | `h9gi-nx95` | Crash data for correlation |
+| 311 Requests | `erm2-nwe9` | Maintenance complaints (less reliable for new infrastructure) |
 
-## Code Patterns
+## Analysis Logic
 
-### Spatial Calculations
-Uses vectorized numpy haversine distance calculations. Always convert degrees to radians before trigonometry. Filter by time BEFORE spatial to optimize O(N*M) comparisons.
+### Outcome Classification
+- **Denied**: `statusdescription` contains "denial" OR "Engineering Study Completed" without approval
+- **Approved**: Contains "approval", "approved", "aps installed", or "aps ranking"
+- **Pending**: All other statuses
 
-### Data Type Handling
-- Coerce string coordinates to numeric with `errors='coerce'`
-- Use `.dropna(subset=[cols])` for missing coordinate/date validation
-- Street name normalization: AVE→AVENUE, ST→STREET, RD→ROAD
+### CB5 Identification
+- Signal Studies: Filter by borough='Queens' and street names within CB5 boundaries
+- SRTS: `cb='405'` (Queens CB5 code format: borough 4 + district 05)
+- See `REFERENCE_cb5_boundaries.md` for boundary filtering rules to exclude misattributed records north of the LIE
 
-### API Calls
-```python
-url = f"https://data.cityofnewyork.us/resource/{DATASET_ID}.json"
-# Use $where for SQL filtering, $limit for record limits
-```
+### APS Exclusion
+Accessible Pedestrian Signals are **excluded** from approval rate calculations because they are court-mandated (federal lawsuit) and do not undergo standard merit-based review.
 
-## NYC Open Data Datasets
+## Reference Documentation
 
-| Dataset | ID | Description |
-|---------|-----|-------------|
-| 311 Service Requests | erm2-nwe9 | DOT complaints and resolutions |
-| Motor Vehicle Collisions | h9gi-nx95 | NYPD crash data |
-| Traffic Studies | w76s-c5u4 | DOT traffic study results |
-| Community Districts | 5crt-au7u | GeoJSON boundaries |
-
-## Known Data Issues
-
-- Traffic Studies dataset lacks coordinates (requires geocoding via 311 intersection lookup)
-- ~10-20% geocoding failure rate for street intersections
-- Some outlier coordinates exist outside Queens (boundary filtering handles this)
-- API limit: 50,000 records per call
+- `REFERENCE_data_dictionary.md` - Field descriptions, status codes, denial reasons
+- `REFERENCE_data_sources.md` - Dataset URLs and usage notes
+- `REFERENCE_cb5_boundaries.md` - CB5 geographic boundaries and filtering logic

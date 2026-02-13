@@ -1,0 +1,26 @@
+Rank,location_name,dataset,request_type,latitude,longitude,crashes_150m,injuries_150m,ped_injuries_150m,fatalities_150m
+1,62 Avenue (Fresh Pond Road To 62 Street),SRTS,Speed Bump,40.713843,-73.90093899999998,71,86,18,1
+2,62 Avenue (Fresh Pond Road To 62 Street),SRTS,Speed Bump,40.713843,-73.900939,71,86,18,1
+3,Metropolitan Avenue & Aubrey Avenue,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
+4,Aubrey Avenue & Metropolitan Avenue,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
+5,Metropolitan Avenue & Aubrey Avenue,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
+6,Metropolitan Avenue & Aubrey Avenue,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
+7,Onderdonk Avenue (70 Avenue To Myrtle Avenue),SRTS,Speed Bump,40.700718,-73.901694,62,82,19,0
+8,62 Road (Fresh Pond Road To 62 Street),SRTS,Speed Bump,40.713173,-73.900749,62,69,17,0
+9,70 Avenue (Onderdonk Avenue To Forest Avenue),SRTS,Speed Bump,40.700718,-73.901694,62,82,19,0
+10,61 Street & Metropolitan Avenue,Signal Study,Left Turn Arrow/Signal,40.712757,-73.90225,59,70,17,0
+11,Metropolitan Avenue (60 Street To 60 Street),SRTS,Speed Bump,40.7128770415982,-73.90537725573958,58,72,19,0
+12,Fresh Pond Road & Metropolitan Avenue,Signal Study,Left Turn Arrow/Signal,40.712696,-73.900604,57,64,17,0
+13,69 Avenue & Onderdonk Avenue,Signal Study,All-Way Stop,40.70123,-73.902565,57,67,15,0
+14,Fresh Pond Road & Metropolitan Avenue,Signal Study,Traffic Signal,40.712696,-73.900604,57,64,17,0
+15,Fresh Pond Road & Metropolitan Avenue,Signal Study,Left Turn Arrow/Signal,40.712696,-73.900604,57,64,17,0
+16,Onderdonk Avenue (69 Avenue To 70 Avenue),SRTS,Speed Bump,40.701229,-73.902559,57,67,15,0
+17,69 Avenue (Onderdonk Avenue To Forest Avenue),SRTS,Speed Bump,40.701229,-73.902559,57,67,15,0
+18,Cypress Avenue (Cabot Road To Clover Place),SRTS,Speed Bump,40.693843,-73.896912,57,72,13,0
+19,69 Avenue (Onderdonk Avenue To Forest Avenue),SRTS,Speed Bump,40.701229,-73.902559,57,67,15,0
+20,Seneca Avenue & Catalpa Avenue,Signal Study,Traffic Signal,40.700737,-73.9042,56,67,18,0
+21,Cooper Avenue & Cypress Avenue,Signal Study,Left Turn Arrow/Signal,40.694107,-73.89737,55,70,12,0
+22,Cypress Avenue & Cooper Avenue,Signal Study,Traffic Signal,40.694107,-73.89737,55,70,12,0
+23,Cooper Avenue & Cypress Avenue,Signal Study,Leading Pedestrian Interval,40.694107,-73.89737,55,70,12,0
+24,Cypress Avenue & Cooper Avenue,Signal Study,Traffic Signal,40.694107,-73.89737,55,70,12,0
+25,Cypress Avenue & Cooper Avenue,Signal Study,Leading Pedestrian Interval,40.694107,-73.89737,55,70,12,0
