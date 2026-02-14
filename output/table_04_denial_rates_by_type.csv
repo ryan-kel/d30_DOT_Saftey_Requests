@@ -1,4 +1,4 @@
-Request Type,CB5 Total,CB5 Denial Rate (%),Citywide Total,Citywide Denial Rate (%),Source Dataset
+Request Type,CB5 Resolved,CB5 Denial Rate (%),Citywide Resolved,Citywide Denial Rate (%),Source Dataset
 Traffic Signal,182,89.6,8762,91.2,Signal Studies [w76s-c5u4]
 All-Way Stop,164,85.4,4803,77.9,Signal Studies [w76s-c5u4]
 Left Turn Arrow/Signal,37,100.0,1148,100.0,Signal Studies [w76s-c5u4]

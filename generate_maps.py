@@ -1654,7 +1654,7 @@ def chart_09b_top_denied_ranking(signal_prox):
     axes[1].set_xlabel('Persons Injured within 150m', fontweight='bold')
     axes[1].set_title('Top 15 by Persons Injured', fontweight='bold', fontsize=12)
     axes[1].yaxis.grid(False)
-    axes[1].legend(loc='upper right', fontsize=8, framealpha=0.9)
+    axes[1].legend(loc='lower right', fontsize=8, framealpha=0.9)
 
     fig.suptitle(f'QCB5 Top 15 Denied Signal Study Intersections by Nearby Crashes\n(150m Radius, n={n_unique:,} unique denied intersections, 2020–2025)',
                  fontweight='bold', fontsize=14, y=1.02)
@@ -1808,10 +1808,17 @@ def chart_14_installation_wait_times():
             s = s.replace(full, short)
         return s.title()
 
+    # Short codes for request types
+    _TYPE_ABBREV = {
+        'Traffic Signal': 'TS', 'All-Way Stop': 'AWS',
+        'Leading Pedestrian Interval': 'LPI', 'Left Turn Arrow/Signal': 'LT',
+    }
+    all_locations['type_code'] = all_locations['requesttype'].map(_TYPE_ABBREV).fillna('Other')
     all_locations['label'] = all_locations.apply(
         lambda r: _abbreviate(r['mainstreet'] or '') + ' & ' + _abbreviate(r['crossstreet1'] or ''), axis=1)
     all_locations['label'] = all_locations.apply(
-        lambda r: r['label'][:32] + (' [Installed]' if r['confirmed'] else ' [Approved]'), axis=1)
+        lambda r: r['label'][:30] + f' ({r["type_code"]})'
+                  + (' [Installed]' if r['confirmed'] else ' [Approved]'), axis=1)
 
     y = np.arange(len(all_locations))
     colors = [COLORS['approved'] if c else '#cc8400' for c in all_locations['confirmed']]
