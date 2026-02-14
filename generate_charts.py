@@ -54,15 +54,15 @@ COLORS = {
     'secondary': '#666666',     # Gray — citywide lines in trend charts
     'citywide': '#B8860B',     # Dark goldenrod — citywide comparison bars
     'cb5_highlight': '#1a1a1a', # Black — CB5 bar in ranked comparisons
-    'denied': '#8B0000',       # Dark red — denial-themed bars
-    'approved': '#006400',     # Dark green — approval-themed bars
-    'avg_line': '#8B0000',     # Dark red dashed — average reference lines
-    'crash': '#A12020',        # Muted red — crash data
-    'crash_alt': '#C04040',    # Lighter muted red — injury data
+    'denied': '#B44040',       # Muted red — denial-themed bars (unified w/ maps)
+    'approved': '#4A7C59',     # Muted green — approval-themed bars (unified w/ maps)
+    'avg_line': '#B8860B',     # Dark goldenrod dashed — citywide average reference lines
+    'crash': '#996633',        # Warm brown — crash data (unified w/ maps)
+    'crash_alt': '#CC9966',    # Lighter warm brown — injury data (unified w/ maps)
 }
 
 # Denial-reason gradient (darkest to lightest, for ranked horizontal bars)
-DENIAL_SHADES = ['#8B0000', '#A52A2A', '#B94545', '#CD5C5C', '#D47272', '#DC8888', '#E4A0A0']
+DENIAL_SHADES = ['#8B2020', '#B44040', '#C46060', '#D48080', '#DDA0A0', '#E6B8B8', '#EED0D0']
 
 # Categorical palette (for pie charts, multi-line series, etc.)
 CATEGORY_PALETTE = ['#2C5F8B', '#B8860B', '#8B0000', '#006400', '#7B5EA7', '#4A7C6F', '#666666']
@@ -281,11 +281,11 @@ def chart_01_request_volume(data):
 
     axes[1].set_xlabel('Number of Requests', fontweight='bold')
     cb5_min_year = int(cb5_capped['year'].min())
-    cb5_max_year = int(cb5_capped['year'].max())
-    axes[1].set_title(f'CB5 Queens Requests by Type\n(n={len(cb5_capped):,}, {cb5_min_year}–{cb5_max_year})', fontweight='bold', fontsize=12)
+    cb5_max_year = min(int(cb5_capped['year'].max()), 2025)
+    axes[1].set_title(f'QCB5 Requests by Type\n(n={len(cb5_capped):,}, {cb5_min_year}–{cb5_max_year})', fontweight='bold', fontsize=12)
     axes[1].set_xlim(0, top_types.max() * 1.2)
 
-    fig.suptitle('DOT Signal Study Request Volume', fontweight='bold', fontsize=14, y=1.02)
+    fig.suptitle('DOT Signal Study Request Volume, 2020–2025', fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.02, 'Source: NYC Open Data - Signal Studies (w76s-c5u4)',
              ha='left', fontsize=9, style='italic', color='#333333')
 
@@ -331,7 +331,7 @@ def chart_01z_request_volume_full(data):
 
     ax.set_xlabel('Number of Requests', fontweight='bold')
     min_yr = int(signal_capped['year'].min())
-    ax.set_title(f'Signal Study Requests by Borough — Full History\n(Citywide, n={len(signal_capped):,}, {min_yr}–2025)', fontweight='bold', fontsize=12)
+    ax.set_title(f'Signal Study Requests by Borough\n(Citywide, n={len(signal_capped):,}, {min_yr}–2025)', fontweight='bold', fontsize=12)
     ax.set_xlim(0, borough_counts.max() * 1.15)
     ax.yaxis.grid(False)
 
@@ -362,12 +362,12 @@ def chart_01bz_requests_by_year_full(data):
     fig, ax = plt.subplots(figsize=(10, 6))
 
     ax.plot(cw_yearly.index, cw_yearly.values, marker='o', markersize=4,
-            linewidth=2, color=COLORS['primary'], label='Citywide', zorder=3)
+            linewidth=2, color=COLORS['citywide'], label='Citywide', zorder=3)
     ax.plot(queens_yearly.index, queens_yearly.values, marker='s', markersize=4,
-            linewidth=2, color=COLORS['citywide'], label='Queens', zorder=3)
+            linewidth=2, color=COLORS['primary'], label='Queens', zorder=3)
     ax.set_xlabel('Year', fontweight='bold')
     ax.set_ylabel('Number of Requests', fontweight='bold')
-    ax.set_title(f'Signal Study Requests by Year — Full History\n(1996–2025)', fontweight='bold', fontsize=12)
+    ax.set_title(f'Signal Study Requests by Year\n(Citywide, n={cw_yearly.sum():,}, 1996–2025)', fontweight='bold', fontsize=12)
     ax.legend(loc='upper left', fontsize=10)
     ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 
@@ -403,12 +403,12 @@ def chart_01b_requests_by_year(data):
 
     # Left panel: Citywide and Queens trends (2020–2025)
     axes[0].plot(cw_yearly.index, cw_yearly.values, marker='o', markersize=5,
-                 linewidth=2, color=COLORS['primary'], label='Citywide', zorder=3)
+                 linewidth=2, color=COLORS['citywide'], label='Citywide', zorder=3)
     axes[0].plot(queens_yearly.index, queens_yearly.values, marker='s', markersize=5,
-                 linewidth=2, color=COLORS['citywide'], label='Queens', zorder=3)
+                 linewidth=2, color=COLORS['primary'], label='Queens', zorder=3)
     axes[0].set_xlabel('Year', fontweight='bold')
     axes[0].set_ylabel('Number of Requests', fontweight='bold')
-    axes[0].set_title(f'Signal Study Requests by Year\n(2020–2025)', fontweight='bold', fontsize=12)
+    axes[0].set_title(f'Signal Study Requests by Year\n(Citywide, n={cw_yearly.sum():,}, 2020–2025)', fontweight='bold', fontsize=12)
     axes[0].legend(loc='upper left', fontsize=10)
     axes[0].xaxis.set_major_locator(MaxNLocator(integer=True))
 
@@ -419,7 +419,7 @@ def chart_01b_requests_by_year(data):
     # Stack order: main types bottom-up, APS on top (visually distinct)
     stack_order = ['Traffic Signal', 'All-Way Stop', 'Leading Pedestrian Interval',
                    'Left Turn Arrow/Signal', 'Accessible Pedestrian Signal']
-    stack_colors = ['#4E79A7', '#F28E2B', '#59A14F', '#E15759', '#BAB0AC']
+    stack_colors = ['#2C5F8B', '#B8860B', '#4A7C59', '#B44040', '#999999']
 
     # Aggregate minor types into "Other"
     other_cols = [c for c in type_yearly.columns if c not in stack_order]
@@ -456,14 +456,14 @@ def chart_01b_requests_by_year(data):
 
     axes[1].set_xlabel('Year', fontweight='bold')
     axes[1].set_ylabel('Number of Requests', fontweight='bold')
-    axes[1].set_title(f'CB5 Queens Requests by Type\n(n={len(cb5_by_type_year):,}, 2020–2025)',
+    axes[1].set_title(f'QCB5 Requests by Type\n(n={len(cb5_by_type_year):,}, 2020–2025)',
                       fontweight='bold', fontsize=12)
     axes[1].legend(handles=legend_handles, loc='upper right', fontsize=8, framealpha=0.9)
     axes[1].xaxis.set_major_locator(MaxNLocator(integer=True))
     axes[1].set_ylim(0, bottom.max() * 1.12)
     axes[1].xaxis.grid(False)  # vertical gridlines not useful for discrete bars
 
-    fig.suptitle('DOT Signal Study Request Trends', fontweight='bold', fontsize=14, y=1.02)
+    fig.suptitle('DOT Signal Study Request Trends, 2020–2025', fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.02, 'Source: NYC Open Data - Signal Studies (w76s-c5u4)',
              ha='left', fontsize=9, style='italic', color='#333333')
 
@@ -589,7 +589,7 @@ def _draw_yoy_chart(yoy, filename, suptitle_suffix, sig_year_label, srts_year_la
 
     # Top left: CB5 Signal Study Volume
     axes[0, 0].bar(cb5_sig.index, cb5_sig['total'], color=COLORS['primary'], edgecolor='black', zorder=3)
-    axes[0, 0].set_title(f'CB5 Signal Study Requests\n(Excl. APS, n={int(cb5_sig["total"].sum()):,}, {sig_year_label})', fontweight='bold')
+    axes[0, 0].set_title(f'QCB5 Signal Study Requests\n(Excl. APS, n={int(cb5_sig["total"].sum()):,}, {sig_year_label})', fontweight='bold')
     axes[0, 0].set_xlabel('Year')
     axes[0, 0].set_ylabel('Number of Requests')
     axes[0, 0].xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -597,10 +597,10 @@ def _draw_yoy_chart(yoy, filename, suptitle_suffix, sig_year_label, srts_year_la
 
     # Top right: Signal Study Denial Rates
     axes[0, 1].plot(cb5_sig.index, cb5_sig['denial_rate'], marker='o', linewidth=2,
-                    color=COLORS['primary'], label='CB5', zorder=3)
+                    color=COLORS['primary'], label='QCB5', zorder=3)
     axes[0, 1].plot(cw_sig.index, cw_sig['denial_rate'], marker='s', linewidth=2,
-                    color=COLORS['secondary'], linestyle='--', label='Citywide', zorder=3)
-    axes[0, 1].set_title(f'Signal Study Denial Rates\n(Excl. APS, {sig_year_label})', fontweight='bold')
+                    color=COLORS['citywide'], linestyle='--', label='Citywide', zorder=3)
+    axes[0, 1].set_title(f'Signal Study Denial Rates\n(Excl. APS, QCB5 n={int(cb5_sig["total"].sum()):,}, {sig_year_label})', fontweight='bold')
     axes[0, 1].set_xlabel('Year')
     axes[0, 1].set_ylabel('Denial Rate (%)')
     axes[0, 1].legend(loc='lower right')
@@ -609,7 +609,7 @@ def _draw_yoy_chart(yoy, filename, suptitle_suffix, sig_year_label, srts_year_la
 
     # Bottom left: CB5 Speed Bump Volume
     axes[1, 0].bar(cb5_srts.index, cb5_srts['total'], color=COLORS['primary'], edgecolor='black', zorder=3)
-    axes[1, 0].set_title(f'CB5 Speed Bump Requests\n(n={int(cb5_srts["total"].sum()):,}, {srts_year_label})', fontweight='bold')
+    axes[1, 0].set_title(f'QCB5 Speed Bump Requests\n(n={int(cb5_srts["total"].sum()):,}, {srts_year_label})', fontweight='bold')
     axes[1, 0].set_xlabel('Year')
     axes[1, 0].set_ylabel('Number of Requests')
     axes[1, 0].xaxis.set_major_locator(MaxNLocator(integer=True))
@@ -617,17 +617,17 @@ def _draw_yoy_chart(yoy, filename, suptitle_suffix, sig_year_label, srts_year_la
 
     # Bottom right: Speed Bump Denial Rates
     axes[1, 1].plot(cb5_srts.index, cb5_srts['denial_rate'], marker='o', linewidth=2,
-                    color=COLORS['primary'], label='CB5', zorder=3)
+                    color=COLORS['primary'], label='QCB5', zorder=3)
     axes[1, 1].plot(cw_srts.index, cw_srts['denial_rate'], marker='s', linewidth=2,
-                    color=COLORS['secondary'], linestyle='--', label='Citywide', zorder=3)
-    axes[1, 1].set_title(f'Speed Bump Denial Rates\n({srts_year_label})', fontweight='bold')
+                    color=COLORS['citywide'], linestyle='--', label='Citywide', zorder=3)
+    axes[1, 1].set_title(f'Speed Bump Denial Rates\n(QCB5 n={int(cb5_srts["total"].sum()):,}, {srts_year_label})', fontweight='bold')
     axes[1, 1].set_xlabel('Year')
     axes[1, 1].set_ylabel('Denial Rate (%)')
     axes[1, 1].legend(loc='lower right')
     axes[1, 1].set_ylim(60, 105)
     axes[1, 1].xaxis.set_major_locator(MaxNLocator(integer=True))
 
-    fig.suptitle(f'Year-over-Year Analysis: CB5 Safety Infrastructure Requests{suptitle_suffix}',
+    fig.suptitle(f'Year-over-Year Analysis: QCB5 Safety Infrastructure Requests, {srts_year_label}',
                  fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.02, 'Source: NYC Open Data - Signal Studies (w76s-c5u4), SRTS (9n6h-pt9g)',
              ha='left', fontsize=9, style='italic', color='#333333')
@@ -665,7 +665,7 @@ def chart_03_year_over_year_trends(data):
 def chart_03z_year_over_year_full(data):
     """Chart 3z: Year-over-Year Trends — full history."""
     yoy = _compute_yoy_data(data, 1999, 2025)
-    _draw_yoy_chart(yoy, 'chart_03z_year_over_year_full', '\n(Full History)',
+    _draw_yoy_chart(yoy, 'chart_03z_year_over_year_full', '',
                     '2020–2025', '1999–2025')
     print("  Chart 03z saved.")
 
@@ -712,7 +712,7 @@ def chart_04_denial_rates_by_type(data):
     x = np.arange(len(request_types))
     width = 0.35
 
-    bars1 = ax.bar(x - width/2, cb5_rates, width, label='CB5', color=COLORS['primary'], edgecolor='black', zorder=3)
+    bars1 = ax.bar(x - width/2, cb5_rates, width, label='QCB5', color=COLORS['primary'], edgecolor='black', zorder=3)
     bars2 = ax.bar(x + width/2, cw_rates, width, label='Citywide', color=COLORS['citywide'], edgecolor='black', zorder=3)
 
     for bar, rate in zip(bars1, cb5_rates):
@@ -725,7 +725,7 @@ def chart_04_denial_rates_by_type(data):
     ax.set_ylabel('Denial Rate (%)', fontweight='bold')
     n_cb5 = sum(cb5_ns)
     n_cw = sum(cw_ns)
-    ax.set_title(f'Denial Rates by Request Type: CB5 vs. Citywide\n(Excl. APS, 2020–2025)', fontweight='bold', fontsize=12)
+    ax.set_title(f'Denial Rates by Request Type: QCB5 vs. Citywide\n(Excl. APS, QCB5 n={n_cb5:,}, 2020–2025)', fontweight='bold', fontsize=12)
     ax.set_xticks(x)
     xlabels = [f'{t}\n(n={cb5_ns[i]:,} / {cw_ns[i]:,})' for i, t in enumerate(request_types)]
     ax.set_xticklabels(xlabels, fontsize=9)
@@ -830,7 +830,7 @@ def chart_05_speed_bump_analysis(data):
                  ha='right', fontsize=8, color=COLORS['avg_line'])
 
     axes[0].set_xlabel('Denial Rate (%)', fontweight='bold')
-    axes[0].set_title(f'Speed Bump Denial Rates\nby Queens CB (2020–2025)', fontweight='bold', fontsize=12)
+    axes[0].set_title(f'Speed Bump Denial Rates by Queens CB\n(n={len(queens_srts):,}, 2020–2025)', fontweight='bold', fontsize=12)
     axes[0].set_xlim(0, 112)
     axes[0].yaxis.grid(False)
 
@@ -844,14 +844,14 @@ def chart_05_speed_bump_analysis(data):
         axes[1].text(val + 2, bar.get_y() + bar.get_height()/2, f'{pct:.0f}%', va='center', fontsize=9)
 
     axes[1].set_xlabel('Number of Denials', fontweight='bold')
-    axes[1].set_title(f'CB5 Speed Bump Denial Reasons\n(n={len(cb5_denied):,}, 2020–2025)', fontweight='bold', fontsize=12)
+    axes[1].set_title(f'QCB5 Speed Bump Denial Reasons\n(n={len(cb5_denied):,}, 2020–2025)', fontweight='bold', fontsize=12)
     axes[1].set_xlim(0, reason_counts.max() * 1.15)
     axes[1].yaxis.grid(False)
 
     # Right panel: "Speed < 30 mph" vs other reasons by year (stacked bar)
     years = reason_simple.index
     bottom = np.zeros(len(years))
-    stack_colors = ['#8B0000', '#BAB0AC']
+    stack_colors = [DENIAL_SHADES[0], '#BAB0AC']
     from matplotlib.patches import Patch
     legend_handles = []
 
@@ -878,13 +878,13 @@ def chart_05_speed_bump_analysis(data):
 
     axes[2].set_xlabel('Year', fontweight='bold')
     axes[2].set_ylabel('Number of Denials', fontweight='bold')
-    axes[2].set_title('CB5 Denial Reasons by Year\n(2020–2025)', fontweight='bold', fontsize=12)
+    axes[2].set_title(f'QCB5 Denial Reasons by Year\n(n={len(cb5_all_denied_recent):,}, 2020–2025)', fontweight='bold', fontsize=12)
     axes[2].legend(handles=legend_handles, loc='upper left', fontsize=9, framealpha=0.9)
     axes[2].xaxis.set_major_locator(MaxNLocator(integer=True))
     axes[2].set_ylim(0, bottom.max() * 1.12)
     axes[2].xaxis.grid(False)
 
-    fig.suptitle('Speed Bump (SRTS) Analysis', fontweight='bold', fontsize=14, y=1.02)
+    fig.suptitle('Speed Bump (SRTS) Analysis, QCB5, 2020–2025', fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.02, 'Source: NYC Open Data - Speed Reducer Tracking System (9n6h-pt9g)',
              ha='left', fontsize=9, style='italic', color='#333333')
 
@@ -971,7 +971,7 @@ def chart_05z_speed_bump_full(data):
     axes[0].text(queens_denial_rate - 1, -0.8, f'Queens Avg {queens_denial_rate:.1f}%',
                  ha='right', fontsize=8, color=COLORS['avg_line'])
     axes[0].set_xlabel('Denial Rate (%)', fontweight='bold')
-    axes[0].set_title(f'Speed Bump Denial Rates\nby Queens CB ({q_min_yr}–2025)', fontweight='bold', fontsize=12)
+    axes[0].set_title(f'Speed Bump Denial Rates by Queens CB\n(n={len(queens_srts):,}, {q_min_yr}–2025)', fontweight='bold', fontsize=12)
     axes[0].set_xlim(0, 112)
     axes[0].yaxis.grid(False)
 
@@ -983,19 +983,19 @@ def chart_05z_speed_bump_full(data):
         pct = val / reason_counts.sum() * 100
         axes[1].text(val + 5, bar.get_y() + bar.get_height()/2, f'{pct:.0f}%', va='center', fontsize=9)
     axes[1].set_xlabel('Number of Denials', fontweight='bold')
-    axes[1].set_title(f'CB5 Speed Bump Denial Reasons\n(n={len(cb5_denied):,}, {cb5_min_yr}–2025)', fontweight='bold', fontsize=12)
+    axes[1].set_title(f'QCB5 Speed Bump Denial Reasons\n(n={len(cb5_denied):,}, {cb5_min_yr}–2025)', fontweight='bold', fontsize=12)
     axes[1].set_xlim(0, reason_counts.max() * 1.18)
     axes[1].yaxis.grid(False)
 
     # Right: Trend Lines
     axes[2].plot(cb5_yearly.index, cb5_yearly['denial_rate'], marker='o', linewidth=2, markersize=4,
-                 color=COLORS['primary'], label='CB5', zorder=3)
+                 color=COLORS['primary'], label='QCB5', zorder=3)
     axes[2].plot(cw_yearly.index, cw_yearly['denial_rate'], marker='s', linewidth=2, markersize=3,
                  color=COLORS['secondary'], linestyle='--', label='Citywide', zorder=3)
     trend_min = int(min(cb5_yearly.index.min(), cw_yearly.index.min()))
     axes[2].set_xlabel('Year', fontweight='bold')
     axes[2].set_ylabel('Denial Rate (%)', fontweight='bold')
-    axes[2].set_title(f'Denial Rate Trends\n({trend_min}–2025)', fontweight='bold', fontsize=12)
+    axes[2].set_title(f'Denial Rate Trends\n(QCB5 n={int(cb5_yearly["total"].sum()):,}, {trend_min}–2025)', fontweight='bold', fontsize=12)
     axes[2].legend(loc='lower right', fontsize=9)
     all_rates = pd.concat([cb5_yearly['denial_rate'], cw_yearly['denial_rate']])
     axes[2].set_ylim(max(0, all_rates.min() - 5), min(108, all_rates.max() + 8))
@@ -1004,7 +1004,7 @@ def chart_05z_speed_bump_full(data):
     axes[2].xaxis.set_major_locator(MultipleLocator(5))
     axes[2].xaxis.set_minor_locator(MultipleLocator(1))
 
-    fig.suptitle('Speed Bump (SRTS) Analysis — Full History', fontweight='bold', fontsize=14, y=1.02)
+    fig.suptitle(f'Speed Bump (SRTS) Analysis, QCB5, {q_min_yr}–2025', fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.02, 'Source: NYC Open Data - Speed Reducer Tracking System (9n6h-pt9g)',
              ha='left', fontsize=9, style='italic', color='#333333')
 
@@ -1059,7 +1059,7 @@ def chart_06_most_denied_intersections(data):
                 va='center', ha='left', fontsize=10, fontweight='bold')
 
     ax.set_xlabel('Number of Denials', fontweight='bold')
-    ax.set_title(f'Most Denied Intersections in CB5\n(Signal Studies, Excl. APS, n={len(cb5_denied):,}, 2020–2025)',
+    ax.set_title(f'Most Denied Intersections in QCB5\n(Signal Studies, Excl. APS, n={len(cb5_denied):,}, 2020–2025)',
                  fontweight='bold', fontsize=12)
     ax.set_xlim(0, location_counts.max() * 1.2)
     ax.yaxis.grid(False)
@@ -1104,7 +1104,7 @@ def chart_07_most_denied_streets_speed_bumps(data):
                 va='center', ha='left', fontsize=10, fontweight='bold')
 
     ax.set_xlabel('Number of Denials', fontweight='bold')
-    ax.set_title(f'Most Denied Streets for Speed Bumps in CB5, 2020–2025 (n={n_denied:,} denials)',
+    ax.set_title(f'Most Denied Streets for Speed Bumps in QCB5, 2020–2025 (n={n_denied:,} denials)',
                  fontweight='bold', fontsize=12)
     ax.set_xlim(0, max_val * 1.15)
     ax.yaxis.grid(False)
@@ -1179,7 +1179,7 @@ def chart_08_crash_hotspots(data):
                      va='center', ha='left', fontsize=9, fontweight='bold')
 
     axes[0].set_xlabel('Number of Crashes', fontweight='bold')
-    axes[0].set_title(f'Total Crashes by Street\n(CB5 Queens, n={n_crashes:,}, 2020–2025)', fontweight='bold', fontsize=12)
+    axes[0].set_title(f'Total Crashes by Street\n(QCB5, n={n_crashes:,}, 2020–2025)', fontweight='bold', fontsize=12)
     axes[0].yaxis.grid(False)
 
     # Right: Injuries (sorted by injuries)
@@ -1190,10 +1190,10 @@ def chart_08_crash_hotspots(data):
                      va='center', ha='left', fontsize=9, fontweight='bold')
 
     axes[1].set_xlabel('Number of Injuries', fontweight='bold')
-    axes[1].set_title(f'Total Injuries by Street\n(CB5 Queens, n={n_injuries:,} injuries, 2020–2025)', fontweight='bold', fontsize=12)
+    axes[1].set_title(f'Total Injuries by Street\n(QCB5, n={n_injuries:,} injuries, 2020–2025)', fontweight='bold', fontsize=12)
     axes[1].yaxis.grid(False)
 
-    fig.suptitle('Crash Hotspots in CB5 Queens, 2020–2025', fontweight='bold', fontsize=14, y=1.02)
+    fig.suptitle(f'Crash Hotspots in QCB5 (n={n_crashes:,} crashes), 2020–2025', fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.02,
              'Source: NYC Open Data - Motor Vehicle Collisions (h9gi-nx95) | CB5 defined by community district polygon boundary\n'
              'Street names normalized (abbreviations expanded, variants merged)',
@@ -1246,7 +1246,7 @@ def chart_10_combined_annual_summary(data):
 
     axes[0].set_xlabel('Year', fontweight='bold')
     axes[0].set_ylabel('Number of Requests', fontweight='bold')
-    axes[0].set_title('CB5 Signal Study Outcomes by Year\n(Excl. APS, 2020–2025)', fontweight='bold', fontsize=12)
+    axes[0].set_title(f'QCB5 Signal Study Outcomes by Year\n(Excl. APS, n={int(cb5_yearly["total"].sum()):,}, 2020–2025)', fontweight='bold', fontsize=12)
     axes[0].set_xticks(x)
     axes[0].set_xticklabels(cb5_yearly.index.astype(int))
     axes[0].legend()
@@ -1258,12 +1258,12 @@ def chart_10_combined_annual_summary(data):
 
     axes[1].set_xlabel('Year', fontweight='bold')
     axes[1].set_ylabel('Number of Requests', fontweight='bold')
-    axes[1].set_title('CB5 Speed Bump Outcomes by Year\n(2020–2025)', fontweight='bold', fontsize=12)
+    axes[1].set_title(f'QCB5 Speed Bump Outcomes by Year\n(n={int(cb5_srts_yearly["total"].sum()):,}, 2020–2025)', fontweight='bold', fontsize=12)
     axes[1].set_xticks(x2)
     axes[1].set_xticklabels(cb5_srts_yearly.index.astype(int))
     axes[1].legend()
 
-    fig.suptitle('CB5 Annual Request Outcomes', fontweight='bold', fontsize=14, y=1.02)
+    fig.suptitle('QCB5 Annual Request Outcomes, 2020–2025', fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.02, 'Source: NYC Open Data - Signal Studies (w76s-c5u4), SRTS (9n6h-pt9g)',
              ha='left', fontsize=9, style='italic', color='#333333')
 
@@ -1285,7 +1285,7 @@ def chart_11_denial_reasons(data):
     cb5_srts_denied['year'] = cb5_srts_denied['requestdate'].dt.year
 
     cb5_no_aps_filtered = cb5_no_aps_denied[(cb5_no_aps_denied['year'] >= 2020) & (cb5_no_aps_denied['year'] <= 2025)]
-    cb5_srts_filtered = cb5_srts_denied[(cb5_srts_denied['year'] >= 2015) & (cb5_srts_denied['year'] <= 2025)]
+    cb5_srts_filtered = cb5_srts_denied[(cb5_srts_denied['year'] >= 2020) & (cb5_srts_denied['year'] <= 2025)]
 
     # Create figure
     fig, axes = plt.subplots(1, 2, figsize=(14, 6))
@@ -1311,7 +1311,7 @@ def chart_11_denial_reasons(data):
                      va='center', fontsize=11, fontweight='bold')
 
     axes[0].set_xlabel('Number of Denials', fontweight='bold')
-    axes[0].set_title('Signal Study Denial Status\n(Excl. APS, 2020–2025)', fontweight='bold', fontsize=12)
+    axes[0].set_title(f'QCB5 Signal Study Denial Status\n(Excl. APS, n={len(cb5_no_aps_filtered):,}, 2020–2025)', fontweight='bold', fontsize=12)
     axes[0].set_xlim(0, max(status_values) * 1.15)
 
     # Right panel: Speed Bump Denial Reasons over time
@@ -1338,7 +1338,7 @@ def chart_11_denial_reasons(data):
 
     axes[1].set_xlabel('Year', fontweight='bold')
     axes[1].set_ylabel('Number of Denials', fontweight='bold')
-    axes[1].set_title('Speed Bump Denial Reasons Over Time\n(CB5, 2015–2025)', fontweight='bold', fontsize=12)
+    axes[1].set_title(f'Speed Bump Denial Reasons Over Time\n(QCB5, n={len(cb5_srts_filtered):,}, 2020–2025)', fontweight='bold', fontsize=12)
     axes[1].legend(loc='upper left', fontsize=9, framealpha=0.9)
     axes[1].xaxis.set_major_locator(MaxNLocator(integer=True))
 
@@ -1348,7 +1348,7 @@ def chart_11_denial_reasons(data):
                     ha='right', va='top', fontsize=10, fontweight='bold',
                     bbox=dict(boxstyle='round', facecolor='white', edgecolor='gray', alpha=0.9))
 
-    fig.suptitle('CB5 Denial Reasons Analysis', fontweight='bold', fontsize=14, y=1.02)
+    fig.suptitle('QCB5 Denial Reasons Analysis, 2020–2025', fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.02, 'Source: NYC Open Data - Signal Studies (w76s-c5u4), SRTS (9n6h-pt9g)',
              ha='left', fontsize=9, style='italic', color='#333333')
 
@@ -1399,7 +1399,7 @@ def chart_12_request_types(data):
     x = np.arange(len(request_types))
     width = 0.35
 
-    bars1 = ax.bar(x - width/2, cb5_pct, width, label=f'CB5 (n={cb5_total:,})',
+    bars1 = ax.bar(x - width/2, cb5_pct, width, label=f'QCB5 (n={cb5_total:,})',
                    color=COLORS['primary'], edgecolor='black', zorder=3)
     bars2 = ax.bar(x + width/2, cw_pct, width, label=f'Citywide (n={cw_total:,})',
                    color=COLORS['citywide'], edgecolor='black', zorder=3)
@@ -1414,7 +1414,7 @@ def chart_12_request_types(data):
                     ha='center', va='bottom', fontsize=10, fontweight='bold')
 
     ax.set_ylabel('Share of Total Resolved Requests (%)', fontweight='bold')
-    ax.set_title(f'Request Type Mix: CB5 vs. Citywide, 2020–2025\n(Resolved requests excl. APS, as percentage of total)',
+    ax.set_title(f'Request Type Mix: QCB5 vs. Citywide, 2020–2025\n(Resolved Requests, Excl. APS, QCB5 n={cb5_total:,})',
                  fontweight='bold', fontsize=12)
     ax.set_xticks(x)
     ax.set_xticklabels([t.replace('/', '/\n') for t in request_types], fontsize=10)

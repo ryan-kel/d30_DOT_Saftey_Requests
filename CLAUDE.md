@@ -59,8 +59,16 @@ jupyter notebook analysis_notebook.ipynb
 ### APS Exclusion
 Accessible Pedestrian Signals are **excluded** from approval rate calculations because they are court-mandated (federal lawsuit) and do not undergo standard merit-based review.
 
+## Visual Style Guide
+
+**`STYLE_GUIDE.md`** — Official color palette, typography, chart conventions, and map standards. **All visualizations must follow this guide.** Key rules:
+- QCB5 = navy `#2C5F8B`, Citywide = goldenrod `#B8860B`, Denied = red `#B44040`, Approved = green `#4A7C59`
+- Every chart title: year range (YYYY–YYYY), sample size (n=), QCB5 shorthand
+- Main charts = 2020–2025; z-series = actual year range, capped at 2025
+
 ## Reference Documentation
 
+- `STYLE_GUIDE.md` - **Official visual style guide** (colors, typography, chart/map conventions)
 - `REFERENCE_data_dictionary.md` - Field descriptions, status codes, denial reasons
 - `REFERENCE_data_sources.md` - Dataset URLs and usage notes
 - `REFERENCE_cb5_boundaries.md` - CB5 geographic boundaries and filtering logic

@@ -1,5 +1,5 @@
 Dataset,Outcome,N,Mean Crashes 150m,Median Crashes 150m,Mean Injuries 150m,Median Injuries 150m,Mean Ped Injuries 150m,Median Ped Injuries 150m,Mann-Whitney p-value (crashes)
 Signal Studies,denied,370,17.5,11.0,22.2,15.0,4.0,2.0,0.002128
 Signal Studies,approved,40,10.5,8.0,12.5,9.0,3.1,2.0,0.002128
-SRTS,denied,1722,11.4,8.0,14.3,9.0,2.7,2.0,0.728046
-SRTS,approved,237,11.4,8.0,14.3,10.0,2.8,2.0,0.728046
+SRTS,denied,425,12.9,9.0,15.7,11.0,3.3,2.0,0.612418
+SRTS,approved,6,9.7,7.0,12.2,9.0,2.2,2.0,0.612418

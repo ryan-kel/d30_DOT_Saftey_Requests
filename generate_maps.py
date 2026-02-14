@@ -14,7 +14,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import folium
-from folium.plugins import HeatMap
+from folium.plugins import HeatMap  # kept for fallback; primary map uses dot density
 from shapely.geometry import shape, Point
 from shapely.prepared import prep
 import json
@@ -81,7 +81,7 @@ def _add_dynamic_title(m):
         transform:translateX(-50%);z-index:1000;background:rgba(255,255,255,0.92);
         padding:8px 20px;border:1px solid #666;
         font-family:'Times New Roman',Georgia,serif;text-align:center;">
-        <div id="map-dynamic-title" style="font-size:15px;font-weight:bold;">Safety Request Outcomes: Queens Community Board 5</div>
+        <div id="map-dynamic-title" style="font-size:15px;font-weight:bold;">Safety Request Outcomes: QCB5 (Queens Community Board 5)</div>
         <div id="map-dynamic-subtitle" style="font-size:11px;color:#555;margin-top:2px;">Signal Studies &amp; Speed Bumps vs. Injury Crashes (2020\u20132025)</div>
     </div>
     <script>
@@ -96,23 +96,34 @@ def _add_dynamic_title(m):
             });
             var titleEl = document.getElementById('map-dynamic-title');
             var subtitleEl = document.getElementById('map-dynamic-subtitle');
-            var spotlight = layers['Top 15 Denied Spotlight'] || false;
-            var signals = (layers['Denied Signal Studies'] || false) || (layers['Approved Signal Studies'] || false);
-            var srts = (layers['Denied Speed Bumps'] || false) || (layers['Approved Speed Bumps'] || false);
-            if (spotlight) {
+            // Match layer names by prefix (names now include n= and year suffixes)
+            function isActive(prefix) {
+                for (var key in layers) {
+                    if (key.indexOf(prefix) === 0 && layers[key]) return true;
+                }
+                return false;
+            }
+            var spotlight = isActive('Top 15 Denied');
+            var effectiveness = isActive('DOT Effectiveness');
+            var signals = isActive('Denied Signal') || isActive('Approved Signal');
+            var srts = isActive('Denied Speed') || isActive('Approved Speed');
+            if (effectiveness) {
+                titleEl.textContent = 'DOT Effectiveness: Crash Outcomes After Installation';
+                subtitleEl.textContent = 'Before-After Analysis, Confirmed Installations, QCB5';
+            } else if (spotlight) {
                 titleEl.textContent = 'Top 15 Denied Locations by Nearby Crash Count';
-                subtitleEl.textContent = '150m Analysis Radius, Queens CB5';
+                subtitleEl.textContent = '150m Analysis Radius, QCB5';
             } else if (signals && srts) {
-                titleEl.textContent = 'Safety Request Outcomes: Queens Community Board 5';
+                titleEl.textContent = 'Safety Request Outcomes: QCB5';
                 subtitleEl.textContent = 'Signal Studies & Speed Bumps vs. Injury Crashes (2020\u20132025)';
             } else if (signals) {
-                titleEl.textContent = 'Signal Study Outcomes: Queens CB5';
+                titleEl.textContent = 'Signal Study Outcomes: QCB5';
                 subtitleEl.textContent = 'Traffic Signal & Stop Sign Requests vs. Crash Data';
             } else if (srts) {
                 titleEl.textContent = 'Speed Bump Requests & Injury Crashes';
-                subtitleEl.textContent = 'SRTS Program, Queens Community Board 5';
+                subtitleEl.textContent = 'SRTS Program, QCB5';
             } else {
-                titleEl.textContent = 'Safety Infrastructure Data: Queens CB5';
+                titleEl.textContent = 'Safety Infrastructure Data: QCB5';
                 subtitleEl.textContent = 'Use layer controls to explore';
             }
         }
@@ -276,6 +287,11 @@ def load_and_prepare_data():
     cb5_srts, n_srts_excluded = _filter_points_in_cb5(
         cb5_srts, lat_col='fromlatitude', lon_col='fromlongitude')
     print(f"  CB5 SRTS: -> {len(cb5_srts):,} after polygon filter ({n_srts_excluded} excluded)")
+
+    # Filter SRTS to 2020–2025 for consistency with signal studies and crashes
+    n_before_year = len(cb5_srts)
+    cb5_srts = cb5_srts[cb5_srts['year'].between(2020, 2025)].copy()
+    print(f"  CB5 SRTS: -> {len(cb5_srts):,} after 2020–2025 filter ({n_before_year - len(cb5_srts)} excluded)")
 
     # --- Crashes ---
     crashes['crash_date'] = pd.to_datetime(crashes['crash_date'], errors='coerce')
@@ -772,138 +788,445 @@ def _add_cb5_boundary(m):
             'fillColor': '#555555',
             'fillOpacity': 0.02,
             'dashArray': '6 3',
+            'interactive': False,
         },
-        tooltip='Queens Community Board 5',
     ).add_to(m)
 
 
-def map_consolidated(signal_prox, srts_prox, cb5_crashes):
-    """Consolidated map: all layers from former Maps 01-03 with dynamic title."""
-    print("  Generating consolidated map...")
+def _compute_before_after(data):
+    """Compute before-after crash analysis for installed signal study locations.
 
-    m = folium.Map(location=CB5_CENTER, zoom_start=CB5_ZOOM,
-                   tiles='cartodbpositron', control_scale=True)
+    Only includes locations with confirmed installation dates
+    (aw_installdate or signalinstalldate populated).
+
+    Returns DataFrame with before/after crash counts and change metrics.
+    """
+    print("    Computing before-after analysis for installed locations...")
+
+    cb5_studies_full = pd.read_csv(f'{OUTPUT_DIR}/data_cb5_signal_studies.csv', low_memory=False)
+    cb5_studies_full['outcome'] = cb5_studies_full['statusdescription'].apply(_classify_outcome)
+    approved = cb5_studies_full[
+        (cb5_studies_full['outcome'] == 'approved') &
+        (cb5_studies_full['requesttype'] != 'Accessible Pedestrian Signal')
+    ]
+
+    # Only truly installed: must have an install date
+    installed = approved[
+        approved['aw_installdate'].notna() | approved['signalinstalldate'].notna()
+    ].copy()
+    installed['install_date'] = pd.to_datetime(
+        installed['aw_installdate'].fillna(installed['signalinstalldate']), errors='coerce')
+    installed = installed.drop_duplicates(subset='referencenumber')
+
+    # Merge coordinates from geocode cache
+    cache = pd.read_csv(GEOCODE_CACHE_PATH, low_memory=False)
+    installed = installed.merge(
+        cache[['referencenumber', 'latitude', 'longitude']].drop_duplicates('referencenumber'),
+        on='referencenumber', how='left', suffixes=('_orig', ''))
+    installed = installed[installed['latitude'].notna() & installed['longitude'].notna()].copy()
+
+    # Crash arrays for vectorized computation
+    cb5_crashes = data['cb5_crashes']
+    crash_lats = cb5_crashes['latitude'].values
+    crash_lons = cb5_crashes['longitude'].values
+    crash_dates = cb5_crashes['crash_date'].values
+    crash_injured = cb5_crashes['number_of_persons_injured'].values
+    crash_ped_inj = cb5_crashes['number_of_pedestrians_injured'].values
+
+    DATA_START = pd.Timestamp('2020-01-01')
+    DATA_END = pd.Timestamp('2025-12-31')
+
+    results = []
+    for _, row in installed.iterrows():
+        lat, lon = row['latitude'], row['longitude']
+        install_dt = row['install_date']
+
+        dists = _haversine_vectorized(lat, lon, crash_lats, crash_lons)
+        within_150m = dists <= PROXIMITY_RADIUS_M
+
+        # Equal time windows before and after, capped at 24 months
+        months_before = (install_dt - DATA_START).days / 30.44
+        months_after = (DATA_END - install_dt).days / 30.44
+        window_months = min(months_before, months_after, 24)
+        window_days = int(window_months * 30.44)
+
+        before_start = install_dt - pd.Timedelta(days=window_days)
+        after_end = install_dt + pd.Timedelta(days=window_days)
+
+        before_mask = (within_150m &
+                       (crash_dates >= np.datetime64(before_start)) &
+                       (crash_dates < np.datetime64(install_dt)))
+        after_mask = (within_150m &
+                      (crash_dates >= np.datetime64(install_dt)) &
+                      (crash_dates <= np.datetime64(after_end)))
+
+        before_crashes = int(before_mask.sum())
+        after_crashes = int(after_mask.sum())
+        before_inj = int(crash_injured[before_mask].sum())
+        after_inj = int(crash_injured[after_mask].sum())
+
+        if before_crashes > 0:
+            pct_change = ((after_crashes - before_crashes) / before_crashes) * 100
+        elif after_crashes > 0:
+            pct_change = 100.0
+        else:
+            pct_change = 0.0
+
+        results.append({
+            'referencenumber': row['referencenumber'],
+            'requesttype': row['requesttype'],
+            'mainstreet': row['mainstreet'],
+            'crossstreet1': row['crossstreet1'],
+            'daterequested': row.get('daterequested', None),
+            'install_date': install_dt,
+            'window_months': round(window_months, 1),
+            'before_crashes': before_crashes,
+            'after_crashes': after_crashes,
+            'crash_change': after_crashes - before_crashes,
+            'pct_change': round(pct_change, 1),
+            'before_injuries': before_inj,
+            'after_injuries': after_inj,
+            'latitude': lat,
+            'longitude': lon,
+        })
+
+    rdf = pd.DataFrame(results)
+    decreased = (rdf['crash_change'] < 0).sum()
+    increased = (rdf['crash_change'] > 0).sum()
+    print(f"    Installed locations: {len(rdf)} "
+          f"(crashes decreased: {decreased}, increased: {increased}, "
+          f"no change: {len(rdf) - decreased - increased})")
+    print(f"    Aggregate: {rdf['before_crashes'].sum()} before -> "
+          f"{rdf['after_crashes'].sum()} after | "
+          f"Injuries: {rdf['before_injuries'].sum()} -> {rdf['after_injuries'].sum()}")
+    return rdf
+
+
+def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
+    """Consolidated map — print-ready editorial style.
+
+    Base: CartoDB Positron No Labels (clean, minimal, print-friendly).
+    Crash data: dot density (one dot per crash) instead of heatmap.
+    Layers: denied/approved markers, DOT effectiveness (before-after),
+    top-15 spotlight.
+    """
+    print("  Generating consolidated map (print style)...")
+
+    # --- Base map: no-label tiles for print clarity ---
+    m = folium.Map(
+        location=CB5_CENTER, zoom_start=CB5_ZOOM,
+        tiles='https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+        attr='&copy; OpenStreetMap contributors &copy; CARTO',
+        control_scale=True,
+    )
 
     _add_cb5_boundary(m)
 
     _popup_style = "font-family:'Times New Roman',Georgia,serif;font-size:12px;line-height:1.5;"
     _hr = "<hr style='border:0;border-top:1px solid #ccc;margin:4px 0;'>"
 
-    # --- Layer 1: Crash Heatmap (default on) ---
-    heat_data = cb5_crashes[cb5_crashes['latitude'].notna()][
-        ['latitude', 'longitude', 'number_of_persons_injured']
-    ].values.tolist()
+    def _fmt_date(val):
+        """Format a date value to 'Mon DD, YYYY' or return 'N/A'."""
+        if pd.isna(val):
+            return 'N/A'
+        try:
+            return pd.to_datetime(val).strftime('%b %d, %Y')
+        except Exception:
+            return str(val)[:10]
 
-    heatmap_layer = folium.FeatureGroup(name='Crash Heatmap', show=True)
-    HeatMap(heat_data, radius=12, blur=15, max_zoom=16,
-            gradient=HEATMAP_GRADIENT).add_to(heatmap_layer)
-    heatmap_layer.add_to(m)
+    # --- Precompute layer subsets for names and CSV export ---
+    _sig_denied = signal_prox[signal_prox['outcome'] == 'denied']
+    _sig_approved = signal_prox[signal_prox['outcome'] == 'approved']
+    _srts_denied = srts_prox[srts_prox['outcome'] == 'denied']
+    _srts_approved = srts_prox[srts_prox['outcome'] == 'approved']
+    n_sig_denied = _sig_denied['latitude'].notna().sum()
+    n_sig_approved = _sig_approved['latitude'].notna().sum()
+    n_srts_denied = _srts_denied['latitude'].notna().sum()
+    n_srts_approved = _srts_approved['latitude'].notna().sum()
 
-    # --- Layer 2: Denied Signal Studies (default on) ---
-    denied_signals = folium.FeatureGroup(name='Denied Signal Studies', show=True)
+    # --- Layer 1: Crash Dot Density (replaces heatmap) ---
+    crash_with_coords = cb5_crashes[cb5_crashes['latitude'].notna()].copy()
+    crash_dots = folium.FeatureGroup(
+        name=f'Injury Crashes (n={len(crash_with_coords):,}, 2020–2025)', show=True)
+    for _, crow in crash_with_coords.iterrows():
+        injured = int(crow.get('number_of_persons_injured', 0))
+        killed = int(crow.get('number_of_persons_killed', 0))
+        # Size by severity: fatal=4, injury=2, other=1.5
+        if killed > 0:
+            r, color, opacity = 3.5, '#1a1a1a', 0.8
+        elif injured > 0:
+            r, color, opacity = 1.8, '#888888', 0.35
+        else:
+            r, color, opacity = 1.2, '#aaaaaa', 0.2
+
+        # --- Crash popup/tooltip ---
+        c_date = _fmt_date(crow.get('crash_date'))
+        c_time = str(crow.get('crash_time', '')).strip()
+        c_on = str(crow.get('on_street_name', '') or '').strip()
+        c_off = str(crow.get('off_street_name', '') or '').strip()
+        c_loc = f"{c_on} & {c_off}" if c_off else c_on
+        c_factor = str(crow.get('contributing_factor_vehicle_1', '') or '').strip()
+        c_veh1 = str(crow.get('vehicle_type_code1', '') or '').strip()
+        ped_inj = int(crow.get('number_of_pedestrians_injured', 0))
+        ped_k = int(crow.get('number_of_pedestrians_killed', 0))
+        cyc_inj = int(crow.get('number_of_cyclist_injured', 0))
+        cyc_k = int(crow.get('number_of_cyclist_killed', 0))
+        mot_inj = int(crow.get('number_of_motorist_injured', 0))
+        mot_k = int(crow.get('number_of_motorist_killed', 0))
+
+        severity_tag = ('<span style="color:#B44040;font-weight:bold;">FATAL</span>'
+                        if killed > 0 else
+                        '<span style="color:#cc8400;font-weight:bold;">INJURY</span>'
+                        if injured > 0 else 'Property damage')
+
+        crash_popup = (
+            f"<div style=\"{_popup_style}\">"
+            f"<b>{c_loc}</b><br>"
+            f"{c_date} at {c_time}<br>"
+            f"Severity: {severity_tag}"
+            f"{_hr}"
+            f"Pedestrians: {ped_inj} injured, {ped_k} killed<br>"
+            f"Cyclists: {cyc_inj} injured, {cyc_k} killed<br>"
+            f"Motorists: {mot_inj} injured, {mot_k} killed"
+            f"{_hr}"
+            f"Factor: {c_factor or 'N/A'}<br>"
+            f"Vehicle: {c_veh1 or 'N/A'}<br>"
+            f"<span style='color:#666;font-size:10px;'>Collision ID: {crow.get('collision_id', 'N/A')}</span>"
+            f"</div>"
+        )
+        crash_tooltip = f"{c_loc} — {c_date}"
+
+        folium.CircleMarker(
+            [crow['latitude'], crow['longitude']], radius=r,
+            color=color, fill=True, fill_color=color,
+            fill_opacity=opacity, weight=0.3,
+            popup=folium.Popup(crash_popup, max_width=320),
+            tooltip=crash_tooltip,
+        ).add_to(crash_dots)
+    crash_dots.add_to(m)
+
+    # --- Helper: build signal study popup ---
+    def _signal_popup(row, outcome_label, outcome_color):
+        ref = row.get('referencenumber', 'N/A')
+        req_date = _fmt_date(row.get('daterequested'))
+        status_date = _fmt_date(row.get('statusdate'))
+        req_type = row.get('requesttype', 'N/A')
+        status_desc = str(row.get('statusdescription', '') or '').strip()
+        findings = str(row.get('findings', '') or '').strip()
+        fatalities = int(row.get('fatalities_150m', 0))
+        ped_inj = int(row.get('ped_injuries_150m', 0))
+        school = str(row.get('schoolname', '') or '').strip()
+        vz = 'Yes' if row.get('visionzero') == 'Yes' else ''
+        loc = f"{row.get('mainstreet', '')} & {row.get('crossstreet1', '')}"
+
+        extras = ''
+        if school:
+            extras += f"School: {school}<br>"
+        if vz:
+            extras += f"Vision Zero priority: Yes<br>"
+        if findings:
+            extras += f"Findings: {findings}<br>"
+
+        return (
+            f"<div style=\"{_popup_style}\">"
+            f"<b>{loc}</b><br>"
+            f"<span style='color:#666;font-size:10px;'>{ref}</span><br>"
+            f"Type: {req_type}<br>"
+            f"Outcome: <span style='color:{outcome_color};font-weight:bold;'>{outcome_label}</span>"
+            f"{_hr}"
+            f"Requested: {req_date}<br>"
+            f"Status date: {status_date}<br>"
+            f"Status: {status_desc}"
+            f"{_hr}"
+            f"{extras}"
+            f"<b>Within 150m (2020–2025):</b><br>"
+            f"Crashes: {int(row.get('crashes_150m', 0))}<br>"
+            f"Injuries: {int(row.get('injuries_150m', 0))}<br>"
+            f"Ped. injuries: {ped_inj}<br>"
+            f"Fatalities: {fatalities}"
+            f"</div>"
+        )
+
+    # --- Layer 2: Denied Signal Studies ---
+    denied_signals = folium.FeatureGroup(
+        name=f'Denied Signal Studies (n={n_sig_denied:,}, 2020–2025)', show=True)
     for _, row in signal_prox[signal_prox['outcome'] == 'denied'].iterrows():
         if pd.isna(row['latitude']):
             continue
-        popup_html = (
-            f"<div style=\"{_popup_style}\">"
-            f"<b>{row.get('mainstreet', '')} & {row.get('crossstreet1', '')}</b><br>"
-            f"Type: {row.get('requesttype', 'N/A')}<br>"
-            f"Outcome: <span style='color:{COLORS['denied']};font-weight:bold;'>DENIED</span>"
-            f"{_hr}"
-            f"Crashes within 150m: {int(row.get('crashes_150m', 0))}<br>"
-            f"Injuries within 150m: {int(row.get('injuries_150m', 0))}<br>"
-            f"Ped. injuries: {int(row.get('ped_injuries_150m', 0))}"
-            f"</div>"
-        )
+        popup_html = _signal_popup(row, 'DENIED', COLORS['denied'])
         folium.CircleMarker(
             [row['latitude'], row['longitude']], radius=6,
-            color=COLORS['denied'], fill=True, fill_color=COLORS['denied'],
-            fill_opacity=0.7, weight=1.5, popup=folium.Popup(popup_html, max_width=300),
-            tooltip=f"{row.get('mainstreet', '')} & {row.get('crossstreet1', '')} (DENIED)"
+            color='#333333', fill=True, fill_color=COLORS['denied'],
+            fill_opacity=0.75, weight=1.5,
+            popup=folium.Popup(popup_html, max_width=340),
+            tooltip=f"{row.get('mainstreet', '')} & {row.get('crossstreet1', '')} — {row.get('requesttype', '')} (DENIED)"
         ).add_to(denied_signals)
     denied_signals.add_to(m)
 
-    # --- Layer 3: Approved Signal Studies (default on) ---
-    approved_signals = folium.FeatureGroup(name='Approved Signal Studies', show=True)
+    # --- Layer 3: Approved Signal Studies ---
+    approved_signals = folium.FeatureGroup(
+        name=f'Approved Signal Studies (n={n_sig_approved:,}, 2020–2025)', show=True)
     for _, row in signal_prox[signal_prox['outcome'] == 'approved'].iterrows():
         if pd.isna(row['latitude']):
             continue
-        popup_html = (
-            f"<div style=\"{_popup_style}\">"
-            f"<b>{row.get('mainstreet', '')} & {row.get('crossstreet1', '')}</b><br>"
-            f"Type: {row.get('requesttype', 'N/A')}<br>"
-            f"Outcome: <span style='color:{COLORS['approved']};font-weight:bold;'>APPROVED</span>"
-            f"{_hr}"
-            f"Crashes within 150m: {int(row.get('crashes_150m', 0))}<br>"
-            f"Injuries within 150m: {int(row.get('injuries_150m', 0))}"
-            f"</div>"
-        )
+        popup_html = _signal_popup(row, 'APPROVED', COLORS['approved'])
         folium.CircleMarker(
             [row['latitude'], row['longitude']], radius=6,
-            color=COLORS['approved'], fill=True, fill_color=COLORS['approved'],
-            fill_opacity=0.7, weight=1.5, popup=folium.Popup(popup_html, max_width=300),
-            tooltip=f"{row.get('mainstreet', '')} & {row.get('crossstreet1', '')} (APPROVED)"
+            color='#333333', fill=True, fill_color=COLORS['approved'],
+            fill_opacity=0.75, weight=1.5,
+            popup=folium.Popup(popup_html, max_width=340),
+            tooltip=f"{row.get('mainstreet', '')} & {row.get('crossstreet1', '')} — {row.get('requesttype', '')} (APPROVED)"
         ).add_to(approved_signals)
     approved_signals.add_to(m)
 
-    # --- Layer 4: Denied Speed Bumps (default on) ---
-    denied_srts = folium.FeatureGroup(name='Denied Speed Bumps', show=True)
+    # --- Helper: build SRTS popup ---
+    def _srts_popup(row, outcome_label, outcome_color):
+        on_st = row.get('onstreet', '')
+        from_st = row.get('fromstreet', '')
+        to_st = row.get('tostreet', '')
+        req_date = _fmt_date(row.get('requestdate'))
+        proj_status = str(row.get('projectstatus', '') or '').strip()
+        denial = str(row.get('denialreason', '') or '').strip()
+        install_date = _fmt_date(row.get('installationdate'))
+        proj_code = str(row.get('projectcode', '') or '').strip()
+        fatalities = int(row.get('fatalities_150m', 0))
+        ped_inj = int(row.get('ped_injuries_150m', 0))
+        direction = str(row.get('trafficdirectiondesc', '') or '').strip()
+
+        extras = ''
+        if denial:
+            extras += f"Denial reason: {denial}<br>"
+        if install_date != 'N/A':
+            extras += f"Installed: {install_date}<br>"
+        if direction:
+            extras += f"Traffic: {direction}<br>"
+
+        return (
+            f"<div style=\"{_popup_style}\">"
+            f"<b>{on_st}</b> ({from_st} to {to_st})<br>"
+            f"<span style='color:#666;font-size:10px;'>{proj_code}</span><br>"
+            f"Outcome: <span style='color:{outcome_color};font-weight:bold;'>{outcome_label}</span>"
+            f"{_hr}"
+            f"Requested: {req_date}<br>"
+            f"Project status: {proj_status}"
+            f"{_hr}"
+            f"{extras}"
+            f"<b>Within 150m (2020–2025):</b><br>"
+            f"Crashes: {int(row.get('crashes_150m', 0))}<br>"
+            f"Injuries: {int(row.get('injuries_150m', 0))}<br>"
+            f"Ped. injuries: {ped_inj}<br>"
+            f"Fatalities: {fatalities}"
+            f"</div>"
+        )
+
+    # --- Layer 4: Denied Speed Bumps ---
+    denied_srts = folium.FeatureGroup(
+        name=f'Denied Speed Bumps (n={n_srts_denied:,}, 2020–2025)', show=True)
     for _, row in srts_prox[srts_prox['outcome'] == 'denied'].iterrows():
         if pd.isna(row['latitude']):
             continue
-        popup_html = (
-            f"<div style=\"{_popup_style}\">"
-            f"<b>{row.get('onstreet', '')}</b> ({row.get('fromstreet', '')} to {row.get('tostreet', '')})<br>"
-            f"Outcome: <span style='color:{COLORS['denied']};font-weight:bold;'>DENIED</span><br>"
-            f"Reason: {row.get('denialreason', 'N/A')}"
-            f"{_hr}"
-            f"Crashes within 150m: {int(row.get('crashes_150m', 0))}<br>"
-            f"Injuries within 150m: {int(row.get('injuries_150m', 0))}"
-            f"</div>"
-        )
+        popup_html = _srts_popup(row, 'DENIED', COLORS['denied'])
         folium.CircleMarker(
             [row['latitude'], row['longitude']], radius=4,
-            color=COLORS['denied'], fill=True, fill_color=COLORS['denied'],
-            fill_opacity=0.55, weight=1, popup=folium.Popup(popup_html, max_width=300),
-            tooltip=f"{row.get('onstreet', '')} (DENIED)"
+            color='#333333', fill=True, fill_color=COLORS['denied'],
+            fill_opacity=0.6, weight=1,
+            popup=folium.Popup(popup_html, max_width=340),
+            tooltip=f"{row.get('onstreet', '')} ({row.get('fromstreet', '')} to {row.get('tostreet', '')}) — DENIED"
         ).add_to(denied_srts)
     denied_srts.add_to(m)
 
-    # --- Layer 5: Approved Speed Bumps (default on) ---
-    approved_srts = folium.FeatureGroup(name='Approved Speed Bumps', show=True)
+    # --- Layer 5: Approved Speed Bumps ---
+    approved_srts = folium.FeatureGroup(
+        name=f'Approved Speed Bumps (n={n_srts_approved:,}, 2020–2025)', show=True)
     for _, row in srts_prox[srts_prox['outcome'] == 'approved'].iterrows():
         if pd.isna(row['latitude']):
             continue
-        popup_html = (
-            f"<div style=\"{_popup_style}\">"
-            f"<b>{row.get('onstreet', '')}</b> ({row.get('fromstreet', '')} to {row.get('tostreet', '')})<br>"
-            f"Outcome: <span style='color:{COLORS['approved']};font-weight:bold;'>APPROVED</span>"
-            f"{_hr}"
-            f"Crashes within 150m: {int(row.get('crashes_150m', 0))}<br>"
-            f"Injuries within 150m: {int(row.get('injuries_150m', 0))}"
-            f"</div>"
-        )
+        popup_html = _srts_popup(row, 'APPROVED', COLORS['approved'])
         folium.CircleMarker(
             [row['latitude'], row['longitude']], radius=4,
-            color=COLORS['approved'], fill=True, fill_color=COLORS['approved'],
-            fill_opacity=0.55, weight=1, popup=folium.Popup(popup_html, max_width=300),
-            tooltip=f"{row.get('onstreet', '')} (APPROVED)"
+            color='#333333', fill=True, fill_color=COLORS['approved'],
+            fill_opacity=0.6, weight=1,
+            popup=folium.Popup(popup_html, max_width=340),
+            tooltip=f"{row.get('onstreet', '')} ({row.get('fromstreet', '')} to {row.get('tostreet', '')}) — APPROVED"
         ).add_to(approved_srts)
     approved_srts.add_to(m)
 
-    # --- Layer 6: Crashes Near Top 15 (default OFF) ---
-    # Build top-15 denied list
+    # --- Layer 6: DOT Effectiveness — before-after for installed locations ---
+    before_after_df = None
+    if data is not None:
+        before_after_df = _compute_before_after(data)
+        effectiveness_fg = folium.FeatureGroup(
+            name=f'DOT Effectiveness (n={len(before_after_df)}, Installed, 2020–2025)', show=False)
+
+        for _, ba in before_after_df.iterrows():
+            change = ba['crash_change']
+            pct = ba['pct_change']
+
+            # Color by outcome: green = decreased, gray = no change, amber = increased
+            if change < 0:
+                fill_color = '#2d7d46'  # strong green — crashes went down
+                outline = '#1a5c2e'
+                label = f"{abs(int(pct))}% fewer crashes"
+            elif change == 0:
+                fill_color = '#777777'  # neutral gray
+                outline = '#555555'
+                label = "No change"
+            else:
+                fill_color = '#cc8400'  # amber — crashes went up
+                outline = '#996300'
+                label = f"{int(pct)}% more crashes"
+
+            install_str = ba['install_date'].strftime('%b %d, %Y')
+            ref = ba.get('referencenumber', 'N/A')
+            req_date = _fmt_date(ba.get('daterequested'))
+            inj_change = ba['after_injuries'] - ba['before_injuries']
+            inj_pct = (inj_change / ba['before_injuries'] * 100) if ba['before_injuries'] > 0 else 0
+            inj_label = (f"{abs(int(inj_pct))}% fewer" if inj_change < 0
+                         else f"{int(inj_pct)}% more" if inj_change > 0
+                         else "No change")
+            popup_html = (
+                f"<div style=\"{_popup_style}\">"
+                f"<b>{ba['mainstreet']} & {ba['crossstreet1']}</b><br>"
+                f"<span style='color:#666;font-size:10px;'>{ref}</span><br>"
+                f"Type: {ba['requesttype']}<br>"
+                f"Requested: {req_date}<br>"
+                f"Installed: {install_str}"
+                f"{_hr}"
+                f"<b>Before-After Analysis</b> ({ba['window_months']:.0f}-mo. windows, 150m):<br>"
+                f"Crashes: {ba['before_crashes']} &rarr; {ba['after_crashes']} "
+                f"(<b style='color:{fill_color};'>{label}</b>)<br>"
+                f"Injuries: {ba['before_injuries']} &rarr; {ba['after_injuries']} ({inj_label})"
+                f"</div>"
+            )
+
+            # Marker size scaled by absolute crash volume (bigger = more data = more reliable)
+            marker_r = max(7, min(14, 5 + ba['before_crashes']))
+
+            folium.CircleMarker(
+                [ba['latitude'], ba['longitude']], radius=marker_r,
+                color=outline, fill=True, fill_color=fill_color,
+                fill_opacity=0.8, weight=2,
+                popup=folium.Popup(popup_html, max_width=320),
+                tooltip=f"{ba['mainstreet']} & {ba['crossstreet1']} — {label}"
+            ).add_to(effectiveness_fg)
+
+        effectiveness_fg.add_to(m)
+
+    # --- Layer 7: Top 15 Denied Spotlight (default OFF) ---
     sig_denied = signal_prox[
         (signal_prox['outcome'] == 'denied') & signal_prox['latitude'].notna()
     ].copy()
-    sig_denied['location_name'] = sig_denied['mainstreet'].fillna('') + ' & ' + sig_denied['crossstreet1'].fillna('')
+    sig_denied['location_name'] = (sig_denied['mainstreet'].fillna('') + ' & '
+                                   + sig_denied['crossstreet1'].fillna(''))
     sig_denied['dataset'] = 'Signal Study'
     sig_denied['request_info'] = sig_denied['requesttype']
 
     srts_denied = srts_prox[
         (srts_prox['outcome'] == 'denied') & srts_prox['latitude'].notna()
     ].copy()
-    srts_denied['location_name'] = srts_denied['onstreet'].fillna('') + ' (' + srts_denied['fromstreet'].fillna('') + ' to ' + srts_denied['tostreet'].fillna('') + ')'
+    srts_denied['location_name'] = (srts_denied['onstreet'].fillna('') + ' ('
+                                    + srts_denied['fromstreet'].fillna('') + ' to '
+                                    + srts_denied['tostreet'].fillna('') + ')')
     srts_denied['dataset'] = 'SRTS'
     srts_denied['request_info'] = 'Speed Bump'
 
@@ -915,37 +1238,16 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes):
     ], ignore_index=True)
     top15 = combined.nlargest(15, 'crashes_150m')
 
-    crash_fg = folium.FeatureGroup(name='Crashes Near Top 15', show=False)
-    crash_lats = cb5_crashes['latitude'].values
-    crash_lons = cb5_crashes['longitude'].values
-
-    shown_crashes = set()
-    for _, loc in top15.iterrows():
-        dists = _haversine_vectorized(loc['latitude'], loc['longitude'], crash_lats, crash_lons)
-        nearby_idx = np.where(dists <= PROXIMITY_RADIUS_M)[0]
-        for ci in nearby_idx:
-            if ci not in shown_crashes:
-                shown_crashes.add(ci)
-                crow = cb5_crashes.iloc[ci]
-                folium.CircleMarker(
-                    [crow['latitude'], crow['longitude']], radius=2,
-                    color='#666666', fill=True, fill_color='#999999',
-                    fill_opacity=0.35, weight=0.5,
-                ).add_to(crash_fg)
-    crash_fg.add_to(m)
-
-    # --- Layer 7: Top 15 Denied Spotlight (default OFF) ---
-    spotlight_fg = folium.FeatureGroup(name='Top 15 Denied Spotlight', show=False)
+    spotlight_fg = folium.FeatureGroup(name='Top 15 Denied Spotlight (2020–2025)', show=False)
     for rank, (_, row) in enumerate(top15.iterrows(), 1):
         # 150m radius circle
         folium.Circle(
             [row['latitude'], row['longitude']],
             radius=PROXIMITY_RADIUS_M,
             color=COLORS['denied'], fill=True, fill_color=COLORS['denied'],
-            fill_opacity=0.1, weight=1.5, dash_array='5 3',
+            fill_opacity=0.08, weight=1.5, dash_array='5 3',
         ).add_to(spotlight_fg)
 
-        # Main marker
         popup_html = (
             f"<div style=\"{_popup_style}\">"
             f"<b>#{rank}: {row['location_name']}</b><br>"
@@ -961,8 +1263,8 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes):
         )
         folium.CircleMarker(
             [row['latitude'], row['longitude']], radius=9,
-            color=COLORS['denied'], fill=True, fill_color=COLORS['denied'],
-            fill_opacity=0.8, weight=1.5,
+            color='#333333', fill=True, fill_color=COLORS['denied'],
+            fill_opacity=0.85, weight=2,
             popup=folium.Popup(popup_html, max_width=300),
             tooltip=f"#{rank}: {row['location_name']} ({int(row['crashes_150m'])} crashes)"
         ).add_to(spotlight_fg)
@@ -971,19 +1273,27 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes):
         folium.Marker(
             [row['latitude'], row['longitude']],
             icon=folium.DivIcon(
-                html=f"<div style=\"font-family:'Times New Roman',Georgia,serif;font-size:10px;font-weight:bold;color:white;text-align:center;margin-top:-5px;\">{rank}</div>",
+                html=(f"<div style=\"font-family:'Times New Roman',Georgia,serif;"
+                      f"font-size:10px;font-weight:bold;color:white;"
+                      f"text-align:center;margin-top:-5px;\">{rank}</div>"),
                 icon_size=(20, 20), icon_anchor=(10, 10))
         ).add_to(spotlight_fg)
 
     spotlight_fg.add_to(m)
 
-    # --- Legend ---
-    legend_html = _make_legend_html([
+    # --- Legend (print-ready, no heatmap entry) ---
+    legend_items = [
         (COLORS['denied'], 'Denied request'),
         (COLORS['approved'], 'Approved request'),
-        (HEATMAP_GRADIENT[0.6], 'Crash heatmap (injury-weighted)'),
-        ('#999999', 'Individual crash (Top 15 layer)'),
-    ])
+        ('#888888', 'Injury crash (dot = 1 crash)'),
+        ('#1a1a1a', 'Fatal crash'),
+    ]
+    if before_after_df is not None:
+        legend_items.extend([
+            ('#2d7d46', 'Installed \u2014 crashes decreased'),
+            ('#cc8400', 'Installed \u2014 crashes increased'),
+        ])
+    legend_html = _make_legend_html(legend_items)
     m.get_root().html.add_child(folium.Element(legend_html))
 
     # --- CSS + dynamic title ---
@@ -995,6 +1305,61 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes):
 
     m.save(f'{OUTPUT_DIR}/map_01_crash_denial_overlay.html')
     print("    Consolidated map saved to map_01_crash_denial_overlay.html")
+
+    # --- Export layer data as CSV spreadsheets ---
+    print("    Exporting map layer spreadsheets...")
+
+    # Layer 1: Crashes
+    crash_cols = ['crash_date', 'crash_time', 'on_street_name', 'off_street_name',
+                  'number_of_persons_injured', 'number_of_persons_killed',
+                  'number_of_pedestrians_injured', 'number_of_pedestrians_killed',
+                  'number_of_cyclist_injured', 'number_of_cyclist_killed',
+                  'number_of_motorist_injured', 'number_of_motorist_killed',
+                  'contributing_factor_vehicle_1', 'vehicle_type_code1',
+                  'collision_id', 'latitude', 'longitude']
+    _crash_export = crash_with_coords[[c for c in crash_cols if c in crash_with_coords.columns]].copy()
+    _crash_export.to_csv(f'{OUTPUT_DIR}/map_layer_crashes.csv', index=False)
+
+    # Layer 2-3: Signal Studies (denied + approved)
+    # Enrich with fields from original data not carried through geocode cache
+    _sig_full = data['cb5_no_aps'] if data is not None else pd.DataFrame()
+    _sig_enrich_cols = ['referencenumber', 'daterequested', 'statusdate', 'findings',
+                        'schoolname', 'visionzero']
+    _sig_enrich = _sig_full[[c for c in _sig_enrich_cols if c in _sig_full.columns]].drop_duplicates('referencenumber')
+    sig_cols = ['referencenumber', 'mainstreet', 'crossstreet1', 'requesttype',
+                'outcome', 'daterequested', 'statusdate', 'statusdescription',
+                'findings', 'schoolname', 'visionzero',
+                'crashes_150m', 'injuries_150m', 'ped_injuries_150m', 'fatalities_150m',
+                'latitude', 'longitude']
+    for outcome_label, subset in [('denied', _sig_denied), ('approved', _sig_approved)]:
+        _exp = subset[subset['latitude'].notna()].copy()
+        if len(_sig_enrich) > 0:
+            _exp = _exp.merge(_sig_enrich, on='referencenumber', how='left', suffixes=('', '_orig'))
+        _exp = _exp[[c for c in sig_cols if c in _exp.columns]]
+        _exp.to_csv(f'{OUTPUT_DIR}/map_layer_{outcome_label}_signals.csv', index=False)
+
+    # Layer 4-5: Speed Bumps (denied + approved)
+    srts_cols = ['projectcode', 'onstreet', 'fromstreet', 'tostreet',
+                 'outcome', 'requestdate', 'projectstatus', 'denialreason',
+                 'installationdate', 'trafficdirectiondesc',
+                 'crashes_150m', 'injuries_150m', 'ped_injuries_150m', 'fatalities_150m',
+                 'latitude', 'longitude']
+    for outcome_label, subset in [('denied', _srts_denied), ('approved', _srts_approved)]:
+        _exp = subset[[c for c in srts_cols if c in subset.columns]].copy()
+        _exp = _exp[_exp['latitude'].notna()]
+        _exp.to_csv(f'{OUTPUT_DIR}/map_layer_{outcome_label}_speed_bumps.csv', index=False)
+
+    # Layer 7: Top 15 Spotlight
+    top15.to_csv(f'{OUTPUT_DIR}/map_layer_top15_denied.csv', index=False)
+
+    print(f"      map_layer_crashes.csv ({len(_crash_export):,} rows)")
+    print(f"      map_layer_denied_signals.csv ({n_sig_denied:,} rows)")
+    print(f"      map_layer_approved_signals.csv ({n_sig_approved:,} rows)")
+    print(f"      map_layer_denied_speed_bumps.csv ({n_srts_denied:,} rows)")
+    print(f"      map_layer_approved_speed_bumps.csv ({n_srts_approved:,} rows)")
+    print(f"      map_layer_top15_denied.csv (15 rows)")
+
+    return before_after_df
 
 
 # ============================================================
@@ -1039,7 +1404,7 @@ def chart_09_crash_proximity(signal_prox, srts_prox):
         axes[ax_idx].set_xticks(x)
         axes[ax_idx].set_xticklabels(metric_labels, fontsize=10)
         axes[ax_idx].set_ylabel('Median Count within 150m', fontweight='bold')
-        axes[ax_idx].set_title(f'{title_prefix}\nMedian Crash Metrics Near Denied vs Approved',
+        axes[ax_idx].set_title(f'{title_prefix} (n={len(denied)+len(approved):,})\nMedian Crash Metrics, Denied vs Approved, 2020–2025',
                                fontweight='bold', fontsize=12)
         axes[ax_idx].legend(loc='upper right')
         axes[ax_idx].xaxis.grid(False)
@@ -1059,11 +1424,11 @@ def chart_09_crash_proximity(signal_prox, srts_prox):
                 bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='gray', alpha=0.9)
             )
 
-    fig.suptitle('Crash Proximity: Denied vs Approved Safety Request Locations',
+    fig.suptitle('Crash Proximity: Denied vs Approved Locations, QCB5 (2020–2025)',
                  fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.03,
              f'Source: NYC Open Data | 150m radius (~1.5 blocks, Vision Zero standard)\n'
-             f'Crash data: Queens injury crashes 2020-2025 (h9gi-nx95)',
+             f'Crash data: Queens injury crashes 2020–2025 (h9gi-nx95)',
              ha='left', fontsize=9, style='italic', color='#333333')
 
     plt.tight_layout()
@@ -1124,7 +1489,7 @@ def chart_09b_top_denied_ranking(signal_prox, srts_prox):
     ax.set_yticklabels(top15['label'], fontsize=9)
     ax.invert_yaxis()
     ax.set_xlabel('Count within 150m', fontweight='bold')
-    ax.set_title('Top 15 Denied Locations by Nearby Crash Count\n(CB5, 150m radius, 2020-2025)',
+    ax.set_title(f'Top 15 Denied Locations by Nearby Crash Count\n(QCB5, 150m Radius, n={len(combined):,} denied, 2020–2025)',
                  fontweight='bold', fontsize=12)
     ax.yaxis.grid(False)
 
@@ -1143,6 +1508,413 @@ def chart_09b_top_denied_ranking(signal_prox, srts_prox):
                 bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close()
     print("    Chart 09b saved.")
+
+
+def chart_13_approval_vs_installation():
+    """Chart 13: Paper Approval Rate vs Confirmed Installation Rate."""
+    print("  Generating Chart 13: Approval vs Installation Rate...")
+
+    # --- Signal Studies ---
+    sig = pd.read_csv(f'{OUTPUT_DIR}/data_cb5_signal_studies.csv', low_memory=False)
+    sig['outcome'] = sig['statusdescription'].apply(_classify_outcome)
+    sig_resolved = sig[sig['outcome'].isin(['denied', 'approved'])]
+    sig_no_aps = sig_resolved[sig_resolved['requesttype'] != 'Accessible Pedestrian Signal']
+
+    sig_denied = (sig_no_aps['outcome'] == 'denied').sum()
+    sig_approved = (sig_no_aps['outcome'] == 'approved').sum()
+    sig_installed = sig_no_aps[
+        sig_no_aps['aw_installdate'].notna() | sig_no_aps['signalinstalldate'].notna()
+    ].drop_duplicates('referencenumber').shape[0]
+
+    # --- SRTS ---
+    srts = pd.read_csv(f'{DATA_DIR}/srts_citywide.csv', low_memory=False)
+    srts['cb_num'] = pd.to_numeric(srts['cb'], errors='coerce')
+    cb5_srts = srts[srts['cb_num'] == 405]
+    srts_resolved = cb5_srts[cb5_srts['segmentstatusdescription'].isin(['Not Feasible', 'Feasible'])]
+    srts_denied = (srts_resolved['segmentstatusdescription'] == 'Not Feasible').sum()
+    srts_feasible = (srts_resolved['segmentstatusdescription'] == 'Feasible').sum()
+    srts_installed = cb5_srts[
+        (cb5_srts['segmentstatusdescription'] == 'Feasible') &
+        cb5_srts['installationdate'].notna() &
+        ~cb5_srts['projectstatus'].str.contains('Cancel|Reject|denied', case=False, na=False)
+    ].shape[0]
+
+    fig, axes = plt.subplots(1, 2, figsize=(13, 6))
+
+    # Panel 1: Signal Studies
+    categories = ['Denied', 'Approved\n(on paper)', 'Confirmed\nInstalled']
+    sig_vals = [sig_denied, sig_approved, sig_installed]
+    sig_colors = [COLORS['denied'], COLORS['approved'], '#2d7d46']
+    bars = axes[0].bar(categories, sig_vals, color=sig_colors, edgecolor='black', zorder=3)
+    for bar, val in zip(bars, sig_vals):
+        axes[0].text(bar.get_x() + bar.get_width()/2, val + 2,
+                     str(val), ha='center', va='bottom', fontweight='bold', fontsize=11)
+    sig_paper_rate = sig_approved / (sig_denied + sig_approved) * 100
+    sig_install_rate = sig_installed / (sig_denied + sig_installed) * 100
+    axes[0].set_title(f'Signal Studies (QCB5, Excl. APS, n={len(sig_no_aps):,}, 2020–2025)', fontweight='bold', fontsize=12)
+    axes[0].set_ylabel('Number of Requests', fontweight='bold')
+    axes[0].xaxis.grid(False)
+    axes[0].annotate(
+        f'Paper approval rate: {sig_paper_rate:.1f}%\n'
+        f'Confirmed install rate: {sig_install_rate:.1f}%',
+        xy=(0.98, 0.95), xycoords='axes fraction', ha='right', va='top',
+        fontsize=10, bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='gray', alpha=0.9))
+
+    # Panel 2: SRTS
+    srts_vals = [srts_denied, srts_feasible, srts_installed]
+    bars2 = axes[1].bar(categories, srts_vals, color=sig_colors, edgecolor='black', zorder=3)
+    for bar, val in zip(bars2, srts_vals):
+        axes[1].text(bar.get_x() + bar.get_width()/2, val + 15,
+                     str(val), ha='center', va='bottom', fontweight='bold', fontsize=11)
+    srts_paper_rate = srts_feasible / (srts_denied + srts_feasible) * 100
+    srts_install_rate = srts_installed / (srts_denied + srts_installed) * 100
+    _rd = pd.to_datetime(cb5_srts['requestdate'], errors='coerce')
+    srts_min_yr = int(_rd.dt.year.min())
+    srts_max_yr = min(int(_rd.dt.year.max()), 2025)
+    axes[1].set_title(f'Speed Bumps / SRTS (QCB5, n={len(srts_resolved):,}, {srts_min_yr}–{srts_max_yr})', fontweight='bold', fontsize=12)
+    axes[1].set_ylabel('Number of Requests', fontweight='bold')
+    axes[1].xaxis.grid(False)
+    axes[1].annotate(
+        f'Paper approval rate: {srts_paper_rate:.1f}%\n'
+        f'Confirmed install rate: {srts_install_rate:.1f}%',
+        xy=(0.98, 0.95), xycoords='axes fraction', ha='right', va='top',
+        fontsize=10, bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='gray', alpha=0.9))
+
+    fig.suptitle(f'Paper Approvals vs Confirmed Installations — QCB5',
+                 fontweight='bold', fontsize=14, y=1.02)
+    fig.text(0.01, -0.03,
+             'Source: NYC Open Data | Signal Studies (w76s-c5u4), SRTS (9n6h-pt9g)\n'
+             'Confirmed = installation date recorded in DOT system',
+             ha='left', fontsize=9, style='italic', color='#333333')
+
+    plt.tight_layout()
+    plt.savefig(f'{OUTPUT_DIR}/chart_13_approval_vs_installation.png', dpi=300,
+                bbox_inches='tight', facecolor='white', edgecolor='none')
+    plt.close()
+    print("    Chart 13 saved.")
+
+
+def chart_14_installation_wait_times():
+    """Chart 14: How long approved requests wait — installed baseline vs still waiting."""
+    print("  Generating Chart 14: Installation Wait Times...")
+
+    sig = pd.read_csv(f'{OUTPUT_DIR}/data_cb5_signal_studies.csv', low_memory=False)
+    sig['outcome'] = sig['statusdescription'].apply(_classify_outcome)
+    approved = sig[(sig['outcome'] == 'approved') &
+                   (sig['requesttype'] != 'Accessible Pedestrian Signal')].copy()
+
+    approved['statusdate_dt'] = pd.to_datetime(approved['statusdate'], errors='coerce')
+    approved['install_dt'] = pd.to_datetime(
+        approved['aw_installdate'].fillna(approved['signalinstalldate']), errors='coerce')
+    approved['confirmed'] = approved['install_dt'].notna()
+    approved = approved.drop_duplicates('referencenumber')
+
+    installed = approved[approved['confirmed']].copy()
+    installed['wait_months'] = (installed['install_dt'] - installed['statusdate_dt']).dt.days / 30.44
+
+    not_installed = approved[~approved['confirmed']].copy()
+    not_installed['wait_months'] = (pd.Timestamp.now() - not_installed['statusdate_dt']).dt.days / 30.44
+
+    max_baseline = installed['wait_months'].max()
+
+    fig, ax = plt.subplots(figsize=(14, 7))
+
+    # Combine for a single horizontal bar chart
+    installed_sorted = installed.sort_values('wait_months')
+    not_installed_sorted = not_installed.sort_values('wait_months')
+
+    all_locations = pd.concat([installed_sorted, not_installed_sorted], ignore_index=True)
+
+    # Abbreviate street names for cleaner labels
+    def _abbreviate(name):
+        s = str(name).strip()
+        for full, short in [('AVENUE', 'Ave'), ('STREET', 'St'), ('BOULEVARD', 'Blvd'),
+                             ('ROAD', 'Rd'), ('PLACE', 'Pl'), ('DRIVE', 'Dr'),
+                             ('LANE', 'Ln'), ('COURT', 'Ct'), ('PARKWAY', 'Pkwy'),
+                             ('EXPRESSWAY', 'Expwy'), ('TURNPIKE', 'Tpke')]:
+            s = s.replace(full, short)
+        return s.title()
+
+    all_locations['label'] = all_locations.apply(
+        lambda r: _abbreviate(r['mainstreet'] or '') + ' & ' + _abbreviate(r['crossstreet1'] or ''), axis=1)
+    all_locations['label'] = all_locations.apply(
+        lambda r: r['label'][:32] + (' [Installed]' if r['confirmed'] else ' [Approved]'), axis=1)
+
+    y = np.arange(len(all_locations))
+    colors = [COLORS['approved'] if c else '#cc8400' for c in all_locations['confirmed']]
+
+    ax.barh(y, all_locations['wait_months'], color=colors, edgecolor='black', zorder=3, height=0.7)
+
+    # Baseline line: max known install time
+    # Position label at the transition between green (installed) and amber (waiting)
+    n_installed = len(installed_sorted)
+    ax.axvline(x=max_baseline, color=COLORS['denied'], linestyle='--', linewidth=1.5, zorder=5)
+    ax.text(max_baseline + 0.5, max(0, n_installed - 4),
+            f'Longest known\ninstall time\n({max_baseline:.0f} mo.)',
+            fontsize=8, color=COLORS['denied'], va='center', fontweight='bold')
+
+    # Labels
+    for i, (_, row) in enumerate(all_locations.iterrows()):
+        val = row['wait_months']
+        ax.text(val + 0.5, i, f'{val:.0f} mo.',
+                va='center', ha='left', fontsize=8)
+
+    ax.set_yticks(y)
+    ax.set_yticklabels(all_locations['label'], fontsize=8)
+    ax.invert_yaxis()
+    ax.set_xlabel('Months Since Approval', fontweight='bold')
+    ax.set_title(f'Approved Signal Studies: Time to Installation\n'
+                 f'QCB5, Excl. APS, n={len(all_locations):,}, 2020–2025',
+                 fontweight='bold', fontsize=12)
+    ax.yaxis.grid(False)
+
+    from matplotlib.patches import Patch
+    ax.legend(handles=[
+        Patch(facecolor=COLORS['approved'], edgecolor='black', label='Approved & Installed'),
+        Patch(facecolor='#cc8400', edgecolor='black', label='Approved, Not Yet Installed'),
+    ], loc='upper right')
+
+    fig.text(0.01, -0.03,
+             'Source: NYC Open Data (w76s-c5u4) | Dashed line = longest observed approval-to-install time\n'
+             'Wait times for uninstalled approvals measured through Feb 2026',
+             ha='left', fontsize=9, style='italic', color='#333333')
+
+    plt.tight_layout()
+    plt.savefig(f'{OUTPUT_DIR}/chart_14_installation_wait_times.png', dpi=300,
+                bbox_inches='tight', facecolor='white', edgecolor='none')
+    plt.close()
+    print("    Chart 14 saved.")
+
+
+def chart_15_srts_funnel():
+    """Chart 15: SRTS Approval Funnel — what happens after DOT approves a speed bump."""
+    print("  Generating Chart 15: SRTS Approval Funnel...")
+
+    srts = pd.read_csv(f'{DATA_DIR}/srts_citywide.csv', low_memory=False)
+    srts['cb_num'] = pd.to_numeric(srts['cb'], errors='coerce')
+    cb5 = srts[srts['cb_num'] == 405].copy()
+    cb5['requestdate'] = pd.to_datetime(cb5['requestdate'], errors='coerce')
+    feasible = cb5[cb5['segmentstatusdescription'] == 'Feasible'].copy()
+
+    min_yr = int(feasible['requestdate'].dt.year.min())
+    max_yr = min(int(feasible['requestdate'].dt.year.max()), 2025)
+
+    feasible['install_dt'] = pd.to_datetime(feasible['installationdate'], errors='coerce')
+
+    # Categorize outcomes
+    installed = feasible[
+        feasible['install_dt'].notna() &
+        ~feasible['projectstatus'].str.contains('Cancel|Reject|denied', case=False, na=False)
+    ]
+    cancelled = feasible[
+        feasible['projectstatus'].str.contains('Cancel|Reject|denied', case=False, na=False)
+    ]
+    still_open = feasible[
+        feasible['install_dt'].isna() &
+        ~feasible['projectstatus'].str.contains('Cancel|Reject|denied|Closed', case=False, na=False)
+    ]
+
+    n_total = len(feasible)
+    n_installed = len(installed)
+    n_cancelled = len(cancelled)
+    n_waiting = len(still_open)
+
+    # --- Two-panel layout ---
+    fig, axes = plt.subplots(1, 2, figsize=(13, 6), gridspec_kw={'width_ratios': [1, 2]})
+
+    # Left panel: total approved as a single reference bar
+    axes[0].bar(['Approved\nby DOT'], [n_total], color=COLORS['approved'],
+                edgecolor='black', zorder=3, width=0.5)
+    axes[0].text(0, n_total + 5, str(n_total), ha='center', va='bottom',
+                 fontweight='bold', fontsize=14)
+    axes[0].set_ylabel('Number of Requests', fontweight='bold')
+    axes[0].set_title(f'Total Approved\n({min_yr}–{max_yr})', fontweight='bold', fontsize=12)
+    axes[0].set_ylim(0, n_total * 1.15)
+    axes[0].xaxis.grid(False)
+
+    # Right panel: what happened to them
+    categories = ['Confirmed\nInstalled', 'Cancelled /\nRejected', 'Still\nWaiting']
+    values = [n_installed, n_cancelled, n_waiting]
+    bar_colors = ['#2d7d46', '#cc8400', '#888888']
+
+    bars = axes[1].bar(categories, values, color=bar_colors, edgecolor='black', zorder=3, width=0.6)
+
+    for bar, val in zip(bars, values):
+        pct = val / n_total * 100
+        axes[1].text(bar.get_x() + bar.get_width()/2, val + 3,
+                     f'{val}\n({pct:.0f}%)', ha='center', va='bottom',
+                     fontweight='bold', fontsize=11)
+
+    axes[1].set_ylabel('Number of Requests', fontweight='bold')
+    axes[1].set_title(f'Outcome of {n_total} Approved Requests', fontweight='bold', fontsize=12)
+    axes[1].set_ylim(0, max(values) * 1.25)
+    axes[1].xaxis.grid(False)
+
+    # Median wait annotation for still-waiting
+    still_open_dt = pd.to_datetime(still_open['requestdate'], errors='coerce')
+    if len(still_open_dt.dropna()) > 0:
+        median_years = (pd.Timestamp.now() - still_open_dt).dt.days.median() / 365.25
+        axes[1].annotate(f'Median wait: {median_years:.1f} years',
+                         xy=(2, n_waiting * 0.5), ha='center', fontsize=9,
+                         style='italic', fontweight='bold',
+                         bbox=dict(boxstyle='round', facecolor='lightyellow',
+                                   edgecolor='gray', alpha=0.9))
+
+    fig.suptitle(f'Fate of DOT-Approved Speed Bumps — QCB5 (n={n_total:,}), {min_yr}–{max_yr}',
+                 fontweight='bold', fontsize=14, y=1.02)
+    fig.text(0.01, -0.03,
+             'Source: NYC Open Data (9n6h-pt9g) | "Feasible" = DOT engineering approval\n'
+             'Cancelled/Rejected per DOT projectstatus field',
+             ha='left', fontsize=9, style='italic', color='#333333')
+
+    plt.tight_layout()
+    plt.savefig(f'{OUTPUT_DIR}/chart_15_srts_funnel.png', dpi=300,
+                bbox_inches='tight', facecolor='white', edgecolor='none')
+    plt.close()
+    print("    Chart 15 saved.")
+
+
+def _abbreviate_street(name):
+    """Abbreviate street type suffixes for compact chart labels."""
+    s = str(name).strip()
+    for full, short in [('AVENUE', 'Ave'), ('STREET', 'St'), ('BOULEVARD', 'Blvd'),
+                         ('ROAD', 'Rd'), ('PLACE', 'Pl'), ('DRIVE', 'Dr'),
+                         ('LANE', 'Ln'), ('COURT', 'Ct'), ('PARKWAY', 'Pkwy'),
+                         ('EXPRESSWAY', 'Expwy'), ('TURNPIKE', 'Tpke'),
+                         ('CRESCENT', 'Cres')]:
+        s = s.replace(full, short)
+    return s.title()
+
+
+def _load_srts_wait_data(year_min=None, year_max=None):
+    """Load SRTS feasible data and split into installed / still-waiting.
+
+    If year_min/year_max provided, filters to requests within that range.
+    Returns (installed_df, still_open_df, max_baseline_months).
+    """
+    srts = pd.read_csv(f'{DATA_DIR}/srts_citywide.csv', low_memory=False)
+    srts['cb_num'] = pd.to_numeric(srts['cb'], errors='coerce')
+    cb5 = srts[srts['cb_num'] == 405].copy()
+    feasible = cb5[cb5['segmentstatusdescription'] == 'Feasible'].copy()
+
+    feasible['install_dt'] = pd.to_datetime(feasible['installationdate'], errors='coerce')
+    feasible['request_dt'] = pd.to_datetime(feasible['requestdate'], errors='coerce')
+    feasible['year'] = feasible['request_dt'].dt.year
+
+    if year_min is not None and year_max is not None:
+        feasible = feasible[feasible['year'].between(year_min, year_max)]
+
+    installed = feasible[
+        feasible['install_dt'].notna() &
+        ~feasible['projectstatus'].str.contains('Cancel|Reject|denied', case=False, na=False)
+    ].copy()
+    still_open = feasible[
+        feasible['install_dt'].isna() &
+        ~feasible['projectstatus'].str.contains('Cancel|Reject|denied|Closed', case=False, na=False)
+    ].copy()
+
+    installed['wait_months'] = (installed['install_dt'] - installed['request_dt']).dt.days / 30.44
+    still_open['wait_months'] = (pd.Timestamp.now() - still_open['request_dt']).dt.days / 30.44
+
+    installed['confirmed'] = True
+    still_open['confirmed'] = False
+
+    max_baseline = installed['wait_months'].max() if len(installed) > 0 else 0
+    return installed, still_open, max_baseline
+
+
+def _draw_srts_wait_chart(installed, still_open, max_baseline, title_suffix,
+                          filename, n_installed_show=15):
+    """Draw the SRTS wait-time horizontal bar chart."""
+    from matplotlib.patches import Patch
+
+    # Show top N longest-wait installed (for baseline context) + all still waiting
+    if len(installed) > n_installed_show:
+        installed_show = installed.nlargest(n_installed_show, 'wait_months').sort_values('wait_months')
+        installed_note = f'showing {n_installed_show} of {len(installed)} longest'
+    else:
+        installed_show = installed.sort_values('wait_months')
+        installed_note = f'{len(installed)} total'
+    still_open_sorted = still_open.sort_values('wait_months')
+
+    all_locations = pd.concat([installed_show, still_open_sorted], ignore_index=True)
+
+    all_locations['label'] = all_locations.apply(
+        lambda r: _abbreviate_street(r.get('onstreet', '') or '') + ' ('
+                  + _abbreviate_street(r.get('fromstreet', '') or '') + ' to '
+                  + _abbreviate_street(r.get('tostreet', '') or '') + ')', axis=1)
+    all_locations['label'] = all_locations.apply(
+        lambda r: r['label'][:40] + (' [Installed]' if r['confirmed'] else ' [Approved]'), axis=1)
+
+    n_bars = len(all_locations)
+    fig_height = max(5, 0.28 * n_bars + 2)
+    fig, ax = plt.subplots(figsize=(14, fig_height))
+
+    y = np.arange(n_bars)
+    colors = [COLORS['approved'] if c else '#cc8400' for c in all_locations['confirmed']]
+
+    ax.barh(y, all_locations['wait_months'], color=colors, edgecolor='black', zorder=3, height=0.7)
+
+    # Baseline line: max known install time
+    n_installed_shown = len(installed_show)
+    if max_baseline > 0:
+        ax.axvline(x=max_baseline, color=COLORS['denied'], linestyle='--', linewidth=1.5, zorder=5)
+        ax.text(max_baseline + 1, max(0, n_installed_shown - 4),
+                f'Longest known\ninstall time\n({max_baseline:.0f} mo.)',
+                fontsize=8, color=COLORS['denied'], va='center', fontweight='bold')
+
+    # Bar labels
+    for i, (_, row) in enumerate(all_locations.iterrows()):
+        val = row['wait_months']
+        yr_label = f' ({val/12:.1f} yr)' if val >= 24 else ''
+        ax.text(val + 1, i, f'{val:.0f} mo.{yr_label}',
+                va='center', ha='left', fontsize=7)
+
+    ax.set_yticks(y)
+    ax.set_yticklabels(all_locations['label'], fontsize=7)
+    ax.invert_yaxis()
+    ax.set_xlabel('Months Since Request', fontweight='bold')
+    ax.set_title(f'Approved Speed Bumps: Time to Installation\n'
+                 f'QCB5, SRTS Program, n={n_bars:,}, {title_suffix}',
+                 fontweight='bold', fontsize=12)
+    ax.yaxis.grid(False)
+
+    ax.legend(handles=[
+        Patch(facecolor=COLORS['approved'], edgecolor='black',
+              label=f'Approved & Installed ({installed_note})'),
+        Patch(facecolor='#cc8400', edgecolor='black',
+              label=f'Approved, Not Yet Installed ({len(still_open)} total)'),
+    ], loc='upper right', fontsize=9)
+
+    fig.text(0.01, -0.03,
+             'Source: NYC Open Data (9n6h-pt9g) | Dashed line = longest observed request-to-install time\n'
+             f'Wait times for uninstalled measured through Feb 2026',
+             ha='left', fontsize=9, style='italic', color='#333333')
+
+    plt.tight_layout()
+    plt.savefig(f'{OUTPUT_DIR}/{filename}.png', dpi=300,
+                bbox_inches='tight', facecolor='white', edgecolor='none')
+    plt.close()
+
+
+def chart_16_srts_wait_times():
+    """Chart 16: SRTS wait times — 2020–2025 requests."""
+    print("  Generating Chart 16: SRTS Wait Times (2020–2025)...")
+    installed, still_open, max_baseline = _load_srts_wait_data(2020, 2025)
+    print(f"    2020–2025: {len(installed)} installed, {len(still_open)} waiting")
+    _draw_srts_wait_chart(installed, still_open, max_baseline,
+                          '2020–2025', 'chart_16_srts_wait_times')
+    print("    Chart 16 saved.")
+
+
+def chart_16z_srts_wait_times_full():
+    """Chart 16z: SRTS wait times — full history."""
+    print("  Generating Chart 16z: SRTS Wait Times (Full History)...")
+    installed, still_open, max_baseline = _load_srts_wait_data()
+    print(f"    Full history: {len(installed)} installed, {len(still_open)} waiting")
+    _draw_srts_wait_chart(installed, still_open, max_baseline,
+                          '1999–2025', 'chart_16z_srts_wait_times_full')
+    print("    Chart 16z saved.")
 
 
 # ============================================================
@@ -1277,13 +2049,25 @@ def main():
 
     # Step 3: Consolidated map (replaces former Maps 01-03)
     print("\nStep 3: Generating consolidated map...")
-    map_consolidated(signal_prox, srts_prox, data['cb5_crashes'])
+    before_after_df = map_consolidated(signal_prox, srts_prox, data['cb5_crashes'], data=data)
     print("  Note: map_02_*.html and map_03_*.html are no longer generated (can be deleted).")
+
+    # Save before-after analysis table
+    if before_after_df is not None and len(before_after_df) > 0:
+        ba_out = before_after_df.copy()
+        ba_out['install_date'] = ba_out['install_date'].dt.strftime('%Y-%m-%d')
+        ba_out.to_csv(f'{OUTPUT_DIR}/table_before_after_installed.csv', index=False)
+        print(f"  Before-after table saved ({len(ba_out)} installed locations).")
 
     # Step 4: Static charts
     print("\nStep 4: Generating charts...")
     chart_09_crash_proximity(signal_prox, srts_prox)
     chart_09b_top_denied_ranking(signal_prox, srts_prox)
+    chart_13_approval_vs_installation()
+    chart_14_installation_wait_times()
+    chart_15_srts_funnel()
+    chart_16_srts_wait_times()
+    chart_16z_srts_wait_times_full()
 
     # Step 5: Data tables
     print("\nStep 5: Saving data tables...")
