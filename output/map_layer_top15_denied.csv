@@ -1,16 +1,16 @@
 location_name,dataset,request_info,latitude,longitude,crashes_150m,injuries_150m,ped_injuries_150m,fatalities_150m
-62 AVENUE (FRESH POND ROAD to 62 STREET),SRTS,Speed Bump,40.713843,-73.900939,71,86,18,1
-METROPOLITAN AVENUE & AUBREY AVENUE,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
-AUBREY AVENUE & METROPOLITAN AVENUE,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
-METROPOLITAN AVENUE & AUBREY AVENUE,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
-METROPOLITAN AVENUE & AUBREY AVENUE,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
-ONDERDONK AVENUE (70 AVENUE to MYRTLE AVENUE),SRTS,Speed Bump,40.700718,-73.901694,62,82,19,0
-62 ROAD (FRESH POND ROAD to 62 STREET),SRTS,Speed Bump,40.713173,-73.900749,62,69,17,0
-61 STREET & METROPOLITAN AVENUE,Signal Study,Left Turn Arrow/Signal,40.712757,-73.90225,59,70,17,0
-FRESH POND ROAD & METROPOLITAN AVENUE,Signal Study,Left Turn Arrow/Signal,40.712696,-73.900604,57,64,17,0
-69 AVENUE & ONDERDONK AVENUE,Signal Study,All-Way Stop,40.70123,-73.902565,57,67,15,0
-FRESH POND ROAD & METROPOLITAN AVENUE,Signal Study,Traffic Signal,40.712696,-73.900604,57,64,17,0
-FRESH POND ROAD & METROPOLITAN AVENUE,Signal Study,Left Turn Arrow/Signal,40.712696,-73.900604,57,64,17,0
-ONDERDONK AVENUE (69 AVENUE to 70 AVENUE),SRTS,Speed Bump,40.701229,-73.902559,57,67,15,0
-69 AVENUE (ONDERDONK AVENUE to FOREST AVENUE),SRTS,Speed Bump,40.701229,-73.902559,57,67,15,0
-CYPRESS AVENUE (CABOT ROAD to CLOVER PLACE),SRTS,Speed Bump,40.693843,-73.896912,57,72,13,0
+Aubrey Avenue & Metropolitan Avenue,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
+61 Street & Metropolitan Avenue,Signal Study,Left Turn Arrow/Signal,40.712757,-73.90225,59,70,17,0
+69 Avenue & Onderdonk Avenue,Signal Study,All-Way Stop,40.70123,-73.902565,57,67,15,0
+Cooper Avenue & Cypress Avenue,Signal Study,Traffic Signal,40.694107,-73.89737,55,70,12,0
+Forest Avenue & Metropolitan Avenue,Signal Study,Leading Pedestrian Interval,40.712902,-73.90608,54,64,19,0
+Bleecker Street & Fresh Pond Road,Signal Study,Traffic Signal,40.711903,-73.90019,54,64,16,0
+Cypress Avenue & Vermont Place,Signal Study,Traffic Signal,40.691433,-73.89063,52,75,1,0
+Cypress Avenue & Putnam Avenue,Signal Study,All-Way Stop,40.700367,-73.906624,51,55,13,0
+Hamilton Place & Perry Avenue,Signal Study,All-Way Stop,40.724888,-73.89899,47,61,5,0
+Forest Avenue & Myrtle Avenue,Signal Study,Traffic Signal Removal,40.700497,-73.90021,46,56,20,0
+Borden Avenue & Maurice Avenue,Signal Study,Traffic Signal,40.727733,-73.906731,45,68,1,0
+Grand Avenue & Maspeth Avenue,Signal Study,Traffic Signal,40.7228,-73.90182,40,42,4,0
+Myrtle Avenue & Summerfield Street,Signal Study,All-Way Stop,40.70052,-73.897962,39,50,16,0
+69 Street & Eliot Avenue,Signal Study,Left Turn Arrow/Signal,40.71946,-73.89117,38,50,12,0
+Fresh Pond Road & Putnam Avenue,Signal Study,Traffic Signal,40.706497,-73.89695,38,53,12,0

@@ -1,26 +1,26 @@
 Rank,location_name,dataset,request_type,latitude,longitude,crashes_150m,injuries_150m,ped_injuries_150m,fatalities_150m
-1,62 Avenue (Fresh Pond Road To 62 Street),SRTS,Speed Bump,40.713843,-73.900939,71,86,18,1
-2,Metropolitan Avenue & Aubrey Avenue,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
-3,Aubrey Avenue & Metropolitan Avenue,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
-4,Metropolitan Avenue & Aubrey Avenue,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
-5,Metropolitan Avenue & Aubrey Avenue,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
-6,Onderdonk Avenue (70 Avenue To Myrtle Avenue),SRTS,Speed Bump,40.700718,-73.901694,62,82,19,0
-7,62 Road (Fresh Pond Road To 62 Street),SRTS,Speed Bump,40.713173,-73.900749,62,69,17,0
-8,61 Street & Metropolitan Avenue,Signal Study,Left Turn Arrow/Signal,40.712757,-73.90225,59,70,17,0
-9,Fresh Pond Road & Metropolitan Avenue,Signal Study,Left Turn Arrow/Signal,40.712696,-73.900604,57,64,17,0
-10,69 Avenue & Onderdonk Avenue,Signal Study,All-Way Stop,40.70123,-73.902565,57,67,15,0
-11,Fresh Pond Road & Metropolitan Avenue,Signal Study,Traffic Signal,40.712696,-73.900604,57,64,17,0
-12,Fresh Pond Road & Metropolitan Avenue,Signal Study,Left Turn Arrow/Signal,40.712696,-73.900604,57,64,17,0
-13,Onderdonk Avenue (69 Avenue To 70 Avenue),SRTS,Speed Bump,40.701229,-73.902559,57,67,15,0
-14,69 Avenue (Onderdonk Avenue To Forest Avenue),SRTS,Speed Bump,40.701229,-73.902559,57,67,15,0
-15,Cypress Avenue (Cabot Road To Clover Place),SRTS,Speed Bump,40.693843,-73.896912,57,72,13,0
-16,Seneca Avenue & Catalpa Avenue,Signal Study,Traffic Signal,40.700737,-73.9042,56,67,18,0
-17,Cooper Avenue & Cypress Avenue,Signal Study,Left Turn Arrow/Signal,40.694107,-73.89737,55,70,12,0
-18,Cypress Avenue & Cooper Avenue,Signal Study,Traffic Signal,40.694107,-73.89737,55,70,12,0
-19,Cooper Avenue & Cypress Avenue,Signal Study,Leading Pedestrian Interval,40.694107,-73.89737,55,70,12,0
-20,Cypress Avenue & Cooper Avenue,Signal Study,Traffic Signal,40.694107,-73.89737,55,70,12,0
-21,Cypress Avenue & Cooper Avenue,Signal Study,Leading Pedestrian Interval,40.694107,-73.89737,55,70,12,0
-22,Cypress Avenue (Cooper Avenue To Cabot Road),SRTS,Speed Bump,40.69411,-73.897362,55,70,12,0
-23,Metropolitan Avenue & Forest Avenue,Signal Study,Leading Pedestrian Interval,40.712902,-73.90608,54,64,19,0
-24,Metropolitan Avenue & Forest Avenue,Signal Study,Traffic Signal,40.712902,-73.90608,54,64,19,0
-25,Bleecker Street & Fresh Pond Road,Signal Study,Traffic Signal,40.711903,-73.90019,54,64,16,0
+1,Aubrey Avenue & Metropolitan Avenue,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0
+2,61 Street & Metropolitan Avenue,Signal Study,Left Turn Arrow/Signal,40.712757,-73.90225,59,70,17,0
+3,69 Avenue & Onderdonk Avenue,Signal Study,All-Way Stop,40.70123,-73.902565,57,67,15,0
+4,Cooper Avenue & Cypress Avenue,Signal Study,Traffic Signal,40.694107,-73.89737,55,70,12,0
+5,Forest Avenue & Metropolitan Avenue,Signal Study,Leading Pedestrian Interval,40.712902,-73.90608,54,64,19,0
+6,Bleecker Street & Fresh Pond Road,Signal Study,Traffic Signal,40.711903,-73.90019,54,64,16,0
+7,Cypress Avenue & Vermont Place,Signal Study,Traffic Signal,40.691433,-73.89063,52,75,1,0
+8,Cypress Avenue & Putnam Avenue,Signal Study,All-Way Stop,40.700367,-73.906624,51,55,13,0
+9,Hamilton Place & Perry Avenue,Signal Study,All-Way Stop,40.724888,-73.89899,47,61,5,0
+10,Forest Avenue & Myrtle Avenue,Signal Study,Traffic Signal Removal,40.700497,-73.90021,46,56,20,0
+11,Borden Avenue & Maurice Avenue,Signal Study,Traffic Signal,40.727733,-73.906731,45,68,1,0
+12,Grand Avenue & Maspeth Avenue,Signal Study,Traffic Signal,40.7228,-73.90182,40,42,4,0
+13,Myrtle Avenue & Summerfield Street,Signal Study,All-Way Stop,40.70052,-73.897962,39,50,16,0
+14,69 Street & Eliot Avenue,Signal Study,Left Turn Arrow/Signal,40.71946,-73.89117,38,50,12,0
+15,Fresh Pond Road & Putnam Avenue,Signal Study,Traffic Signal,40.706497,-73.89695,38,53,12,0
+16,Myrtle Avenue & St Nicholas Avenue,Signal Study,Traffic Signal,40.69984,-73.90868,37,40,11,0
+17,64 Street & Myrtle Avenue,Signal Study,Leading Pedestrian Interval,40.700964,-73.89245299999999,37,44,11,0
+18,Centre Street & Seneca Avenue,Signal Study,Traffic Signal,40.699585,-73.902245,35,51,8,0
+19,Borden Avenue & Grand Avenue,Signal Study,Traffic Signal,40.725635,-73.895856,34,43,6,0
+20,60 Avenue & 69 Street,Signal Study,Traffic Signal,40.72143,-73.892746,34,41,1,0
+21,Eliot Avenue & Fresh Pond Road,Signal Study,Leading Pedestrian Interval,40.714622,-73.90117,33,42,7,1
+22,Union Turnpike & Woodhaven Boulevard,Signal Study,Traffic Signal,40.70559,-73.85823,33,44,3,0
+23,Fresh Pond Road & Palmetto Street,Signal Study,Traffic Signal,40.7084,-73.89801,31,40,4,0
+24,81 Road & Woodhaven Boulevard,Signal Study,Left Turn Arrow/Signal,40.70456,-73.856735,31,42,0,0
+25,70 Street & Cooper Avenue,Signal Study,Leading Pedestrian Interval,40.70171,-73.88091,29,35,11,0

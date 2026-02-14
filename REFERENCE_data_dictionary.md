@@ -246,7 +246,7 @@ curl "https://data.cityofnewyork.us/resource/w76s-c5u4.json?\$where=borough='Que
 
 ### Local Files
 
-After running `explore_all_data.py`, data is saved to:
+After running `scripts_fetch_data.py`, data is saved to:
 - `data_raw/signal_studies_citywide.csv`
 - `data_raw/srts_citywide.csv`
 - `data_raw/aps_installed_citywide.csv`

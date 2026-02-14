@@ -51,7 +51,17 @@ For multi-category breakdowns (e.g., request type stacked bars). Order matches t
 | APS | `#999999` | Gray + `///` hatch |
 | Other | `#D4D4D4` | Light gray |
 
-### 1.5 Map-Specific Colors
+### 1.5 Injury-Type Palette (Chart 08 Stacked Bars)
+
+For the crash hotspots chart, injuries are broken down by victim type:
+
+| Category | Hex | Color |
+|----------|-----|-------|
+| Pedestrians | `#B44040` | Red (matches denied — policy-critical) |
+| Cyclists | `#B8860B` | Goldenrod (matches citywide) |
+| Motorists | `#CC9966` | Tan (matches crash_alt) |
+
+### 1.6 Map-Specific Colors
 
 | Element | Hex | Opacity | Usage |
 |---------|-----|---------|-------|
@@ -101,7 +111,11 @@ Every chart title **must** include:
 2. **Sample size** as `n=X,XXX` (with comma formatting)
 3. **QCB5** shorthand (never "CB5", "Queens CB5", or "Queens Community Board 5" in titles)
 
-**Format**: `Chart Description (QCB5, n=XXX, YYYY–YYYY)` or `(Excl. APS, QCB5 n=XXX, YYYY–YYYY)`
+**Format**: QCB5 or Citywide **always** in the main title line, **never** in the parenthetical subtitle. Parentheses contain only data qualifiers (n=, dates, Excl. APS).
+
+- Correct: `QCB5 Signal Study Requests by Type\n(n=510, 2020–2025)`
+- Correct: `Citywide Signal Study Requests by Borough\n(n=17,824, 2020–2025)`
+- Wrong: `Signal Study Requests by Type\n(QCB5, n=510, 2020–2025)`
 
 ### 3.2 Date Ranges
 
@@ -119,10 +133,14 @@ Accessible Pedestrian Signals are **always excluded** from approval/denial rate 
 Every chart includes a bottom-left source citation:
 
 ```
-Source: NYC Open Data - Signal Studies (w76s-c5u4), SRTS (9n6h-pt9g)
+Source: NYC Open Data — Signal Studies [w76s-c5u4], Speed Reducer Tracking System [9n6h-pt9g]
 ```
 
-Format: 9pt italic, color `#333333`, positioned at `fig.text(0.01, -0.02, ...)`.
+Rules:
+- Use em dash `—` (not hyphen `-`) after "NYC Open Data"
+- Dataset IDs in **square brackets** `[w76s-c5u4]` (not parentheses)
+- Spell out "Speed Reducer Tracking System" (never abbreviate as "SRTS" in source lines)
+- Format: 9pt italic, color `#333333`, positioned at `fig.text(0.01, -0.02, ...)`
 
 ### 3.5 Grid & Layout
 
@@ -217,7 +235,8 @@ Map title updates via JavaScript MutationObserver based on active layer checkbox
 | Year ranges | 2020–2025 (en-dash) | 2020-2025 (hyphen), "Full History", "All Years" |
 | Approval | Approved | Feasible (except raw SRTS field names) |
 | Denial | Denied | Not Feasible (except raw SRTS field names) |
-| Speed bumps | Speed Bumps / SRTS | Speed reducers, humps |
+| Speed bumps | Speed Bumps | Speed reducers, humps, "SRTS" in titles |
+| SRTS dataset | Speed Reducer Tracking System | SRTS (in source citations) |
 
 ---
 

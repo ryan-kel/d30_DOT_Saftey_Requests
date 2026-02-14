@@ -216,15 +216,63 @@ def _filter_points_in_cb5(df, lat_col='latitude', lon_col='longitude'):
     prepared = prep(poly)
 
     has_coords = df[lat_col].notna() & df[lon_col].notna()
-    no_coords = df[~has_coords]
     with_coords = df[has_coords]
+    n_no_coords = (~has_coords).sum()
 
     inside = with_coords.apply(
         lambda r: prepared.contains(Point(r[lon_col], r[lat_col])), axis=1
     )
-    filtered = pd.concat([with_coords[inside], no_coords], ignore_index=False)
-    n_excluded = (~inside).sum()
+    filtered = with_coords[inside]
+    n_excluded = (~inside).sum() + n_no_coords
+    if n_no_coords > 0:
+        print(f"    ({n_no_coords:,} rows without coordinates excluded)")
     return filtered, n_excluded
+
+
+def _load_cb5_srts_full():
+    """Load CB5 SRTS data with full filtering pipeline (all years).
+
+    Applies: cb=405 → cross-street exclusion → polygon filter.
+    Returns all CB5 records (all statuses) with outcome column added
+    (denied/approved for resolved, NaN for pending/other).
+    """
+    srts = pd.read_csv(f'{DATA_DIR}/srts_citywide.csv', low_memory=False)
+    srts['cb_num'] = pd.to_numeric(srts['cb'], errors='coerce')
+    srts['requestdate'] = pd.to_datetime(srts['requestdate'], errors='coerce')
+    srts['year'] = srts['requestdate'].dt.year
+
+    cb5_raw = srts[srts['cb_num'] == 405].copy()
+
+    # Cross-street exclusion (north-of-LIE misattributed records)
+    excluded_cross = ['51 ROAD', '51 STREET', '52 AVENUE', '52 DRIVE', '52 ROAD', '52 COURT',
+                      '53 AVENUE', '53 DRIVE', '53 ROAD', 'CALAMUS AVENUE', 'QUEENS BOULEVARD']
+    excluded_main = ['MAURICE AVENUE']
+
+    def _is_outside(row):
+        cross1 = str(row.get('crossstreet1', '')).upper().strip()
+        cross2 = str(row.get('crossstreet2', '')).upper().strip()
+        main = str(row.get('onstreet', '')).upper().strip()
+        for e in excluded_cross:
+            if e in cross1 or e in cross2:
+                return True
+        for e in excluded_main:
+            if e in main:
+                return True
+        if 'WOODSIDE' in cross1 or 'WOODSIDE' in cross2 or 'WOODSIDE' in main:
+            return True
+        return False
+
+    cb5 = cb5_raw[~cb5_raw.apply(_is_outside, axis=1)].copy()
+
+    # Polygon filter
+    cb5['fromlatitude'] = pd.to_numeric(cb5['fromlatitude'], errors='coerce')
+    cb5['fromlongitude'] = pd.to_numeric(cb5['fromlongitude'], errors='coerce')
+    cb5, _ = _filter_points_in_cb5(cb5, lat_col='fromlatitude', lon_col='fromlongitude')
+
+    cb5['outcome'] = cb5['segmentstatusdescription'].map({
+        'Not Feasible': 'denied', 'Feasible': 'approved'
+    })
+    return cb5
 
 
 def load_and_prepare_data():
@@ -234,6 +282,8 @@ def load_and_prepare_data():
     signal_studies = pd.read_csv(f'{DATA_DIR}/signal_studies_citywide.csv', low_memory=False)
     srts = pd.read_csv(f'{DATA_DIR}/srts_citywide.csv', low_memory=False)
     crashes = pd.read_csv(f'{DATA_DIR}/crashes_queens_2020plus.csv', low_memory=False)
+    # Pre-filtered CB5 signal studies: Queens borough records filtered to CB5 boundary streets.
+    # Curated input — not auto-generated — because signal studies lack a community board field.
     cb5_studies = pd.read_csv(f'{OUTPUT_DIR}/data_cb5_signal_studies.csv', low_memory=False)
 
     print(f"  Signal Studies: {len(signal_studies):,}")
@@ -834,7 +884,9 @@ def _compute_before_after(data):
     crash_ped_inj = cb5_crashes['number_of_pedestrians_injured'].values
 
     DATA_START = pd.Timestamp('2020-01-01')
-    DATA_END = pd.Timestamp('2025-12-31')
+    DATA_END = cb5_crashes['crash_date'].max()
+    if pd.isna(DATA_END):
+        DATA_END = pd.Timestamp('2025-12-31')
 
     results = []
     for _, row in installed.iterrows():
@@ -1212,31 +1264,25 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
 
         effectiveness_fg.add_to(m)
 
-    # --- Layer 7: Top 15 Denied Spotlight (default OFF) ---
+    # --- Layer 7: Top 15 Denied Signal Study Spotlight (default OFF) ---
+    # Signal studies only — intersection-level precision. SRTS excluded due to
+    # segment-based coordinates creating methodological issues with 150m overlap.
     sig_denied = signal_prox[
         (signal_prox['outcome'] == 'denied') & signal_prox['latitude'].notna()
     ].copy()
-    sig_denied['location_name'] = (sig_denied['mainstreet'].fillna('') + ' & '
-                                   + sig_denied['crossstreet1'].fillna(''))
+    sig_denied['location_name'] = sig_denied.apply(
+        lambda r: _normalize_intersection(r['mainstreet'], r['crossstreet1']), axis=1)
     sig_denied['dataset'] = 'Signal Study'
     sig_denied['request_info'] = sig_denied['requesttype']
 
-    srts_denied = srts_prox[
-        (srts_prox['outcome'] == 'denied') & srts_prox['latitude'].notna()
-    ].copy()
-    srts_denied['location_name'] = (srts_denied['onstreet'].fillna('') + ' ('
-                                    + srts_denied['fromstreet'].fillna('') + ' to '
-                                    + srts_denied['tostreet'].fillna('') + ')')
-    srts_denied['dataset'] = 'SRTS'
-    srts_denied['request_info'] = 'Speed Bump'
-
     common_cols = ['location_name', 'dataset', 'request_info', 'latitude', 'longitude',
                    'crashes_150m', 'injuries_150m', 'ped_injuries_150m', 'fatalities_150m']
-    combined = pd.concat([
-        sig_denied[common_cols],
-        srts_denied[common_cols]
-    ], ignore_index=True)
-    top15 = combined.nlargest(15, 'crashes_150m')
+    spotlight_data = sig_denied[common_cols].copy()
+    # De-duplicate: name-based then spatial
+    spotlight_data = spotlight_data.sort_values('crashes_150m', ascending=False).drop_duplicates(
+        subset=['location_name'], keep='first')
+    spotlight_data = _spatial_dedup(spotlight_data, radius_m=150)
+    top15 = spotlight_data.nlargest(15, 'crashes_150m')
 
     spotlight_fg = folium.FeatureGroup(name='Top 15 Denied Spotlight (2020–2025)', show=False)
     for rank, (_, row) in enumerate(top15.iterrows(), 1):
@@ -1375,11 +1421,13 @@ def chart_09_crash_proximity(signal_prox, srts_prox):
     metric_labels = ['Crashes', 'Injuries', 'Ped. Injuries']
 
     for ax_idx, (df, title_prefix) in enumerate([
-        (signal_prox, 'Signal Studies'),
-        (srts_prox, 'Speed Bumps (SRTS)')
+        (signal_prox, 'QCB5 Signal Studies'),
+        (srts_prox, 'QCB5 Speed Bumps')
     ]):
-        denied = df[df['outcome'] == 'denied']
-        approved = df[df['outcome'] == 'approved']
+        # Only count rows with coordinates — non-geocoded rows have no proximity data
+        geocoded = df[df['latitude'].notna()]
+        denied = geocoded[geocoded['outcome'] == 'denied']
+        approved = geocoded[geocoded['outcome'] == 'approved']
 
         x = np.arange(len(metrics))
         width = 0.35
@@ -1404,12 +1452,12 @@ def chart_09_crash_proximity(signal_prox, srts_prox):
         axes[ax_idx].set_xticks(x)
         axes[ax_idx].set_xticklabels(metric_labels, fontsize=10)
         axes[ax_idx].set_ylabel('Median Count within 150m', fontweight='bold')
-        axes[ax_idx].set_title(f'{title_prefix} (n={len(denied)+len(approved):,})\nMedian Crash Metrics, Denied vs Approved, 2020–2025',
+        axes[ax_idx].set_title(f'{title_prefix}\n(n={len(denied)+len(approved):,}, Median Crash Metrics, 2020–2025)',
                                fontweight='bold', fontsize=12)
         axes[ax_idx].legend(loc='upper right')
         axes[ax_idx].xaxis.grid(False)
 
-        # Statistical test for crashes_150m
+        # Statistical test for crashes_150m — placed below legend
         denied_crashes = denied['crashes_150m'].dropna()
         approved_crashes = approved['crashes_150m'].dropna()
         if len(denied_crashes) > 0 and len(approved_crashes) > 0:
@@ -1419,16 +1467,16 @@ def chart_09_crash_proximity(signal_prox, srts_prox):
                 sig_text += ' *'
             axes[ax_idx].annotate(
                 f'Mann-Whitney U ({sig_text})',
-                xy=(0.5, 0.02), xycoords='axes fraction',
-                ha='center', fontsize=9, style='italic',
+                xy=(0.98, 0.82), xycoords='axes fraction',
+                ha='right', fontsize=9, style='italic',
                 bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='gray', alpha=0.9)
             )
 
-    fig.suptitle('Crash Proximity: Denied vs Approved Locations, QCB5 (2020–2025)',
+    fig.suptitle('QCB5 Crash Proximity: Denied vs Approved Locations\n(2020–2025)',
                  fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.03,
-             f'Source: NYC Open Data | 150m radius (~1.5 blocks, Vision Zero standard)\n'
-             f'Crash data: Queens injury crashes 2020–2025 (h9gi-nx95)',
+             f'Source: NYC Open Data — 150m radius (~1.5 blocks, Vision Zero standard)\n'
+             f'Crash data: Queens injury crashes [2020–2025], Motor Vehicle Collisions [h9gi-nx95]',
              ha='left', fontsize=9, style='italic', color='#333333')
 
     plt.tight_layout()
@@ -1438,69 +1486,145 @@ def chart_09_crash_proximity(signal_prox, srts_prox):
     print("    Chart 09 saved.")
 
 
-def chart_09b_top_denied_ranking(signal_prox, srts_prox):
-    """Chart 09b: Top 15 Denied Locations Ranked by Crash Severity."""
-    print("  Generating Chart 09b: Denied Locations Crash Ranking...")
+def _normalize_intersection(street_a, street_b):
+    """Normalize intersection name by sorting streets alphabetically.
 
-    # Combine denied from both datasets
+    Ensures 'Cooper Ave & Cypress Ave' == 'Cypress Ave & Cooper Ave'.
+    """
+    a = str(street_a).strip().title() if pd.notna(street_a) else ''
+    b = str(street_b).strip().title() if pd.notna(street_b) else ''
+    parts = sorted([a, b])
+    return f'{parts[0]} & {parts[1]}'
+
+
+def _spatial_dedup(df, radius_m=100):
+    """Spatially de-duplicate locations: if two entries are within radius_m,
+    keep only the one with the highest crash count.
+
+    Uses greedy approach: sort descending, skip any row within radius of
+    an already-selected row.
+    """
+    if len(df) == 0:
+        return df
+    sorted_df = df.sort_values('crashes_150m', ascending=False).reset_index(drop=True)
+    selected_idx = []
+    selected_coords = []
+
+    for i, row in sorted_df.iterrows():
+        lat, lon = row['latitude'], row['longitude']
+        too_close = False
+        for slat, slon in selected_coords:
+            # Approximate distance in meters
+            dlat = (lat - slat) * 111_320
+            dlon = (lon - slon) * 111_320 * math.cos(math.radians(lat))
+            dist = math.sqrt(dlat**2 + dlon**2)
+            if dist < radius_m:
+                too_close = True
+                break
+        if not too_close:
+            selected_idx.append(i)
+            selected_coords.append((lat, lon))
+
+    return sorted_df.loc[selected_idx].reset_index(drop=True)
+
+
+def chart_09b_top_denied_ranking(signal_prox):
+    """Chart 09b: Top 15 Denied Signal Study Intersections by Crash Severity.
+
+    Signal studies only — SRTS excluded because segment-based coordinates
+    (no cross street) create methodological issues with 150m radius overlap.
+    SRTS crash proximity is shown on the map where spatial context is clear.
+    """
+    print("  Generating Chart 09b: Denied Signal Study Crash Ranking...")
+
+    # Signal studies only — intersection-level precision with geocoded coordinates
     sig_denied = signal_prox[
         (signal_prox['outcome'] == 'denied') & signal_prox['latitude'].notna()
     ].copy()
-    sig_denied['location_name'] = (
-        sig_denied['mainstreet'].fillna('') + ' & ' + sig_denied['crossstreet1'].fillna('')
-    ).str.title()
-    sig_denied['dataset'] = 'Signal'
+    sig_denied['location_name'] = sig_denied.apply(
+        lambda r: _normalize_intersection(r['mainstreet'], r['crossstreet1']), axis=1)
 
-    srts_denied = srts_prox[
-        (srts_prox['outcome'] == 'denied') & srts_prox['latitude'].notna()
-    ].copy()
-    srts_denied['location_name'] = srts_denied['onstreet'].fillna('').str.title()
-    srts_denied['dataset'] = 'SRTS'
+    common_cols = ['location_name', 'latitude', 'longitude',
+                   'crashes_150m', 'injuries_150m', 'ped_injuries_150m', 'fatalities_150m']
+    denied = sig_denied[common_cols].copy()
 
-    common_cols = ['location_name', 'dataset', 'crashes_150m', 'injuries_150m',
-                   'ped_injuries_150m', 'fatalities_150m']
-    combined = pd.concat([
-        sig_denied[common_cols],
-        srts_denied[common_cols]
-    ], ignore_index=True)
+    # De-duplicate: name-based then spatial
+    deduped = denied.sort_values('crashes_150m', ascending=False).drop_duplicates(
+        subset=['location_name'], keep='first')
+    deduped = _spatial_dedup(deduped, radius_m=150)
+    n_unique = len(deduped)
 
-    top15 = combined.nlargest(15, 'crashes_150m').reset_index(drop=True)
+    top15 = deduped.nlargest(15, 'crashes_150m').reset_index(drop=True)
+    top15['other_injuries'] = (top15['injuries_150m'] - top15['ped_injuries_150m']).clip(lower=0)
 
-    # Truncate long names
-    top15['label'] = top15.apply(
-        lambda r: f"{r['location_name'][:35]} [{r['dataset']}]", axis=1)
+    # Abbreviate street names for readability
+    def _abbrev_street(name):
+        return (name
+                .replace(' Avenue', ' Ave')
+                .replace(' Street', ' St')
+                .replace(' Road', ' Rd')
+                .replace(' Boulevard', ' Blvd')
+                .replace(' Turnpike', ' Tpke')
+                .replace(' Place', ' Pl')
+                .replace(' Lane', ' Ln')
+                .replace(' Drive', ' Dr'))
 
-    fig, ax = plt.subplots(figsize=(12, 8))
+    top15['label'] = top15['location_name'].apply(
+        lambda n: _abbrev_street(n[:45]))
 
-    y = np.arange(len(top15))
-    bars = ax.barh(y, top15['crashes_150m'], color=COLORS['denied'],
-                   edgecolor='black', zorder=3)
+    fig, axes = plt.subplots(1, 2, figsize=(14, 8))
 
-    # Overlay injury count as lighter bars
-    ax.barh(y, top15['injuries_150m'], color=COLORS['crash_alt'],
-            edgecolor='none', zorder=4, alpha=0.6, height=0.4)
+    # --- Left panel: Top 15 by crash count ---
+    top15_rev = top15.iloc[::-1].reset_index(drop=True)
+    y = np.arange(len(top15_rev))
 
-    for i, row in top15.iterrows():
-        ax.text(row['crashes_150m'] + 0.5, i,
-                f"{int(row['crashes_150m'])} crashes / {int(row['injuries_150m'])} injuries",
-                va='center', ha='left', fontsize=9)
+    bars = axes[0].barh(y, top15_rev['crashes_150m'], color=COLORS['denied'],
+                        edgecolor='black', zorder=3)
+    for i, val in enumerate(top15_rev['crashes_150m'].astype(int)):
+        axes[0].text(val + 0.5, i, str(val),
+                     va='center', ha='left', fontsize=9, fontweight='bold')
 
-    ax.set_yticks(y)
-    ax.set_yticklabels(top15['label'], fontsize=9)
-    ax.invert_yaxis()
-    ax.set_xlabel('Count within 150m', fontweight='bold')
-    ax.set_title(f'Top 15 Denied Locations by Nearby Crash Count\n(QCB5, 150m Radius, n={len(combined):,} denied, 2020–2025)',
-                 fontweight='bold', fontsize=12)
-    ax.yaxis.grid(False)
+    axes[0].set_yticks(y)
+    axes[0].set_yticklabels(top15_rev['label'], fontsize=9)
+    axes[0].set_xlabel('Crashes within 150m', fontweight='bold')
+    axes[0].set_title('Top 15 by Crash Count', fontweight='bold', fontsize=12)
+    axes[0].yaxis.grid(False)
+
+    # --- Right panel: Top 15 by injury count (independently sorted) ---
+    top15_inj = deduped.nlargest(15, 'injuries_150m').reset_index(drop=True)
+    top15_inj['other_injuries'] = (top15_inj['injuries_150m'] - top15_inj['ped_injuries_150m']).clip(lower=0)
+    top15_inj['label'] = top15_inj['location_name'].apply(
+        lambda n: _abbrev_street(n[:45]))
+    top15_inj_rev = top15_inj.iloc[::-1].reset_index(drop=True)
+    y_inj = np.arange(len(top15_inj_rev))
+
+    ped_vals = top15_inj_rev['ped_injuries_150m'].astype(int).values
+    other_vals = top15_inj_rev['other_injuries'].astype(int).values
 
     from matplotlib.patches import Patch
-    ax.legend(handles=[
-        Patch(facecolor=COLORS['denied'], edgecolor='black', label='Total crashes'),
-        Patch(facecolor=COLORS['crash_alt'], alpha=0.6, label='Injuries'),
-    ], loc='lower right')
+
+    axes[1].barh(y_inj, ped_vals, color=COLORS['denied'],
+                 edgecolor='black', linewidth=0.5, zorder=3, label='Pedestrian Injuries')
+    axes[1].barh(y_inj, other_vals, left=ped_vals, color=COLORS['crash_alt'],
+                 edgecolor='black', linewidth=0.5, zorder=3, label='Other Injuries')
+
+    for i, (p, o) in enumerate(zip(ped_vals, other_vals)):
+        total = p + o
+        axes[1].text(total + 0.5, i, str(total),
+                     va='center', ha='left', fontsize=9, fontweight='bold')
+
+    axes[1].set_yticks(y_inj)
+    axes[1].set_yticklabels(top15_inj_rev['label'], fontsize=9)
+    axes[1].set_xlabel('Persons Injured within 150m', fontweight='bold')
+    axes[1].set_title('Top 15 by Persons Injured', fontweight='bold', fontsize=12)
+    axes[1].yaxis.grid(False)
+    axes[1].legend(loc='upper right', fontsize=8, framealpha=0.9)
+
+    fig.suptitle(f'QCB5 Top 15 Denied Signal Study Intersections by Nearby Crashes\n(150m Radius, n={n_unique:,} unique denied intersections, 2020–2025)',
+                 fontweight='bold', fontsize=14, y=1.02)
 
     fig.text(0.01, -0.03,
-             'Source: NYC Open Data | Signal Studies (w76s-c5u4), SRTS (9n6h-pt9g), Crashes (h9gi-nx95)',
+             'Source: NYC Open Data — Signal Studies [w76s-c5u4], Motor Vehicle Collisions [h9gi-nx95]',
              ha='left', fontsize=9, style='italic', color='#333333')
 
     plt.tight_layout()
@@ -1526,10 +1650,8 @@ def chart_13_approval_vs_installation():
         sig_no_aps['aw_installdate'].notna() | sig_no_aps['signalinstalldate'].notna()
     ].drop_duplicates('referencenumber').shape[0]
 
-    # --- SRTS ---
-    srts = pd.read_csv(f'{DATA_DIR}/srts_citywide.csv', low_memory=False)
-    srts['cb_num'] = pd.to_numeric(srts['cb'], errors='coerce')
-    cb5_srts = srts[srts['cb_num'] == 405]
+    # --- SRTS (full pipeline: cb=405 + cross-street exclusion + polygon filter) ---
+    cb5_srts = _load_cb5_srts_full()
     srts_resolved = cb5_srts[cb5_srts['segmentstatusdescription'].isin(['Not Feasible', 'Feasible'])]
     srts_denied = (srts_resolved['segmentstatusdescription'] == 'Not Feasible').sum()
     srts_feasible = (srts_resolved['segmentstatusdescription'] == 'Feasible').sum()
@@ -1550,13 +1672,13 @@ def chart_13_approval_vs_installation():
         axes[0].text(bar.get_x() + bar.get_width()/2, val + 2,
                      str(val), ha='center', va='bottom', fontweight='bold', fontsize=11)
     sig_paper_rate = sig_approved / (sig_denied + sig_approved) * 100
-    sig_install_rate = sig_installed / (sig_denied + sig_installed) * 100
-    axes[0].set_title(f'Signal Studies (QCB5, Excl. APS, n={len(sig_no_aps):,}, 2020–2025)', fontweight='bold', fontsize=12)
+    sig_install_rate = sig_installed / sig_approved * 100 if sig_approved > 0 else 0
+    axes[0].set_title(f'QCB5 Signal Studies\n(Excl. APS, n={len(sig_no_aps):,}, 2020–2025)', fontweight='bold', fontsize=12)
     axes[0].set_ylabel('Number of Requests', fontweight='bold')
     axes[0].xaxis.grid(False)
     axes[0].annotate(
         f'Paper approval rate: {sig_paper_rate:.1f}%\n'
-        f'Confirmed install rate: {sig_install_rate:.1f}%',
+        f'Install rate (of approved): {sig_install_rate:.1f}%',
         xy=(0.98, 0.95), xycoords='axes fraction', ha='right', va='top',
         fontsize=10, bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='gray', alpha=0.9))
 
@@ -1567,23 +1689,23 @@ def chart_13_approval_vs_installation():
         axes[1].text(bar.get_x() + bar.get_width()/2, val + 15,
                      str(val), ha='center', va='bottom', fontweight='bold', fontsize=11)
     srts_paper_rate = srts_feasible / (srts_denied + srts_feasible) * 100
-    srts_install_rate = srts_installed / (srts_denied + srts_installed) * 100
+    srts_install_rate = srts_installed / srts_feasible * 100 if srts_feasible > 0 else 0
     _rd = pd.to_datetime(cb5_srts['requestdate'], errors='coerce')
     srts_min_yr = int(_rd.dt.year.min())
     srts_max_yr = min(int(_rd.dt.year.max()), 2025)
-    axes[1].set_title(f'Speed Bumps / SRTS (QCB5, n={len(srts_resolved):,}, {srts_min_yr}–{srts_max_yr})', fontweight='bold', fontsize=12)
+    axes[1].set_title(f'QCB5 Speed Bumps\n(n={len(srts_resolved):,}, {srts_min_yr}–{srts_max_yr})', fontweight='bold', fontsize=12)
     axes[1].set_ylabel('Number of Requests', fontweight='bold')
     axes[1].xaxis.grid(False)
     axes[1].annotate(
         f'Paper approval rate: {srts_paper_rate:.1f}%\n'
-        f'Confirmed install rate: {srts_install_rate:.1f}%',
+        f'Install rate (of approved): {srts_install_rate:.1f}%',
         xy=(0.98, 0.95), xycoords='axes fraction', ha='right', va='top',
         fontsize=10, bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='gray', alpha=0.9))
 
-    fig.suptitle(f'Paper Approvals vs Confirmed Installations — QCB5',
+    fig.suptitle(f'QCB5 Paper Approvals vs Confirmed Installations',
                  fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.03,
-             'Source: NYC Open Data | Signal Studies (w76s-c5u4), SRTS (9n6h-pt9g)\n'
+             'Source: NYC Open Data — Signal Studies [w76s-c5u4], Speed Reducer Tracking System [9n6h-pt9g]\n'
              'Confirmed = installation date recorded in DOT system',
              ha='left', fontsize=9, style='italic', color='#333333')
 
@@ -1663,8 +1785,8 @@ def chart_14_installation_wait_times():
     ax.set_yticklabels(all_locations['label'], fontsize=8)
     ax.invert_yaxis()
     ax.set_xlabel('Months Since Approval', fontweight='bold')
-    ax.set_title(f'Approved Signal Studies: Time to Installation\n'
-                 f'QCB5, Excl. APS, n={len(all_locations):,}, 2020–2025',
+    ax.set_title(f'QCB5 Approved Signal Studies: Time to Installation\n'
+                 f'(Excl. APS, n={len(all_locations):,}, 2020–2025)',
                  fontweight='bold', fontsize=12)
     ax.yaxis.grid(False)
 
@@ -1675,8 +1797,8 @@ def chart_14_installation_wait_times():
     ], loc='upper right')
 
     fig.text(0.01, -0.03,
-             'Source: NYC Open Data (w76s-c5u4) | Dashed line = longest observed approval-to-install time\n'
-             'Wait times for uninstalled approvals measured through Feb 2026',
+             'Source: NYC Open Data — Signal Studies [w76s-c5u4] | Dashed line = longest observed approval-to-install time\n'
+             'Wait times for uninstalled approvals measured through [Feb 2026]',
              ha='left', fontsize=9, style='italic', color='#333333')
 
     plt.tight_layout()
@@ -1690,9 +1812,8 @@ def chart_15_srts_funnel():
     """Chart 15: SRTS Approval Funnel — what happens after DOT approves a speed bump."""
     print("  Generating Chart 15: SRTS Approval Funnel...")
 
-    srts = pd.read_csv(f'{DATA_DIR}/srts_citywide.csv', low_memory=False)
-    srts['cb_num'] = pd.to_numeric(srts['cb'], errors='coerce')
-    cb5 = srts[srts['cb_num'] == 405].copy()
+    # Full CB5 pipeline: cb=405 + cross-street exclusion + polygon filter
+    cb5 = _load_cb5_srts_full()
     cb5['requestdate'] = pd.to_datetime(cb5['requestdate'], errors='coerce')
     feasible = cb5[cb5['segmentstatusdescription'] == 'Feasible'].copy()
 
@@ -1701,7 +1822,7 @@ def chart_15_srts_funnel():
 
     feasible['install_dt'] = pd.to_datetime(feasible['installationdate'], errors='coerce')
 
-    # Categorize outcomes
+    # Categorize outcomes (mutually exclusive, must sum to total)
     installed = feasible[
         feasible['install_dt'].notna() &
         ~feasible['projectstatus'].str.contains('Cancel|Reject|denied', case=False, na=False)
@@ -1713,11 +1834,18 @@ def chart_15_srts_funnel():
         feasible['install_dt'].isna() &
         ~feasible['projectstatus'].str.contains('Cancel|Reject|denied|Closed', case=False, na=False)
     ]
+    # "Closed" without install date and without Cancel/Reject — administrative closures
+    closed_other = feasible[
+        feasible['install_dt'].isna() &
+        feasible['projectstatus'].str.contains('Closed', case=False, na=False) &
+        ~feasible['projectstatus'].str.contains('Cancel|Reject|denied', case=False, na=False)
+    ]
 
     n_total = len(feasible)
     n_installed = len(installed)
     n_cancelled = len(cancelled)
     n_waiting = len(still_open)
+    n_closed = len(closed_other)
 
     # --- Two-panel layout ---
     fig, axes = plt.subplots(1, 2, figsize=(13, 6), gridspec_kw={'width_ratios': [1, 2]})
@@ -1732,17 +1860,25 @@ def chart_15_srts_funnel():
     axes[0].set_ylim(0, n_total * 1.15)
     axes[0].xaxis.grid(False)
 
-    # Right panel: what happened to them
-    categories = ['Confirmed\nInstalled', 'Cancelled /\nRejected', 'Still\nWaiting']
-    values = [n_installed, n_cancelled, n_waiting]
-    bar_colors = ['#2d7d46', '#cc8400', '#888888']
+    # Right panel: what happened to them (only include Closed if any exist)
+    categories = ['Confirmed\nInstalled', 'Cancelled /\nRejected']
+    values = [n_installed, n_cancelled]
+    bar_colors = ['#2d7d46', '#cc8400']
+    if n_closed > 0:
+        categories.append('Closed\n(No Install)')
+        values.append(n_closed)
+        bar_colors.append('#b0b0b0')
+    categories.append('Still\nWaiting')
+    values.append(n_waiting)
+    bar_colors.append('#888888')
 
     bars = axes[1].bar(categories, values, color=bar_colors, edgecolor='black', zorder=3, width=0.6)
 
     for bar, val in zip(bars, values):
         pct = val / n_total * 100
+        pct_str = f'{pct:.1f}%' if pct < 1 else f'{pct:.0f}%'
         axes[1].text(bar.get_x() + bar.get_width()/2, val + 3,
-                     f'{val}\n({pct:.0f}%)', ha='center', va='bottom',
+                     f'{val}\n({pct_str})', ha='center', va='bottom',
                      fontweight='bold', fontsize=11)
 
     axes[1].set_ylabel('Number of Requests', fontweight='bold')
@@ -1750,21 +1886,22 @@ def chart_15_srts_funnel():
     axes[1].set_ylim(0, max(values) * 1.25)
     axes[1].xaxis.grid(False)
 
-    # Median wait annotation for still-waiting
+    # Median wait annotation — position on the "Still Waiting" bar (last bar)
     still_open_dt = pd.to_datetime(still_open['requestdate'], errors='coerce')
+    waiting_bar_idx = len(categories) - 1
     if len(still_open_dt.dropna()) > 0:
         median_years = (pd.Timestamp.now() - still_open_dt).dt.days.median() / 365.25
         axes[1].annotate(f'Median wait: {median_years:.1f} years',
-                         xy=(2, n_waiting * 0.5), ha='center', fontsize=9,
+                         xy=(waiting_bar_idx, n_waiting * 0.5), ha='center', fontsize=9,
                          style='italic', fontweight='bold',
                          bbox=dict(boxstyle='round', facecolor='lightyellow',
                                    edgecolor='gray', alpha=0.9))
 
-    fig.suptitle(f'Fate of DOT-Approved Speed Bumps — QCB5 (n={n_total:,}), {min_yr}–{max_yr}',
+    fig.suptitle(f'QCB5 DOT-Approved Speed Bumps: Post-Approval Outcomes\n(n={n_total:,}, {min_yr}–{max_yr})',
                  fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.03,
-             'Source: NYC Open Data (9n6h-pt9g) | "Feasible" = DOT engineering approval\n'
-             'Cancelled/Rejected per DOT projectstatus field',
+             'Source: NYC Open Data — Speed Reducer Tracking System [9n6h-pt9g] | "Feasible" = DOT engineering approval\n'
+             'Cancelled/Rejected and Closed per DOT projectstatus field',
              ha='left', fontsize=9, style='italic', color='#333333')
 
     plt.tight_layout()
@@ -1792,9 +1929,8 @@ def _load_srts_wait_data(year_min=None, year_max=None):
     If year_min/year_max provided, filters to requests within that range.
     Returns (installed_df, still_open_df, max_baseline_months).
     """
-    srts = pd.read_csv(f'{DATA_DIR}/srts_citywide.csv', low_memory=False)
-    srts['cb_num'] = pd.to_numeric(srts['cb'], errors='coerce')
-    cb5 = srts[srts['cb_num'] == 405].copy()
+    # Full CB5 pipeline: cb=405 + cross-street exclusion + polygon filter
+    cb5 = _load_cb5_srts_full()
     feasible = cb5[cb5['segmentstatusdescription'] == 'Feasible'].copy()
 
     feasible['install_dt'] = pd.to_datetime(feasible['installationdate'], errors='coerce')
@@ -1824,7 +1960,7 @@ def _load_srts_wait_data(year_min=None, year_max=None):
 
 
 def _draw_srts_wait_chart(installed, still_open, max_baseline, title_suffix,
-                          filename, n_installed_show=15):
+                          filename, n_installed_show=15, show_year_conversion=False):
     """Draw the SRTS wait-time horizontal bar chart."""
     from matplotlib.patches import Patch
 
@@ -1863,32 +1999,32 @@ def _draw_srts_wait_chart(installed, still_open, max_baseline, title_suffix,
                 f'Longest known\ninstall time\n({max_baseline:.0f} mo.)',
                 fontsize=8, color=COLORS['denied'], va='center', fontweight='bold')
 
-    # Bar labels
+    # Bar labels (zorder=6 to render in front of the red baseline line)
     for i, (_, row) in enumerate(all_locations.iterrows()):
         val = row['wait_months']
-        yr_label = f' ({val/12:.1f} yr)' if val >= 24 else ''
-        ax.text(val + 1, i, f'{val:.0f} mo.{yr_label}',
-                va='center', ha='left', fontsize=7)
+        yr_label = f' ({val/12:.1f} yr)' if show_year_conversion and val >= 24 else ''
+        ax.text(val + 0.5, i, f'{val:.0f} mo.{yr_label}',
+                va='center', ha='left', fontsize=7, zorder=6)
 
     ax.set_yticks(y)
     ax.set_yticklabels(all_locations['label'], fontsize=7)
     ax.invert_yaxis()
     ax.set_xlabel('Months Since Request', fontweight='bold')
-    ax.set_title(f'Approved Speed Bumps: Time to Installation\n'
-                 f'QCB5, SRTS Program, n={n_bars:,}, {title_suffix}',
+    ax.set_title(f'QCB5 Approved Speed Bumps: Time to Installation\n'
+                 f'(n={n_bars:,}, {title_suffix})',
                  fontweight='bold', fontsize=12)
     ax.yaxis.grid(False)
 
     ax.legend(handles=[
         Patch(facecolor=COLORS['approved'], edgecolor='black',
-              label=f'Approved & Installed ({installed_note})'),
+              label='Approved & Installed'),
         Patch(facecolor='#cc8400', edgecolor='black',
-              label=f'Approved, Not Yet Installed ({len(still_open)} total)'),
-    ], loc='upper right', fontsize=9)
+              label='Approved, Not Yet Installed'),
+    ], loc='upper right', fontsize=8, bbox_to_anchor=(0.92, 1.0))
 
     fig.text(0.01, -0.03,
-             'Source: NYC Open Data (9n6h-pt9g) | Dashed line = longest observed request-to-install time\n'
-             f'Wait times for uninstalled measured through Feb 2026',
+             'Source: NYC Open Data — Speed Reducer Tracking System [9n6h-pt9g] | Dashed line = longest observed request-to-install time\n'
+             f'Wait times for uninstalled measured through [Feb 2026]',
              ha='left', fontsize=9, style='italic', color='#333333')
 
     plt.tight_layout()
@@ -1912,8 +2048,13 @@ def chart_16z_srts_wait_times_full():
     print("  Generating Chart 16z: SRTS Wait Times (Full History)...")
     installed, still_open, max_baseline = _load_srts_wait_data()
     print(f"    Full history: {len(installed)} installed, {len(still_open)} waiting")
+    # Derive year range from data
+    all_years = pd.concat([installed['request_dt'], still_open['request_dt']]).dropna()
+    yr_min = int(all_years.dt.year.min()) if len(all_years) > 0 else 1999
+    yr_max = min(int(all_years.dt.year.max()), 2025) if len(all_years) > 0 else 2025
     _draw_srts_wait_chart(installed, still_open, max_baseline,
-                          '1999–2025', 'chart_16z_srts_wait_times_full')
+                          f'{yr_min}–{yr_max}', 'chart_16z_srts_wait_times_full',
+                          show_year_conversion=True)
     print("    Chart 16z saved.")
 
 
@@ -1977,33 +2118,24 @@ def save_data_tables(signal_prox, srts_prox):
 
     table_09b.to_csv(f'{OUTPUT_DIR}/table_09b_aggregate_comparison.csv', index=False)
 
-    # Table 09c: Top denied by crashes (ranked list for article)
+    # Table 09c: Top denied signal study intersections by crashes (ranked list for article)
+    # Signal studies only — intersection-level precision. SRTS excluded due to
+    # segment-based coordinates creating methodological issues with 150m overlap.
     sig_denied = signal_prox[
         (signal_prox['outcome'] == 'denied') & signal_prox['latitude'].notna()
     ].copy()
-    sig_denied['location_name'] = (
-        sig_denied['mainstreet'].fillna('') + ' & ' + sig_denied['crossstreet1'].fillna('')
-    ).str.title()
+    sig_denied['location_name'] = sig_denied.apply(
+        lambda r: _normalize_intersection(r['mainstreet'], r['crossstreet1']), axis=1)
     sig_denied['dataset'] = 'Signal Study'
     sig_denied['request_type'] = sig_denied.get('requesttype', 'N/A')
 
-    srts_denied = srts_prox[
-        (srts_prox['outcome'] == 'denied') & srts_prox['latitude'].notna()
-    ].copy()
-    srts_denied['location_name'] = (
-        srts_denied['onstreet'].fillna('') + ' (' +
-        srts_denied['fromstreet'].fillna('') + ' to ' +
-        srts_denied['tostreet'].fillna('') + ')'
-    ).str.title()
-    srts_denied['dataset'] = 'SRTS'
-    srts_denied['request_type'] = 'Speed Bump'
-
     common_cols_c = ['location_name', 'dataset', 'request_type', 'latitude', 'longitude',
                      'crashes_150m', 'injuries_150m', 'ped_injuries_150m', 'fatalities_150m']
-    combined = pd.concat([
-        sig_denied[[c for c in common_cols_c if c in sig_denied.columns]],
-        srts_denied[[c for c in common_cols_c if c in srts_denied.columns]]
-    ], ignore_index=True)
+    combined = sig_denied[[c for c in common_cols_c if c in sig_denied.columns]].copy()
+    # De-duplicate: name-based then spatial
+    combined = combined.sort_values('crashes_150m', ascending=False).drop_duplicates(
+        subset=['location_name'], keep='first')
+    combined = _spatial_dedup(combined, radius_m=150)
     table_09c = combined.nlargest(25, 'crashes_150m').reset_index(drop=True)
     table_09c.index = table_09c.index + 1
     table_09c.index.name = 'Rank'
@@ -2062,7 +2194,7 @@ def main():
     # Step 4: Static charts
     print("\nStep 4: Generating charts...")
     chart_09_crash_proximity(signal_prox, srts_prox)
-    chart_09b_top_denied_ranking(signal_prox, srts_prox)
+    chart_09b_top_denied_ranking(signal_prox)
     chart_13_approval_vs_installation()
     chart_14_installation_wait_times()
     chart_15_srts_funnel()

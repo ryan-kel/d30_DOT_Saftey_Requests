@@ -52,9 +52,22 @@ jupyter notebook analysis_notebook.ipynb
 - **Pending**: All other statuses
 
 ### CB5 Identification
-- Signal Studies: Filter by borough='Queens' and street names within CB5 boundaries
-- SRTS: `cb='405'` (Queens CB5 code format: borough 4 + district 05)
-- See `REFERENCE_cb5_boundaries.md` for boundary filtering rules to exclude misattributed records north of the LIE
+
+**CRITICAL: All three datasets MUST be filtered using the official CB5 polygon (shapely point-in-polygon). Never rely solely on field-level filters.**
+
+- **Signal Studies**: Filter by borough='Queens' and street names within CB5 boundaries → then polygon filter on geocoded coordinates
+- **SRTS (Speed Bumps)**: Three mandatory filtering layers, applied in order:
+  1. `cb='405'` (Queens CB5 code format: borough 4 + district 05)
+  2. Cross-street exclusion (streets north of the LIE — see `REFERENCE_cb5_boundaries.md`)
+  3. **Polygon boundary filter** (shapely point-in-polygon against official CB5 GeoJSON)
+
+  **WARNING:** `cb=405` alone is insufficient — ~29 records pass the cb filter but fall outside the actual CB5 polygon. All three layers are mandatory. In `generate_maps.py`, use `_load_cb5_srts_full()` which applies all three layers automatically. **Never load SRTS data directly from CSV with only `cb=405`.**
+- **Crashes**: No community board field — uses polygon filter exclusively
+- See `REFERENCE_cb5_boundaries.md` for boundary filtering rules
+
+### Coordinate Filtering Rule
+
+The `_filter_points_in_cb5()` function in both scripts filters geographic data against the CB5 polygon. **Rows without valid coordinates are excluded** (not included by default). This prevents no-coordinate rows from inflating counts.
 
 ### APS Exclusion
 Accessible Pedestrian Signals are **excluded** from approval rate calculations because they are court-mandated (federal lawsuit) and do not undergo standard merit-based review.
@@ -66,9 +79,19 @@ Accessible Pedestrian Signals are **excluded** from approval rate calculations b
 - Every chart title: year range (YYYY–YYYY), sample size (n=), QCB5 shorthand
 - Main charts = 2020–2025; z-series = actual year range, capped at 2025
 
+## Shared Helper Functions (generate_maps.py)
+
+| Function | Purpose |
+|----------|---------|
+| `_load_cb5_srts_full()` | Load SRTS data with full CB5 pipeline (cb=405 + cross-street exclusion + polygon filter). **All SRTS charts must use this.** |
+| `_normalize_intersection(a, b)` | Alphabetically sort two street names so "A & B" == "B & A". Prevents reversed-name duplicates. |
+| `_spatial_dedup(df, radius_m)` | Greedy spatial de-duplication: sort by crashes desc, skip entries within `radius_m` of already-selected locations. Used at 150m for top-15 rankings. |
+| `_filter_points_in_cb5(df)` | Polygon filter against official CB5 boundary. Excludes rows without coordinates. |
+
 ## Reference Documentation
 
 - `STYLE_GUIDE.md` - **Official visual style guide** (colors, typography, chart/map conventions)
 - `REFERENCE_data_dictionary.md` - Field descriptions, status codes, denial reasons
 - `REFERENCE_data_sources.md` - Dataset URLs and usage notes
 - `REFERENCE_cb5_boundaries.md` - CB5 geographic boundaries and filtering logic
+- `output/METHODOLOGY.md` - Full methodology, decision log, and audit trail
