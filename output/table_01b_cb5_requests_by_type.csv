@@ -1,7 +1,7 @@
-Request Type,Requests
-Traffic Signal,183
-All-Way Stop,164
-Accessible Pedestrian Signal,65
-Leading Pedestrian Interval,56
-Left Turn Arrow/Signal,37
-Other,5
+Request Type,Requests,Source Dataset
+Traffic Signal,183,Signal Studies [w76s-c5u4]
+All-Way Stop,164,Signal Studies [w76s-c5u4]
+Accessible Pedestrian Signal,65,Signal Studies [w76s-c5u4]
+Leading Pedestrian Interval,56,Signal Studies [w76s-c5u4]
+Left Turn Arrow/Signal,37,Signal Studies [w76s-c5u4]
+Other,5,Signal Studies [w76s-c5u4]

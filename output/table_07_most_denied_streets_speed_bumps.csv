@@ -1,11 +1,11 @@
-Street,Denials
-Otto Road,14
-Myrtle Avenue,14
-Woodward Avenue,14
-Fairview Avenue,13
-Putnam Avenue,12
-65 Place,10
-77 Avenue,10
-69 Lane,10
-64 Street,10
-73 Place,9
+Street,Denials,Source File
+Otto Road,14,srts_citywide.csv
+Myrtle Avenue,14,srts_citywide.csv
+Woodward Avenue,14,srts_citywide.csv
+Fairview Avenue,13,srts_citywide.csv
+Putnam Avenue,12,srts_citywide.csv
+65 Place,10,srts_citywide.csv
+77 Avenue,10,srts_citywide.csv
+69 Lane,10,srts_citywide.csv
+64 Street,10,srts_citywide.csv
+73 Place,9,srts_citywide.csv

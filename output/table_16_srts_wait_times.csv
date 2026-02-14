@@ -1,0 +1,7 @@
+Project Code,Location,Street,From,To,Request Date,Wait Months,Installed,Source File
+SR-20210119-24318,Myrtle Ave (83 St to 84 St) [Installed],MYRTLE AVENUE,83 STREET,84 STREET,2020-07-27,22.5,True,srts_citywide.csv
+SR-20221006-28863,Cypress Hills St (80 Ave to Cypress Ave) [Installed],CYPRESS HILLS STREET,80 AVENUE,CYPRESS AVENUE,2022-10-05,33.4,True,srts_citywide.csv
+SR-20221006-28863,Cypress Hills St (78 Ave to 80 Ave) [Installed],CYPRESS HILLS STREET,78 AVENUE,80 AVENUE,2022-10-05,33.4,True,srts_citywide.csv
+SR-20251203-39806,Woodward Ave (68 Rd to Catalpa Ave) [Approved],WOODWARD AVENUE,68 ROAD,CATALPA AVENUE,2025-12-03,2.4,False,srts_citywide.csv
+SR-20240502-31623,74 St (Pleasantview St to Penelope Ave) [Approved],74 STREET,PLEASANTVIEW STREET,PENELOPE AVENUE,2024-05-01,21.5,False,srts_citywide.csv
+SR-20230918-30597,74 St (Juniper Valley Rd to 66 Dr) [Approved],74 STREET,JUNIPER VALLEY ROAD,66 DRIVE,2023-09-17,28.9,False,srts_citywide.csv

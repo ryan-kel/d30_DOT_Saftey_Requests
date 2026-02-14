@@ -1,0 +1,6 @@
+Category,Count,Percent,Source File
+Total Approved (Feasible),237,100.0,srts_citywide.csv
+Confirmed Installed,101,42.6,srts_citywide.csv
+Cancelled / Rejected,114,48.1,srts_citywide.csv
+Closed (No Install),1,0.4,srts_citywide.csv
+Still Waiting,21,8.9,srts_citywide.csv

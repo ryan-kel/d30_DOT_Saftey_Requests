@@ -305,10 +305,12 @@ def chart_01_request_volume(data):
     # Save underlying data tables
     borough_df = borough_counts.rename_axis('Borough').reset_index(name='Requests')
     borough_df = borough_df.sort_values('Requests', ascending=False)
+    borough_df['Source Dataset'] = 'Signal Studies [w76s-c5u4]'
     borough_df.to_csv(f'{OUTPUT_DIR}/table_01a_requests_by_borough.csv', index=False)
 
     cb5_type_df = top_types.rename_axis('Request Type').reset_index(name='Requests')
     cb5_type_df = cb5_type_df.sort_values('Requests', ascending=False)
+    cb5_type_df['Source Dataset'] = 'Signal Studies [w76s-c5u4]'
     cb5_type_df.to_csv(f'{OUTPUT_DIR}/table_01b_cb5_requests_by_type.csv', index=False)
 
     print("  Chart 01 saved.")
@@ -353,6 +355,7 @@ def chart_01z_request_volume_full(data):
 
     borough_df = borough_counts.rename_axis('Borough').reset_index(name='Requests')
     borough_df = borough_df.sort_values('Requests', ascending=False)
+    borough_df['Source Dataset'] = 'Signal Studies [w76s-c5u4]'
     borough_df.to_csv(f'{OUTPUT_DIR}/table_01z_requests_by_borough_full.csv', index=False)
 
     print("  Chart 01z saved.")
@@ -389,6 +392,7 @@ def chart_01bz_requests_by_year_full(data):
 
     table = pd.DataFrame({'Year': cw_yearly.index, 'Citywide': cw_yearly.values,
                           'Queens': queens_yearly.reindex(cw_yearly.index, fill_value=0).values})
+    table['Source Dataset'] = 'Signal Studies [w76s-c5u4]'
     table.to_csv(f'{OUTPUT_DIR}/table_01bz_requests_by_year_full.csv', index=False)
 
     print("  Chart 01bz saved.")
@@ -482,10 +486,12 @@ def chart_01b_requests_by_year(data):
 
     # Save underlying data tables
     left_df = pd.DataFrame({'Year': cw_yearly.index, 'Citywide': cw_yearly.values, 'Queens': queens_yearly.reindex(cw_yearly.index, fill_value=0).values})
+    left_df['Source Dataset'] = 'Signal Studies [w76s-c5u4]'
     left_df.to_csv(f'{OUTPUT_DIR}/table_01b_left_requests_by_year.csv', index=False)
 
     right_df = type_yearly[stack_order].copy()
     right_df['Total'] = right_df.sum(axis=1)
+    right_df['Source Dataset'] = 'Signal Studies [w76s-c5u4]'
     right_df.index.name = 'Year'
     right_df.to_csv(f'{OUTPUT_DIR}/table_01b_right_cb5_by_type_year.csv')
 
@@ -547,6 +553,7 @@ def chart_02_denial_rates_by_borough(data):
     table_02['Total Resolved'] = table_02['Total Resolved'].astype(int)
     table_02['Denied'] = table_02['Denied'].astype(int)
     table_02['Denial Rate (%)'] = table_02['Denial Rate (%)'].round(1)
+    table_02['Source Dataset'] = 'Signal Studies [w76s-c5u4]'
     table_02.index.name = 'Borough'
     table_02.to_csv(f'{OUTPUT_DIR}/table_02_denial_rates_by_borough.csv')
 
@@ -651,6 +658,7 @@ def _draw_yoy_chart(yoy, filename, suptitle_suffix, sig_year_label, srts_year_la
         cw_sig[['total', 'denied', 'denial_rate']].rename(columns={'total': 'CW Total', 'denied': 'CW Denied', 'denial_rate': 'CW Denial Rate (%)'}),
         left_index=True, right_index=True, how='outer'
     )
+    sig_table['Source Dataset'] = 'Signal Studies [w76s-c5u4]'
     sig_table.index.name = 'Year'
     sig_table.to_csv(f'{OUTPUT_DIR}/{filename.replace("chart_", "table_")}_signal.csv')
 
@@ -659,6 +667,7 @@ def _draw_yoy_chart(yoy, filename, suptitle_suffix, sig_year_label, srts_year_la
         cw_srts[['total', 'denied', 'denial_rate']].rename(columns={'total': 'CW Total', 'denied': 'CW Denied', 'denial_rate': 'CW Denial Rate (%)'}),
         left_index=True, right_index=True, how='outer'
     )
+    srts_table['Source Dataset'] = 'Speed Reducer Tracking System [9n6h-pt9g]'
     srts_table.index.name = 'Year'
     srts_table.to_csv(f'{OUTPUT_DIR}/{filename.replace("chart_", "table_")}_srts.csv')
 
@@ -757,6 +766,9 @@ def chart_04_denial_rates_by_type(data):
         'Citywide Total': cw_ns,
         'Citywide Denial Rate (%)': [round(r, 1) for r in cw_rates],
     })
+    table_04['Source Dataset'] = table_04['Request Type'].apply(
+        lambda t: 'Speed Reducer Tracking System [9n6h-pt9g]' if t == 'Speed Bumps'
+        else 'Signal Studies [w76s-c5u4]')
     table_04.to_csv(f'{OUTPUT_DIR}/table_04_denial_rates_by_type.csv', index=False)
 
     print("  Chart 04 saved.")
@@ -907,16 +919,19 @@ def chart_05_speed_bump_analysis(data):
     cb_table.columns = ['Total', 'Denied', 'Denial Rate (%)']
     cb_table['Denial Rate (%)'] = cb_table['Denial Rate (%)'].round(1)
     cb_table = cb_table.sort_values('Denial Rate (%)', ascending=False)
+    cb_table['Source Dataset'] = 'Speed Reducer Tracking System [9n6h-pt9g]'
     cb_table.index.name = 'Community Board'
     cb_table.to_csv(f'{OUTPUT_DIR}/table_05a_queens_cb_denial_rates.csv')
 
     reason_df = reason_counts.rename_axis('Reason').reset_index(name='Count')
     reason_df['Percent'] = (reason_df['Count'] / reason_df['Count'].sum() * 100).round(1)
     reason_df = reason_df.sort_values('Count', ascending=False)
+    reason_df['Source Dataset'] = 'Speed Reducer Tracking System [9n6h-pt9g]'
     reason_df.to_csv(f'{OUTPUT_DIR}/table_05b_cb5_denial_reasons.csv', index=False)
 
     reason_simple.index.name = 'Year'
     reason_simple['Total'] = reason_simple.sum(axis=1)
+    reason_simple['Source Dataset'] = 'Speed Reducer Tracking System [9n6h-pt9g]'
     reason_simple.to_csv(f'{OUTPUT_DIR}/table_05c_denial_reasons_by_year.csv')
 
     print("  Chart 05 saved.")
@@ -1020,6 +1035,27 @@ def chart_05z_speed_bump_full(data):
     plt.savefig(f'{OUTPUT_DIR}/chart_05z_speed_bump_full.png', dpi=300,
                 bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close()
+
+    # Save accompanying CSVs
+    table_05za = cb_stats.reset_index()
+    table_05za.columns = ['Community Board', 'Total', 'Denied', 'Denial Rate (%)']
+    table_05za['Community Board'] = table_05za['Community Board'].apply(lambda x: f'CB{int(x)-400}')
+    table_05za['Denial Rate (%)'] = table_05za['Denial Rate (%)'].round(1)
+    table_05za['Source Dataset'] = 'Speed Reducer Tracking System [9n6h-pt9g]'
+    table_05za.to_csv(f'{OUTPUT_DIR}/table_05za_queens_cb_denial_rates_full.csv', index=False)
+
+    table_05zb = reason_counts.reset_index()
+    table_05zb.columns = ['Denial Reason', 'Count']
+    table_05zb['Percent'] = (table_05zb['Count'] / table_05zb['Count'].sum() * 100).round(1)
+    table_05zb['Source Dataset'] = 'Speed Reducer Tracking System [9n6h-pt9g]'
+    table_05zb.to_csv(f'{OUTPUT_DIR}/table_05zb_denial_reasons_full.csv', index=False)
+
+    table_05zc = cb5_yearly.reset_index()
+    table_05zc.columns = ['Year', 'Total', 'Denied', 'Denial Rate (%)']
+    table_05zc['Denial Rate (%)'] = table_05zc['Denial Rate (%)'].round(1)
+    table_05zc['Source Dataset'] = 'Speed Reducer Tracking System [9n6h-pt9g]'
+    table_05zc.to_csv(f'{OUTPUT_DIR}/table_05zc_cb5_trend_full.csv', index=False)
+
     print("  Chart 05z saved.")
 
 
@@ -1084,6 +1120,7 @@ def chart_06_most_denied_intersections(data):
 
     # Save underlying data table
     table_06 = location_counts.rename_axis('Intersection').reset_index(name='Denials')
+    table_06['Source File'] = 'data_cb5_signal_studies.csv'
     table_06.to_csv(f'{OUTPUT_DIR}/table_06_most_denied_intersections.csv', index=False)
 
     print("  Chart 06 saved.")
@@ -1129,6 +1166,7 @@ def chart_07_most_denied_streets_speed_bumps(data):
 
     # Save underlying data table
     table_07 = street_counts.rename_axis('Street').reset_index(name='Denials')
+    table_07['Source File'] = 'srts_citywide.csv'
     table_07.to_csv(f'{OUTPUT_DIR}/table_07_most_denied_streets_speed_bumps.csv', index=False)
 
     print("  Chart 07 saved.")
@@ -1244,10 +1282,12 @@ def chart_08_crash_hotspots(data):
     # Save underlying data tables
     table_08_crashes = street_crashes_by_crash[['crashes', 'injuries', 'ped_injuries']].reset_index()
     table_08_crashes.columns = ['Street', 'Crashes', 'Injuries', 'Pedestrian Injuries']
+    table_08_crashes['Source Dataset'] = 'Motor Vehicle Collisions [h9gi-nx95]'
     table_08_crashes.to_csv(f'{OUTPUT_DIR}/table_08a_crash_hotspots_by_crashes.csv', index=False)
 
     table_08_injuries = street_crashes_by_injury[['crashes', 'injuries', 'ped_injuries']].reset_index()
     table_08_injuries.columns = ['Street', 'Crashes', 'Injuries', 'Pedestrian Injuries']
+    table_08_injuries['Source Dataset'] = 'Motor Vehicle Collisions [h9gi-nx95]'
     table_08_injuries.to_csv(f'{OUTPUT_DIR}/table_08b_crash_hotspots_by_injuries.csv', index=False)
 
     print("  Chart 08 saved.")
@@ -1333,6 +1373,9 @@ def chart_12_request_types(data):
         'Citywide Count': cw_counts,
         'Citywide Share (%)': [round(p, 1) for p in cw_pct]
     })
+    table_12['Source Dataset'] = table_12['Request Type'].apply(
+        lambda t: 'Speed Reducer Tracking System [9n6h-pt9g]' if t == 'Speed Bumps'
+        else 'Signal Studies [w76s-c5u4]')
     table_12.to_csv(f'{OUTPUT_DIR}/table_12_request_type_mix.csv', index=False)
 
     print("  Chart 12 saved.")

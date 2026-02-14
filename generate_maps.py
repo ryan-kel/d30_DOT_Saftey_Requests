@@ -629,7 +629,9 @@ def geocode_signal_studies(data):
 
     # Save cache
     cache_cols = ['referencenumber', 'mainstreet', 'crossstreet1', 'requesttype',
-                  'statusdescription', 'outcome', 'year', 'latitude', 'longitude',
+                  'statusdescription', 'outcome', 'year',
+                  'daterequested', 'statusdate',
+                  'latitude', 'longitude',
                   'geocode_tier', 'main_norm', 'cross_norm']
     cache_df = cb5_no_aps[[c for c in cache_cols if c in cb5_no_aps.columns]].copy()
     cache_df.to_csv(GEOCODE_CACHE_PATH, index=False)
@@ -967,10 +969,14 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
     # --- Base map: no-label tiles for print clarity ---
     m = folium.Map(
         location=CB5_CENTER, zoom_start=CB5_ZOOM,
-        tiles='https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
-        attr='&copy; OpenStreetMap contributors &copy; CARTO',
+        tiles=None,
         control_scale=True,
     )
+    folium.TileLayer(
+        tiles='https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+        attr='&copy; OpenStreetMap contributors &copy; CARTO',
+        name='Base Map',
+    ).add_to(m)
 
     _add_cb5_boundary(m)
 
@@ -985,6 +991,17 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             return pd.to_datetime(val).strftime('%b %d, %Y')
         except Exception:
             return str(val)[:10]
+
+    # --- Enrich signal_prox with dates from full CB5 studies data ---
+    # The geocode cache may lack daterequested/statusdate (older caches).
+    # Merge them from the full studies data so popups and exports have dates.
+    if data is not None and 'cb5_no_aps' in data:
+        _date_source = data['cb5_no_aps'][['referencenumber', 'daterequested', 'statusdate']].drop_duplicates('referencenumber')
+        for col in ['daterequested', 'statusdate']:
+            if col not in signal_prox.columns or signal_prox[col].isna().all():
+                signal_prox = signal_prox.drop(columns=[col], errors='ignore')
+                signal_prox = signal_prox.merge(
+                    _date_source[['referencenumber', col]], on='referencenumber', how='left')
 
     # --- Precompute layer subsets for names and CSV export ---
     _sig_denied = signal_prox[signal_prox['outcome'] == 'denied']
@@ -1014,9 +1031,20 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         # --- Crash popup/tooltip ---
         c_date = _fmt_date(crow.get('crash_date'))
         c_time = str(crow.get('crash_time', '')).strip()
-        c_on = str(crow.get('on_street_name', '') or '').strip()
-        c_off = str(crow.get('off_street_name', '') or '').strip()
-        c_loc = f"{c_on} & {c_off}" if c_off else c_on
+        _on_raw = crow.get('on_street_name')
+        _off_raw = crow.get('off_street_name')
+        _cross_raw = crow.get('cross_street_name')
+        c_on = '' if pd.isna(_on_raw) else str(_on_raw).strip()
+        c_off = '' if pd.isna(_off_raw) else str(_off_raw).strip()
+        c_cross = '' if pd.isna(_cross_raw) else str(_cross_raw).strip()
+        if c_on and c_off:
+            c_loc = f"{c_on} & {c_off}"
+        elif c_on or c_off:
+            c_loc = c_on or c_off
+        elif c_cross:
+            c_loc = f"Near {c_cross}"
+        else:
+            c_loc = 'Location on map'
         c_factor = str(crow.get('contributing_factor_vehicle_1', '') or '').strip()
         c_veh1 = str(crow.get('vehicle_type_code1', '') or '').strip()
         ped_inj = int(crow.get('number_of_pedestrians_injured', 0))
@@ -1046,7 +1074,8 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             f"<span style='color:#666;font-size:10px;'>Collision ID: {crow.get('collision_id', 'N/A')}</span>"
             f"</div>"
         )
-        crash_tooltip = f"{c_loc} — {c_date}"
+        _sev = 'Fatal' if killed > 0 else f'{injured} injured' if injured > 0 else 'Crash'
+        crash_tooltip = f"{c_loc} — {_sev}, {c_date}"
 
         folium.CircleMarker(
             [crow['latitude'], crow['longitude']], radius=r,
@@ -1137,6 +1166,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         from_st = row.get('fromstreet', '')
         to_st = row.get('tostreet', '')
         req_date = _fmt_date(row.get('requestdate'))
+        closed_date = _fmt_date(row.get('closeddate'))
         proj_status = str(row.get('projectstatus', '') or '').strip()
         denial = str(row.get('denialreason', '') or '').strip()
         install_date = _fmt_date(row.get('installationdate'))
@@ -1160,6 +1190,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             f"Outcome: <span style='color:{outcome_color};font-weight:bold;'>{outcome_label}</span>"
             f"{_hr}"
             f"Requested: {req_date}<br>"
+            f"Decision date: {closed_date}<br>"
             f"Project status: {proj_status}"
             f"{_hr}"
             f"{extras}"
@@ -1364,6 +1395,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
                   'contributing_factor_vehicle_1', 'vehicle_type_code1',
                   'collision_id', 'latitude', 'longitude']
     _crash_export = crash_with_coords[[c for c in crash_cols if c in crash_with_coords.columns]].copy()
+    _crash_export['Source Dataset'] = 'Motor Vehicle Collisions [h9gi-nx95]'
     _crash_export.to_csv(f'{OUTPUT_DIR}/map_layer_crashes.csv', index=False)
 
     # Layer 2-3: Signal Studies (denied + approved)
@@ -1382,21 +1414,25 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         if len(_sig_enrich) > 0:
             _exp = _exp.merge(_sig_enrich, on='referencenumber', how='left', suffixes=('', '_orig'))
         _exp = _exp[[c for c in sig_cols if c in _exp.columns]]
+        _exp['Source File'] = 'data_cb5_signal_studies.csv'
         _exp.to_csv(f'{OUTPUT_DIR}/map_layer_{outcome_label}_signals.csv', index=False)
 
     # Layer 4-5: Speed Bumps (denied + approved)
     srts_cols = ['projectcode', 'onstreet', 'fromstreet', 'tostreet',
-                 'outcome', 'requestdate', 'projectstatus', 'denialreason',
+                 'outcome', 'requestdate', 'closeddate', 'projectstatus', 'denialreason',
                  'installationdate', 'trafficdirectiondesc',
                  'crashes_150m', 'injuries_150m', 'ped_injuries_150m', 'fatalities_150m',
                  'latitude', 'longitude']
     for outcome_label, subset in [('denied', _srts_denied), ('approved', _srts_approved)]:
         _exp = subset[[c for c in srts_cols if c in subset.columns]].copy()
         _exp = _exp[_exp['latitude'].notna()]
+        _exp['Source File'] = 'srts_citywide.csv'
         _exp.to_csv(f'{OUTPUT_DIR}/map_layer_{outcome_label}_speed_bumps.csv', index=False)
 
     # Layer 7: Top 15 Spotlight
-    top15.to_csv(f'{OUTPUT_DIR}/map_layer_top15_denied.csv', index=False)
+    _top15_export = top15.copy()
+    _top15_export['Source File'] = 'data_cb5_signal_studies.csv'
+    _top15_export.to_csv(f'{OUTPUT_DIR}/map_layer_top15_denied.csv', index=False)
 
     print(f"      map_layer_crashes.csv ({len(_crash_export):,} rows)")
     print(f"      map_layer_denied_signals.csv ({n_sig_denied:,} rows)")
@@ -1713,6 +1749,21 @@ def chart_13_approval_vs_installation():
     plt.savefig(f'{OUTPUT_DIR}/chart_13_approval_vs_installation.png', dpi=300,
                 bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close()
+
+    # Save accompanying CSV
+    table_13 = pd.DataFrame([
+        {'Dataset': 'Signal Studies', 'Source File': 'data_cb5_signal_studies.csv',
+         'Denied': sig_denied, 'Approved': sig_approved,
+         'Confirmed Installed': sig_installed,
+         'Paper Approval Rate (%)': round(sig_paper_rate, 1),
+         'Install Rate of Approved (%)': round(sig_install_rate, 1)},
+        {'Dataset': 'Speed Bumps', 'Source File': 'srts_citywide.csv',
+         'Denied': srts_denied, 'Approved': srts_feasible,
+         'Confirmed Installed': srts_installed,
+         'Paper Approval Rate (%)': round(srts_paper_rate, 1),
+         'Install Rate of Approved (%)': round(srts_install_rate, 1)},
+    ])
+    table_13.to_csv(f'{OUTPUT_DIR}/table_13_approval_vs_installation.csv', index=False)
     print("    Chart 13 saved.")
 
 
@@ -1805,6 +1856,17 @@ def chart_14_installation_wait_times():
     plt.savefig(f'{OUTPUT_DIR}/chart_14_installation_wait_times.png', dpi=300,
                 bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close()
+
+    # Save accompanying CSV (with reference numbers for traceability)
+    table_14 = all_locations[['referencenumber', 'label', 'mainstreet', 'crossstreet1',
+                               'requesttype', 'daterequested', 'statusdate_dt', 'install_dt',
+                               'confirmed', 'wait_months']].copy()
+    table_14.columns = ['Reference Number', 'Label', 'Main Street', 'Cross Street',
+                         'Request Type', 'Date Requested', 'Date Approved', 'Install Date',
+                         'Installed', 'Wait Months']
+    table_14['Wait Months'] = table_14['Wait Months'].round(1)
+    table_14['Source File'] = 'data_cb5_signal_studies.csv'
+    table_14.to_csv(f'{OUTPUT_DIR}/table_14_installation_wait_times.csv', index=False)
     print("    Chart 14 saved.")
 
 
@@ -1908,6 +1970,19 @@ def chart_15_srts_funnel():
     plt.savefig(f'{OUTPUT_DIR}/chart_15_srts_funnel.png', dpi=300,
                 bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close()
+
+    # Save accompanying CSV
+    rows_15 = [
+        {'Category': 'Total Approved (Feasible)', 'Count': n_total, 'Percent': 100.0},
+        {'Category': 'Confirmed Installed', 'Count': n_installed, 'Percent': round(n_installed / n_total * 100, 1)},
+        {'Category': 'Cancelled / Rejected', 'Count': n_cancelled, 'Percent': round(n_cancelled / n_total * 100, 1)},
+    ]
+    if n_closed > 0:
+        rows_15.append({'Category': 'Closed (No Install)', 'Count': n_closed, 'Percent': round(n_closed / n_total * 100, 1)})
+    rows_15.append({'Category': 'Still Waiting', 'Count': n_waiting, 'Percent': round(n_waiting / n_total * 100, 1)})
+    table_15 = pd.DataFrame(rows_15)
+    table_15['Source File'] = 'srts_citywide.csv'
+    table_15.to_csv(f'{OUTPUT_DIR}/table_15_srts_funnel.csv', index=False)
     print("    Chart 15 saved.")
 
 
@@ -2032,6 +2107,20 @@ def _draw_srts_wait_chart(installed, still_open, max_baseline, title_suffix,
                 bbox_inches='tight', facecolor='white', edgecolor='none')
     plt.close()
 
+    # Save accompanying CSV (with reference numbers for traceability)
+    csv_cols = ['projectcode', 'label', 'onstreet', 'fromstreet', 'tostreet',
+                'request_dt', 'wait_months', 'confirmed']
+    table_16 = all_locations[[c for c in csv_cols if c in all_locations.columns]].copy()
+    table_16 = table_16.rename(columns={
+        'projectcode': 'Project Code', 'label': 'Location',
+        'onstreet': 'Street', 'fromstreet': 'From', 'tostreet': 'To',
+        'request_dt': 'Request Date', 'wait_months': 'Wait Months',
+        'confirmed': 'Installed'
+    })
+    table_16['Wait Months'] = table_16['Wait Months'].round(1)
+    table_16['Source File'] = 'srts_citywide.csv'
+    table_16.to_csv(f'{OUTPUT_DIR}/{filename.replace("chart_", "table_")}.csv', index=False)
+
 
 def chart_16_srts_wait_times():
     """Chart 16: SRTS wait times — 2020–2025 requests."""
@@ -2066,24 +2155,34 @@ def save_data_tables(signal_prox, srts_prox):
     """Save CSV data tables for all Part 2 outputs."""
     print("  Saving data tables...")
 
-    # Table 09: Per-location crash proximity
+    # Table 09: Per-location crash proximity (with reference numbers for traceability)
     sig_rows = signal_prox[signal_prox['latitude'].notna()].copy()
     sig_rows['location_name'] = (
         sig_rows['mainstreet'].fillna('') + ' & ' + sig_rows['crossstreet1'].fillna('')
     ).str.title()
     sig_rows['dataset'] = 'Signal Study'
+    sig_rows['reference_id'] = sig_rows['referencenumber']
+    sig_rows['request_year'] = sig_rows['year']
+    sig_rows['request_type'] = sig_rows['requesttype']
+    sig_rows['source_file'] = 'data_cb5_signal_studies.csv'
 
     srts_rows = srts_prox[srts_prox['latitude'].notna()].copy()
     srts_rows['location_name'] = srts_rows['onstreet'].fillna('').str.title()
     srts_rows['dataset'] = 'SRTS'
+    srts_rows['reference_id'] = srts_rows['projectcode']
+    srts_rows['request_year'] = srts_rows['year']
+    srts_rows['request_type'] = 'Speed Bump'
+    srts_rows['source_file'] = 'srts_citywide.csv'
 
-    common_cols = ['location_name', 'dataset', 'outcome', 'latitude', 'longitude',
+    common_cols = ['reference_id', 'location_name', 'dataset', 'request_type', 'outcome',
+                   'request_year', 'source_file', 'latitude', 'longitude',
                    'crashes_150m', 'injuries_150m', 'ped_injuries_150m', 'fatalities_150m']
     table_09 = pd.concat([
         sig_rows[[c for c in common_cols if c in sig_rows.columns]],
         srts_rows[[c for c in common_cols if c in srts_rows.columns]]
     ], ignore_index=True)
     table_09 = table_09.sort_values('crashes_150m', ascending=False)
+    table_09 = table_09.rename(columns={'source_file': 'Source File'})
     table_09.to_csv(f'{OUTPUT_DIR}/table_09_crash_proximity_by_location.csv', index=False)
 
     # Table 09b: Aggregate comparison — denied vs approved
@@ -2116,6 +2215,9 @@ def save_data_tables(signal_prox, srts_prox):
             mask = table_09b['Dataset'] == dataset_label
             table_09b.loc[mask, 'Mann-Whitney p-value (crashes)'] = round(p, 6)
 
+    table_09b['Source Dataset'] = table_09b['Dataset'].apply(
+        lambda d: 'data_cb5_signal_studies.csv' if d == 'Signal Studies'
+        else 'srts_citywide.csv')
     table_09b.to_csv(f'{OUTPUT_DIR}/table_09b_aggregate_comparison.csv', index=False)
 
     # Table 09c: Top denied signal study intersections by crashes (ranked list for article)
@@ -2128,8 +2230,12 @@ def save_data_tables(signal_prox, srts_prox):
         lambda r: _normalize_intersection(r['mainstreet'], r['crossstreet1']), axis=1)
     sig_denied['dataset'] = 'Signal Study'
     sig_denied['request_type'] = sig_denied.get('requesttype', 'N/A')
+    sig_denied['reference_id'] = sig_denied['referencenumber']
+    sig_denied['request_year'] = sig_denied['year']
+    sig_denied['source_file'] = 'data_cb5_signal_studies.csv'
 
-    common_cols_c = ['location_name', 'dataset', 'request_type', 'latitude', 'longitude',
+    common_cols_c = ['reference_id', 'location_name', 'dataset', 'request_type',
+                     'request_year', 'source_file', 'latitude', 'longitude',
                      'crashes_150m', 'injuries_150m', 'ped_injuries_150m', 'fatalities_150m']
     combined = sig_denied[[c for c in common_cols_c if c in sig_denied.columns]].copy()
     # De-duplicate: name-based then spatial
@@ -2139,6 +2245,7 @@ def save_data_tables(signal_prox, srts_prox):
     table_09c = combined.nlargest(25, 'crashes_150m').reset_index(drop=True)
     table_09c.index = table_09c.index + 1
     table_09c.index.name = 'Rank'
+    table_09c = table_09c.rename(columns={'source_file': 'Source File'})
     table_09c.to_csv(f'{OUTPUT_DIR}/table_09c_top_denied_by_crashes.csv')
 
     print(f"    table_09: {len(table_09)} locations")
@@ -2188,6 +2295,7 @@ def main():
     if before_after_df is not None and len(before_after_df) > 0:
         ba_out = before_after_df.copy()
         ba_out['install_date'] = ba_out['install_date'].dt.strftime('%Y-%m-%d')
+        ba_out['Source File'] = 'data_cb5_signal_studies.csv'
         ba_out.to_csv(f'{OUTPUT_DIR}/table_before_after_installed.csv', index=False)
         print(f"  Before-after table saved ({len(ba_out)} installed locations).")
 
