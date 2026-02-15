@@ -1048,9 +1048,9 @@ def run_proximity_analysis(signal_geo, srts_df, cb5_crashes):
 def _make_legend_html(items):
     """Generate HTML for a dynamic map legend — items show/hide with layer toggles.
 
-    items: list of (color, label, layer_prefixes_csv) tuples.
-        layer_prefixes_csv is a comma-separated string of layer name prefixes
-        that control this legend item's visibility.
+    items: list of (color, label, layer_prefixes_csv[, icon_style]) tuples.
+        layer_prefixes_csv: comma-separated layer name prefixes for visibility.
+        icon_style: 'dot' (default) or 'spotlight' (dot + dashed radius circle).
     """
     html = ('<div class="map-legend" id="map-legend" style="position:fixed;bottom:30px;left:30px;'
             'z-index:1000;background:white;padding:10px 14px;border:1px solid #666;'
@@ -1058,12 +1058,23 @@ def _make_legend_html(items):
     html += ('<span class="legend-header" style="font-size:13px;font-weight:bold;'
              'border-bottom:1px solid #999;display:block;margin-bottom:4px;'
              'padding-bottom:2px;">Legend</span>')
-    for color, label, layer_prefixes in items:
+    for item in items:
+        color, label, layer_prefixes = item[0], item[1], item[2]
+        icon_style = item[3] if len(item) > 3 else 'dot'
+        if icon_style == 'spotlight':
+            # Dot + dashed circle — matches map spotlight/radius markers
+            icon = (f'<span class="legend-dot" style="display:inline-block;width:16px;'
+                    f'height:16px;border:1.5px dashed {color};border-radius:50%;'
+                    f'margin-right:5px;vertical-align:middle;position:relative;">'
+                    f'<span style="position:absolute;top:50%;left:50%;'
+                    f'transform:translate(-50%,-50%);width:6px;height:6px;'
+                    f'background:{color};border-radius:50%;"></span></span>')
+        else:
+            icon = (f'<span class="legend-dot" style="display:inline-block;width:12px;'
+                    f'height:12px;background:{color};border:1px solid #999;'
+                    f'border-radius:50%;margin-right:6px;vertical-align:middle;"></span>')
         html += (f'<span class="legend-item" data-layers="{layer_prefixes}" '
-                 f'style="display:block;">'
-                 f'<span class="legend-dot" style="display:inline-block;width:12px;height:12px;'
-                 f'background:{color};border:1px solid #999;border-radius:50%;'
-                 f'margin-right:6px;vertical-align:middle;"></span>{label}</span>')
+                 f'style="display:block;">{icon}{label}</span>')
     html += '</div>'
     return html
 
@@ -1293,41 +1304,22 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
     crash_with_coords = cb5_crashes[cb5_crashes['latitude'].notna()].copy()
     crash_dots = folium.FeatureGroup(
         name=f'Injury Crashes (n={len(crash_with_coords):,}, 2020–2025)', show=True)
-    # Cluster overlapping crash dots — click a cluster to zoom/spiderfy
-    _cluster_icon_fn = """
-    function(cluster) {
-        var count = cluster.getChildCount();
-        var size = count < 10 ? 26 : count < 50 ? 32 : 38;
-        return L.divIcon({
-            html: '<div style="background:rgba(136,136,136,0.8);color:white;' +
-                  'font-weight:bold;font-family:Times New Roman,serif;font-size:11px;' +
-                  'text-align:center;line-height:' + size + 'px;border-radius:50%;' +
-                  'border:1.5px solid #666;">' + count + '</div>',
-            className: '',
-            iconSize: L.point(size, size)
-        });
-    }
-    """
-    crash_cluster = MarkerCluster(
-        icon_create_function=_cluster_icon_fn,
-        options={
-            'maxClusterRadius': 25,
-            'spiderfyOnMaxZoom': True,
-            'showCoverageOnHover': False,
-            'zoomToBoundsOnClick': True,
-            'spiderfyDistanceMultiplier': 1.5,
-        },
-    )
-    for _, crow in crash_with_coords.iterrows():
+    # Jitter stacked dots so crashes at the same intersection spread apart
+    # ~5m offset (0.00005°) — enough to unstick dots, imperceptible geographically
+    rng = np.random.RandomState(42)
+    jitter_lat = rng.uniform(-0.00005, 0.00005, len(crash_with_coords))
+    jitter_lon = rng.uniform(-0.00005, 0.00005, len(crash_with_coords))
+    _crash_markers = []  # collect for reuse in clustered layer
+    for i, (_, crow) in enumerate(crash_with_coords.iterrows()):
         injured = int(crow.get('number_of_persons_injured', 0))
         killed = int(crow.get('number_of_persons_killed', 0))
-        # Size by severity: fatal=8px, injury=5px, other=4px
+        # Size by severity: fatal=4, injury=2, other=1.5
         if killed > 0:
-            d, color, opacity = 8, '#1a1a1a', 0.85
+            r, color, opacity = 3.5, '#1a1a1a', 0.8
         elif injured > 0:
-            d, color, opacity = 5, '#888888', 0.5
+            r, color, opacity = 1.8, '#888888', 0.35
         else:
-            d, color, opacity = 4, '#aaaaaa', 0.3
+            r, color, opacity = 1.2, '#aaaaaa', 0.2
 
         # --- Crash popup/tooltip ---
         c_date = _fmt_date(crow.get('crash_date'))
@@ -1378,17 +1370,60 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         _sev = 'Fatal' if killed > 0 else f'{injured} injured' if injured > 0 else 'Crash'
         crash_tooltip = f"{c_loc} — {_sev}, {c_date}"
 
+        # Store popup/tooltip for reuse in clustered layer
+        _crash_markers.append((crow['latitude'], crow['longitude'],
+                               color, opacity, crash_popup, crash_tooltip))
+
+        folium.CircleMarker(
+            [crow['latitude'] + jitter_lat[i],
+             crow['longitude'] + jitter_lon[i]], radius=r,
+            color=color, fill=True, fill_color=color,
+            fill_opacity=opacity, weight=0.3,
+            popup=folium.Popup(crash_popup, max_width=320),
+            tooltip=crash_tooltip,
+        ).add_to(crash_dots)
+    crash_dots.add_to(m)
+
+    # --- Clustered crash layer (off by default, for analysis) ---
+    crash_clustered = folium.FeatureGroup(
+        name=f'Injury Crashes \u2014 Clustered (n={len(crash_with_coords):,})', show=False)
+    _cluster_icon_fn = """
+    function(cluster) {
+        var count = cluster.getChildCount();
+        var size = count < 10 ? 26 : count < 50 ? 32 : 38;
+        return L.divIcon({
+            html: '<div style="background:rgba(136,136,136,0.8);color:white;' +
+                  'font-weight:bold;font-family:Times New Roman,serif;font-size:11px;' +
+                  'text-align:center;line-height:' + size + 'px;border-radius:50%;' +
+                  'border:1.5px solid #666;">' + count + '</div>',
+            className: '',
+            iconSize: L.point(size, size)
+        });
+    }
+    """
+    crash_cluster = MarkerCluster(
+        icon_create_function=_cluster_icon_fn,
+        options={
+            'maxClusterRadius': 25,
+            'spiderfyOnMaxZoom': True,
+            'showCoverageOnHover': False,
+            'zoomToBoundsOnClick': True,
+            'spiderfyDistanceMultiplier': 1.5,
+        },
+    )
+    for lat, lon, color, opacity, popup_html, tooltip_text in _crash_markers:
+        d = 6 if color == '#1a1a1a' else 5 if color == '#888888' else 4
         icon_html = (f'<div style="width:{d}px;height:{d}px;background:{color};'
                      f'border-radius:50%;opacity:{opacity};"></div>')
         folium.Marker(
-            [crow['latitude'], crow['longitude']],
+            [lat, lon],
             icon=folium.DivIcon(html=icon_html, icon_size=(d, d),
                                 icon_anchor=(d // 2, d // 2)),
-            popup=folium.Popup(crash_popup, max_width=320),
-            tooltip=crash_tooltip,
+            popup=folium.Popup(popup_html, max_width=320),
+            tooltip=tooltip_text,
         ).add_to(crash_cluster)
-    crash_cluster.add_to(crash_dots)
-    crash_dots.add_to(m)
+    crash_cluster.add_to(crash_clustered)
+    crash_clustered.add_to(m)
 
     # --- Helper: build signal study popup ---
     def _signal_popup(row, outcome_label, outcome_color):
@@ -1601,6 +1636,14 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             # Marker size scaled by absolute crash volume (bigger = more data = more reliable)
             marker_r = max(7, min(14, 5 + ba['before_crashes']))
 
+            # 150m radius circle (dashed outline, non-interactive)
+            folium.Circle(
+                [ba['latitude'], ba['longitude']],
+                radius=PROXIMITY_RADIUS_M,
+                color=fill_color, fill=True, fill_color=fill_color,
+                fill_opacity=0.08, weight=1.5, dash_array='5 3',
+                interactive=False,
+            ).add_to(effectiveness_fg)
             folium.CircleMarker(
                 [ba['latitude'], ba['longitude']], radius=marker_r,
                 color=outline, fill=True, fill_color=fill_color,
@@ -1741,12 +1784,13 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         (COLORS['approved'], 'Approved request', 'Approved Signal,Approved Speed'),
         ('#888888', 'Injury crash (dot = 1 crash)', 'Injury Crashes'),
         ('#1a1a1a', 'Fatal crash', 'Injury Crashes'),
-        (COLORS['primary'], 'Top 10 crash intersection', 'Top 10 Crash'),
+        (COLORS['primary'], 'Top 10 crash intersection', 'Top 10 Crash', 'spotlight'),
+        (COLORS['denied'], 'Top 15 denied spotlight', 'Top 15 Denied', 'spotlight'),
     ]
     if before_after_df is not None:
         legend_items.extend([
-            ('#2d7d46', 'Installed \u2014 crashes decreased', 'DOT Effectiveness'),
-            ('#cc8400', 'Installed \u2014 crashes increased', 'DOT Effectiveness'),
+            ('#2d7d46', 'Installed \u2014 crashes decreased', 'DOT Effectiveness', 'spotlight'),
+            ('#cc8400', 'Installed \u2014 crashes increased', 'DOT Effectiveness', 'spotlight'),
         ])
     legend_html = _make_legend_html(legend_items)
     m.get_root().html.add_child(folium.Element(legend_html))
