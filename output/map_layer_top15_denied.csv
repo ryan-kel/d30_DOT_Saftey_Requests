@@ -2,15 +2,15 @@ location_name,dataset,request_info,latitude,longitude,crashes_150m,injuries_150m
 Aubrey Avenue & Metropolitan Avenue,Signal Study,Traffic Signal,40.711994,-73.86073,66,101,4,0,data_cb5_signal_studies.csv
 61 Street & Metropolitan Avenue,Signal Study,Left Turn Arrow/Signal,40.712757,-73.90225,59,70,17,0,data_cb5_signal_studies.csv
 69 Avenue & Onderdonk Avenue,Signal Study,All-Way Stop,40.70123,-73.902565,57,67,15,0,data_cb5_signal_studies.csv
-Cooper Avenue & Cypress Avenue,Signal Study,Traffic Signal,40.694107,-73.89737,55,70,12,0,data_cb5_signal_studies.csv
+Cooper Avenue & Cypress Avenue,Signal Study,Left Turn Arrow/Signal,40.694107,-73.89737,55,70,12,0,data_cb5_signal_studies.csv
 Forest Avenue & Metropolitan Avenue,Signal Study,Leading Pedestrian Interval,40.712902,-73.90608,54,64,19,0,data_cb5_signal_studies.csv
 Bleecker Street & Fresh Pond Road,Signal Study,Traffic Signal,40.711903,-73.90019,54,64,16,0,data_cb5_signal_studies.csv
 Cypress Avenue & Vermont Place,Signal Study,Traffic Signal,40.691433,-73.89063,52,75,1,0,data_cb5_signal_studies.csv
 Cypress Avenue & Putnam Avenue,Signal Study,All-Way Stop,40.700367,-73.906624,51,55,13,0,data_cb5_signal_studies.csv
 Hamilton Place & Perry Avenue,Signal Study,All-Way Stop,40.724888,-73.89899,47,61,5,0,data_cb5_signal_studies.csv
 Forest Avenue & Myrtle Avenue,Signal Study,Traffic Signal Removal,40.700497,-73.90021,46,56,20,0,data_cb5_signal_studies.csv
-Borden Avenue & Maurice Avenue,Signal Study,Traffic Signal,40.727733,-73.906731,45,68,1,0,data_cb5_signal_studies.csv
+Borden Avenue & Maurice Avenue,Signal Study,Left Turn Arrow/Signal,40.727733,-73.906731,45,68,1,0,data_cb5_signal_studies.csv
+61 Street & 62 Street,Signal Study,All-Way Stop,40.713271500000005,-73.899743,45,51,12,0,data_cb5_signal_studies.csv
 Grand Avenue & Maspeth Avenue,Signal Study,Traffic Signal,40.7228,-73.90182,40,42,4,0,data_cb5_signal_studies.csv
 Myrtle Avenue & Summerfield Street,Signal Study,All-Way Stop,40.70052,-73.897962,39,50,16,0,data_cb5_signal_studies.csv
 69 Street & Eliot Avenue,Signal Study,Left Turn Arrow/Signal,40.71946,-73.89117,38,50,12,0,data_cb5_signal_studies.csv
-Fresh Pond Road & Putnam Avenue,Signal Study,Traffic Signal,40.706497,-73.89695,38,53,12,0,data_cb5_signal_studies.csv

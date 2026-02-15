@@ -163,7 +163,7 @@ def prepare_data(signal_studies, srts, crashes, cb5_studies):
     srts['requestdate'] = pd.to_datetime(srts['requestdate'], errors='coerce')
     srts['year'] = srts['requestdate'].dt.year
 
-    # All non-APS records (for volume counts and n= reconciliation: 510 - 65 APS = 445)
+    # All non-APS records (for volume counts and n= reconciliation: 499 - 65 APS = 434)
     signal_no_aps = signal_studies[signal_studies['requesttype'] != 'Accessible Pedestrian Signal']
     cb5_no_aps = cb5_studies[cb5_studies['requesttype'] != 'Accessible Pedestrian Signal']
 
@@ -177,35 +177,13 @@ def prepare_data(signal_studies, srts, crashes, cb5_studies):
     srts_resolved = srts[srts['segmentstatusdescription'].isin(['Not Feasible', 'Feasible'])]
     cb5_srts_raw = srts_resolved[srts_resolved['cb_num'] == 405]
 
-    # Apply CB5 cross-street exclusion filter (see REFERENCE_cb5_boundaries.md)
-    # Records labeled cb=405 are excluded if cross streets indicate locations north of the LIE
-    excluded_cross = ['51 ROAD', '51 STREET', '52 AVENUE', '52 DRIVE', '52 ROAD', '52 COURT',
-                      '53 AVENUE', '53 DRIVE', '53 ROAD', 'CALAMUS AVENUE', 'QUEENS BOULEVARD']
-    excluded_main = ['MAURICE AVENUE']
-
-    def _is_outside_cb5(row):
-        cross1 = str(row.get('crossstreet1', '')).upper().strip()
-        cross2 = str(row.get('crossstreet2', '')).upper().strip()
-        main = str(row.get('onstreet', '')).upper().strip()
-        for e in excluded_cross:
-            if e in cross1 or e in cross2:
-                return True
-        for e in excluded_main:
-            if e in main:
-                return True
-        if 'WOODSIDE' in cross1 or 'WOODSIDE' in cross2 or 'WOODSIDE' in main:
-            return True
-        return False
-
-    cb5_excluded = cb5_srts_raw.apply(_is_outside_cb5, axis=1)
-    cb5_srts = cb5_srts_raw[~cb5_excluded].copy()
-    print(f"  CB5 SRTS: {len(cb5_srts_raw):,} raw -> {len(cb5_srts):,} after cross-street filter ({cb5_excluded.sum()} excluded)")
-
-    # Polygon filter: remove any SRTS records with coords outside the actual CB5 boundary
+    # Polygon filter: the CB5 boundary polygon is the sole authority for geographic filtering.
+    # All cb=405 records with coordinates are tested against the official CB5 GeoJSON polygon.
+    cb5_srts = cb5_srts_raw.copy()
     cb5_srts['fromlatitude'] = pd.to_numeric(cb5_srts['fromlatitude'], errors='coerce')
     cb5_srts['fromlongitude'] = pd.to_numeric(cb5_srts['fromlongitude'], errors='coerce')
     cb5_srts, n_srts_poly = _filter_points_in_cb5(cb5_srts, lat_col='fromlatitude', lon_col='fromlongitude')
-    print(f"  CB5 SRTS: -> {len(cb5_srts):,} after polygon filter ({n_srts_poly} excluded)")
+    print(f"  CB5 SRTS: {len(cb5_srts_raw):,} raw -> {len(cb5_srts):,} after polygon filter ({n_srts_poly} excluded)")
 
     # Process crashes
     crashes['crash_date'] = pd.to_datetime(crashes['crash_date'], errors='coerce')

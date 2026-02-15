@@ -232,7 +232,7 @@ def _filter_points_in_cb5(df, lat_col='latitude', lon_col='longitude'):
 def _load_cb5_srts_full():
     """Load CB5 SRTS data with full filtering pipeline (all years).
 
-    Applies: cb=405 → cross-street exclusion → polygon filter.
+    Applies: cb=405 → polygon filter (CB5 boundary polygon is sole authority).
     Returns all CB5 records (all statuses) with outcome column added
     (denied/approved for resolved, NaN for pending/other).
     """
@@ -243,31 +243,10 @@ def _load_cb5_srts_full():
 
     cb5_raw = srts[srts['cb_num'] == 405].copy()
 
-    # Cross-street exclusion (north-of-LIE misattributed records)
-    excluded_cross = ['51 ROAD', '51 STREET', '52 AVENUE', '52 DRIVE', '52 ROAD', '52 COURT',
-                      '53 AVENUE', '53 DRIVE', '53 ROAD', 'CALAMUS AVENUE', 'QUEENS BOULEVARD']
-    excluded_main = ['MAURICE AVENUE']
-
-    def _is_outside(row):
-        cross1 = str(row.get('crossstreet1', '')).upper().strip()
-        cross2 = str(row.get('crossstreet2', '')).upper().strip()
-        main = str(row.get('onstreet', '')).upper().strip()
-        for e in excluded_cross:
-            if e in cross1 or e in cross2:
-                return True
-        for e in excluded_main:
-            if e in main:
-                return True
-        if 'WOODSIDE' in cross1 or 'WOODSIDE' in cross2 or 'WOODSIDE' in main:
-            return True
-        return False
-
-    cb5 = cb5_raw[~cb5_raw.apply(_is_outside, axis=1)].copy()
-
-    # Polygon filter
-    cb5['fromlatitude'] = pd.to_numeric(cb5['fromlatitude'], errors='coerce')
-    cb5['fromlongitude'] = pd.to_numeric(cb5['fromlongitude'], errors='coerce')
-    cb5, _ = _filter_points_in_cb5(cb5, lat_col='fromlatitude', lon_col='fromlongitude')
+    # Polygon filter: the CB5 boundary polygon is the sole authority.
+    cb5_raw['fromlatitude'] = pd.to_numeric(cb5_raw['fromlatitude'], errors='coerce')
+    cb5_raw['fromlongitude'] = pd.to_numeric(cb5_raw['fromlongitude'], errors='coerce')
+    cb5, _ = _filter_points_in_cb5(cb5_raw, lat_col='fromlatitude', lon_col='fromlongitude')
 
     cb5['outcome'] = cb5['segmentstatusdescription'].map({
         'Not Feasible': 'denied', 'Feasible': 'approved'
@@ -305,38 +284,16 @@ def load_and_prepare_data():
     srts_resolved = srts[srts['segmentstatusdescription'].isin(['Not Feasible', 'Feasible'])]
     cb5_srts_raw = srts_resolved[srts_resolved['cb_num'] == 405]
 
-    # CB5 boundary exclusion filter (same as generate_charts.py)
-    excluded_cross = ['51 ROAD', '51 STREET', '52 AVENUE', '52 DRIVE', '52 ROAD', '52 COURT',
-                      '53 AVENUE', '53 DRIVE', '53 ROAD', 'CALAMUS AVENUE', 'QUEENS BOULEVARD']
-    excluded_main = ['MAURICE AVENUE']
-
-    def _is_outside_cb5(row):
-        cross1 = str(row.get('crossstreet1', '')).upper().strip()
-        cross2 = str(row.get('crossstreet2', '')).upper().strip()
-        main = str(row.get('onstreet', '')).upper().strip()
-        for e in excluded_cross:
-            if e in cross1 or e in cross2:
-                return True
-        for e in excluded_main:
-            if e in main:
-                return True
-        if 'WOODSIDE' in cross1 or 'WOODSIDE' in cross2 or 'WOODSIDE' in main:
-            return True
-        return False
-
-    cb5_excluded = cb5_srts_raw.apply(_is_outside_cb5, axis=1)
-    cb5_srts = cb5_srts_raw[~cb5_excluded].copy()
+    # Polygon filter: the CB5 boundary polygon is the sole authority for geographic filtering.
+    cb5_srts = cb5_srts_raw.copy()
     cb5_srts['outcome'] = cb5_srts['segmentstatusdescription'].map({
         'Not Feasible': 'denied', 'Feasible': 'approved'
     })
-    print(f"  CB5 SRTS: {len(cb5_srts_raw):,} raw -> {len(cb5_srts):,} after cross-street filter")
-
-    # Polygon filter: SRTS
     cb5_srts['fromlatitude'] = pd.to_numeric(cb5_srts['fromlatitude'], errors='coerce')
     cb5_srts['fromlongitude'] = pd.to_numeric(cb5_srts['fromlongitude'], errors='coerce')
     cb5_srts, n_srts_excluded = _filter_points_in_cb5(
         cb5_srts, lat_col='fromlatitude', lon_col='fromlongitude')
-    print(f"  CB5 SRTS: -> {len(cb5_srts):,} after polygon filter ({n_srts_excluded} excluded)")
+    print(f"  CB5 SRTS: {len(cb5_srts_raw):,} raw -> {len(cb5_srts):,} after polygon filter ({n_srts_excluded} excluded)")
 
     # Filter SRTS to 2020–2025 for consistency with signal studies and crashes
     n_before_year = len(cb5_srts)

@@ -20,35 +20,14 @@ Per NYC official documentation, Queens Community Board 5 includes:
 
 ## Data Filtering Methodology
 
-The `cb` field in SRTS data contains some misattributed records. To ensure accuracy, we apply the following filtering logic:
+The `cb` field in SRTS data contains some misattributed records. The **official CB5 polygon** (`data_raw/cb5_boundary.geojson`) is the **sole geographic authority** for determining whether a record falls within CB5.
 
-### Exclusion Criteria
+### Filtering Pipeline
 
-Records labeled `cb=405` are **excluded** if they have cross streets that indicate locations **north of the LIE** (in CB2/CB4 Elmhurst/Woodside):
+1. **`cb=405`** — Initial filter (Queens borough 4, district 05)
+2. **Polygon boundary filter** — Shapely point-in-polygon test against the official CB5 GeoJSON
 
-**Excluded cross streets:**
-- 51 Road, 51 Street
-- 52 Avenue, 52 Drive, 52 Road, 52 Court
-- 53 Avenue, 53 Drive, 53 Road
-- Calamus Avenue
-- Queens Boulevard
-- Any street containing "Woodside"
-
-**Excluded main streets:**
-- Maurice Avenue (boundary street, not inside CB5)
-
-### Inclusion Criteria
-
-All other records with `cb=405` are included, specifically:
-
-**Definitely CB5:**
-- Caldwell Avenue (Maspeth, along LIE)
-- Queens Midtown Expressway Service Roads (LIE service roads)
-- Metropolitan Avenue corridor
-- Myrtle Avenue corridor
-- Fresh Pond Road corridor
-- Cooper Avenue
-- All numbered streets (60s-80s) with cross streets south of LIE
+No street-name heuristics are used. An earlier cross-street exclusion approach (targeting 52 Ave, 53 Ave, Calamus Ave, etc.) was removed after audit revealed it wrongly excluded 67 records that fall inside the official CB5 polygon boundary, particularly in northern Maspeth where these streets run through CB5 territory.
 
 ## Key CB5 Streets (Reference)
 
@@ -58,7 +37,7 @@ All other records with `cb=405` are included, specifically:
 - Cooper Avenue
 - Eliot Avenue
 - Juniper Valley Road
-- 60 Avenue through 80 Avenue
+- 52 Avenue through 80 Avenue (northern Maspeth through Glendale)
 
 **Major Streets (North-South):**
 - Fresh Pond Road
@@ -69,21 +48,20 @@ All other records with `cb=405` are included, specifically:
 **Maspeth Area:**
 - Caldwell Avenue
 - Grand Avenue
-- 54 Street through 58 Street area
+- Maurice Avenue (boundary street — some segments inside polygon)
+- 54 Street through 74 Street area
 
 ## Filtering Results
 
-SRTS records pass through three mandatory filtering layers:
+SRTS records pass through two filtering layers:
 
 | Step | Metric | Count |
 |------|--------|-------|
 | 1 | Raw records (cb=405) | 1,988 |
-| 2 | After cross-street exclusion | 1,913 |
-| 3 | After polygon boundary filter | ~1,959 (resolved) |
-| — | Excluded by cross-street filter | 75 |
-| — | Excluded by polygon filter | ~23 additional |
+| 2 | After polygon boundary filter | 1,962 |
+| — | Excluded by polygon filter | 26 |
 
-The 75 cross-street exclusions are demonstrably north of the LIE (52nd Ave, 53rd Ave, Calamus Ave, etc.). The polygon filter catches an additional ~23 records that pass `cb=405` but fall outside the official CB5 boundary geometry. **All three layers are mandatory** — see `_load_cb5_srts_full()` in `generate_maps.py`.
+The 26 excluded records have coordinates that fall outside the official CB5 boundary geometry. **The polygon is the sole authority** — see `_load_cb5_srts_full()` in `generate_maps.py`.
 
 ## Sources
 

@@ -2,7 +2,7 @@ Denial Reason,Count,Percent,Source Dataset
 Bus Route,36,2.1,Speed Reducer Tracking System [9n6h-pt9g]
 Stop Controls,49,2.9,Speed Reducer Tracking System [9n6h-pt9g]
 Near Speed Camera,58,3.4,Speed Reducer Tracking System [9n6h-pt9g]
-Other,149,8.7,Speed Reducer Tracking System [9n6h-pt9g]
+Other,150,8.7,Speed Reducer Tracking System [9n6h-pt9g]
 Street Too Short,156,9.1,Speed Reducer Tracking System [9n6h-pt9g]
 Driveways,255,14.9,Speed Reducer Tracking System [9n6h-pt9g]
 Not Specified,379,22.1,Speed Reducer Tracking System [9n6h-pt9g]

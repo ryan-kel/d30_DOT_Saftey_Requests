@@ -56,12 +56,11 @@ jupyter notebook analysis_notebook.ipynb
 **CRITICAL: All three datasets MUST be filtered using the official CB5 polygon (shapely point-in-polygon). Never rely solely on field-level filters.**
 
 - **Signal Studies**: Filter by borough='Queens' and street names within CB5 boundaries → then polygon filter on geocoded coordinates
-- **SRTS (Speed Bumps)**: Three mandatory filtering layers, applied in order:
+- **SRTS (Speed Bumps)**: Two filtering layers:
   1. `cb='405'` (Queens CB5 code format: borough 4 + district 05)
-  2. Cross-street exclusion (streets north of the LIE — see `REFERENCE_cb5_boundaries.md`)
-  3. **Polygon boundary filter** (shapely point-in-polygon against official CB5 GeoJSON)
+  2. **Polygon boundary filter** (shapely point-in-polygon against official CB5 GeoJSON) — **sole geographic authority**
 
-  **WARNING:** `cb=405` alone is insufficient — ~29 records pass the cb filter but fall outside the actual CB5 polygon. All three layers are mandatory. In `generate_maps.py`, use `_load_cb5_srts_full()` which applies all three layers automatically. **Never load SRTS data directly from CSV with only `cb=405`.**
+  **WARNING:** `cb=405` alone is insufficient — ~26 records pass the cb filter but fall outside the actual CB5 polygon. In `generate_maps.py`, use `_load_cb5_srts_full()` which applies both layers automatically. **Never load SRTS data directly from CSV with only `cb=405`.** The polygon is the sole geographic authority — no street-name heuristics.
 - **Crashes**: No community board field — uses polygon filter exclusively
 - See `REFERENCE_cb5_boundaries.md` for boundary filtering rules
 
@@ -83,7 +82,7 @@ Accessible Pedestrian Signals are **excluded** from approval rate calculations b
 
 | Function | Purpose |
 |----------|---------|
-| `_load_cb5_srts_full()` | Load SRTS data with full CB5 pipeline (cb=405 + cross-street exclusion + polygon filter). **All SRTS charts must use this.** |
+| `_load_cb5_srts_full()` | Load SRTS data with full CB5 pipeline (cb=405 + polygon filter). **All SRTS charts must use this.** |
 | `_normalize_intersection(a, b)` | Alphabetically sort two street names so "A & B" == "B & A". Prevents reversed-name duplicates. |
 | `_spatial_dedup(df, radius_m)` | Greedy spatial de-duplication: sort by crashes desc, skip entries within `radius_m` of already-selected locations. Used at 150m for top-15 rankings. |
 | `_filter_points_in_cb5(df)` | Polygon filter against official CB5 boundary. Excludes rows without coordinates. |

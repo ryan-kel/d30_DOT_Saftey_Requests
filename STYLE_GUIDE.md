@@ -113,9 +113,9 @@ Every chart title **must** include:
 
 **Format**: QCB5 or Citywide **always** in the main title line, **never** in the parenthetical subtitle. Parentheses contain only data qualifiers (n=, dates, Excl. APS).
 
-- Correct: `QCB5 Signal Study Requests by Type\n(n=510, 2020–2025)`
+- Correct: `QCB5 Signal Study Requests by Type\n(n=499, 2020–2025)`
 - Correct: `Citywide Signal Study Requests by Borough\n(n=17,824, 2020–2025)`
-- Wrong: `Signal Study Requests by Type\n(QCB5, n=510, 2020–2025)`
+- Wrong: `Signal Study Requests by Type\n(QCB5, n=499, 2020–2025)`
 
 ### 3.2 Date Ranges
 

@@ -1,26 +1,26 @@
 Rank,reference_id,location_name,dataset,request_type,request_year,Source File,latitude,longitude,crashes_150m,injuries_150m,ped_injuries_150m,fatalities_150m
-1,CQ21-2787B,Aubrey Avenue & Metropolitan Avenue,Signal Study,Traffic Signal,2021,data_cb5_signal_studies.csv,40.711994,-73.86073,66,101,4,0
+1,CQ23-3520B,Aubrey Avenue & Metropolitan Avenue,Signal Study,Traffic Signal,2024,data_cb5_signal_studies.csv,40.711994,-73.86073,66,101,4,0
 2,CQ23-0750B,61 Street & Metropolitan Avenue,Signal Study,Left Turn Arrow/Signal,2023,data_cb5_signal_studies.csv,40.712757,-73.90225,59,70,17,0
 3,CQ24-2047,69 Avenue & Onderdonk Avenue,Signal Study,All-Way Stop,2024,data_cb5_signal_studies.csv,40.70123,-73.902565,57,67,15,0
-4,CQ21-1280B,Cooper Avenue & Cypress Avenue,Signal Study,Traffic Signal,2021,data_cb5_signal_studies.csv,40.694107,-73.89737,55,70,12,0
+4,CQ23-1576B,Cooper Avenue & Cypress Avenue,Signal Study,Left Turn Arrow/Signal,2023,data_cb5_signal_studies.csv,40.694107,-73.89737,55,70,12,0
 5,CQ25-0094B,Forest Avenue & Metropolitan Avenue,Signal Study,Leading Pedestrian Interval,2025,data_cb5_signal_studies.csv,40.712902,-73.90608,54,64,19,0
 6,CQ20-0921B,Bleecker Street & Fresh Pond Road,Signal Study,Traffic Signal,2020,data_cb5_signal_studies.csv,40.711903,-73.90019,54,64,16,0
-7,CQ22-1132,Cypress Avenue & Vermont Place,Signal Study,Traffic Signal,2022,data_cb5_signal_studies.csv,40.691433,-73.89063,52,75,1,0
+7,CQ25-3033B,Cypress Avenue & Vermont Place,Signal Study,Traffic Signal,2025,data_cb5_signal_studies.csv,40.691433,-73.89063,52,75,1,0
 8,CQ25-0172,Cypress Avenue & Putnam Avenue,Signal Study,All-Way Stop,2025,data_cb5_signal_studies.csv,40.700367,-73.906624,51,55,13,0
 9,CQ22-1495,Hamilton Place & Perry Avenue,Signal Study,All-Way Stop,2022,data_cb5_signal_studies.csv,40.724888,-73.89899,47,61,5,0
 10,CQ21-0387B,Forest Avenue & Myrtle Avenue,Signal Study,Traffic Signal Removal,2021,data_cb5_signal_studies.csv,40.700497,-73.90021,46,56,20,0
-11,CQ24-2174B,Borden Avenue & Maurice Avenue,Signal Study,Traffic Signal,2024,data_cb5_signal_studies.csv,40.727733,-73.906731,45,68,1,0
-12,CQ22-1863B,Grand Avenue & Maspeth Avenue,Signal Study,Traffic Signal,2022,data_cb5_signal_studies.csv,40.7228,-73.90182,40,42,4,0
-13,CQ20-1068,Myrtle Avenue & Summerfield Street,Signal Study,All-Way Stop,2020,data_cb5_signal_studies.csv,40.70052,-73.897962,39,50,16,0
-14,CQ22-1673B,69 Street & Eliot Avenue,Signal Study,Left Turn Arrow/Signal,2022,data_cb5_signal_studies.csv,40.71946,-73.89117,38,50,12,0
-15,CQ20-1355B,Fresh Pond Road & Putnam Avenue,Signal Study,Traffic Signal,2020,data_cb5_signal_studies.csv,40.706497,-73.89695,38,53,12,0
-16,CQ22-3213B,Myrtle Avenue & St Nicholas Avenue,Signal Study,Traffic Signal,2022,data_cb5_signal_studies.csv,40.69984,-73.90868,37,40,11,0
+11,CQ21-1110B,Borden Avenue & Maurice Avenue,Signal Study,Left Turn Arrow/Signal,2021,data_cb5_signal_studies.csv,40.727733,-73.906731,45,68,1,0
+12,CQ20-1166,61 Street & 62 Street,Signal Study,All-Way Stop,2020,data_cb5_signal_studies.csv,40.713271500000005,-73.899743,45,51,12,0
+13,CQ22-1863B,Grand Avenue & Maspeth Avenue,Signal Study,Traffic Signal,2022,data_cb5_signal_studies.csv,40.7228,-73.90182,40,42,4,0
+14,CQ20-1068,Myrtle Avenue & Summerfield Street,Signal Study,All-Way Stop,2020,data_cb5_signal_studies.csv,40.70052,-73.897962,39,50,16,0
+15,CQ22-1673B,69 Street & Eliot Avenue,Signal Study,Left Turn Arrow/Signal,2022,data_cb5_signal_studies.csv,40.71946,-73.89117,38,50,12,0
+16,CQ20-1355B,Fresh Pond Road & Putnam Avenue,Signal Study,Traffic Signal,2020,data_cb5_signal_studies.csv,40.706497,-73.89695,38,53,12,0
 17,CQ22-1051B,64 Street & Myrtle Avenue,Signal Study,Leading Pedestrian Interval,2022,data_cb5_signal_studies.csv,40.700964,-73.89245299999999,37,44,11,0
-18,CQ20-0925B,Centre Street & Seneca Avenue,Signal Study,Traffic Signal,2020,data_cb5_signal_studies.csv,40.699585,-73.902245,35,51,8,0
-19,CQ20-1559B,Borden Avenue & Grand Avenue,Signal Study,Traffic Signal,2020,data_cb5_signal_studies.csv,40.725635,-73.895856,34,43,6,0
-20,CQ22-3501,60 Avenue & 69 Street,Signal Study,Traffic Signal,2022,data_cb5_signal_studies.csv,40.72143,-73.892746,34,41,1,0
-21,CQ24-0295B,Eliot Avenue & Fresh Pond Road,Signal Study,Leading Pedestrian Interval,2024,data_cb5_signal_studies.csv,40.714622,-73.90117,33,42,7,1
-22,CQ25-1762B,Union Turnpike & Woodhaven Boulevard,Signal Study,Traffic Signal,2025,data_cb5_signal_studies.csv,40.70559,-73.85823,33,44,3,0
-23,CQ22-2347B,Fresh Pond Road & Palmetto Street,Signal Study,Traffic Signal,2022,data_cb5_signal_studies.csv,40.7084,-73.89801,31,40,4,0
-24,CQ24-0508B,81 Road & Woodhaven Boulevard,Signal Study,Left Turn Arrow/Signal,2024,data_cb5_signal_studies.csv,40.70456,-73.856735,31,42,0,0
-25,CQ22-0469B,70 Street & Cooper Avenue,Signal Study,Leading Pedestrian Interval,2022,data_cb5_signal_studies.csv,40.70171,-73.88091,29,35,11,0
+18,CQ24-0024B,Myrtle Avenue & St Nicholas Avenue,Signal Study,Traffic Signal,2023,data_cb5_signal_studies.csv,40.69984,-73.90868,37,40,11,0
+19,CQ20-0925B,Centre Street & Seneca Avenue,Signal Study,Traffic Signal,2020,data_cb5_signal_studies.csv,40.699585,-73.902245,35,51,8,0
+20,CQ20-1559B,Borden Avenue & Grand Avenue,Signal Study,Traffic Signal,2020,data_cb5_signal_studies.csv,40.725635,-73.895856,34,43,6,0
+21,CQ22-3501,60 Avenue & 69 Street,Signal Study,Traffic Signal,2022,data_cb5_signal_studies.csv,40.72143,-73.892746,34,41,1,0
+22,CQ20-2507B,Union Turnpike & Woodhaven Boulevard,Signal Study,Leading Pedestrian Interval,2020,data_cb5_signal_studies.csv,40.70559,-73.85823,33,44,3,0
+23,CQ20-0551B,Eliot Avenue & Fresh Pond Road,Signal Study,Leading Pedestrian Interval,2020,data_cb5_signal_studies.csv,40.714622,-73.90117,33,42,7,1
+24,CQ22-2347B,Fresh Pond Road & Palmetto Street,Signal Study,Traffic Signal,2022,data_cb5_signal_studies.csv,40.7084,-73.89801,31,40,4,0
+25,CQ24-0508B,81 Road & Woodhaven Boulevard,Signal Study,Left Turn Arrow/Signal,2024,data_cb5_signal_studies.csv,40.70456,-73.856735,31,42,0,0

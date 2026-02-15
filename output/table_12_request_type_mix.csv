@@ -1,6 +1,6 @@
 Request Type,CB5 Count,CB5 Share (%),Citywide Count,Citywide Share (%),Source Dataset
-Traffic Signal,183,21.0,8882,28.6,Signal Studies [w76s-c5u4]
-All-Way Stop,164,18.8,4829,15.5,Signal Studies [w76s-c5u4]
-Leading Pedestrian Interval,56,6.4,890,2.9,Signal Studies [w76s-c5u4]
-Left Turn Arrow/Signal,37,4.2,1166,3.7,Signal Studies [w76s-c5u4]
-Speed Bumps,431,49.5,15334,49.3,Speed Reducer Tracking System [9n6h-pt9g]
+Traffic Signal,178,20.7,8882,28.6,Signal Studies [w76s-c5u4]
+All-Way Stop,163,19.0,4829,15.5,Signal Studies [w76s-c5u4]
+Leading Pedestrian Interval,54,6.3,890,2.9,Signal Studies [w76s-c5u4]
+Left Turn Arrow/Signal,34,4.0,1166,3.7,Signal Studies [w76s-c5u4]
+Speed Bumps,431,50.1,15334,49.3,Speed Reducer Tracking System [9n6h-pt9g]
