@@ -34,7 +34,6 @@ CQ25-0556,60 STREET,56 DRIVE,All-Way Stop,denied,2025-03-10,2025-07-08T00:00:00.
 CQ25-0497B,69 STREET,JUNIPER VALLEY ROAD,Left Turn Arrow/Signal,denied,2025-02-26,2025-08-11T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,9,11,3,0,40.72184062371875,-73.89068898306941,data_cb5_signal_studies.csv
 CQ25-0457B,ELIOT AVENUE,LUTHERAN AVENUE,Left Turn Arrow/Signal,denied,2025-02-18,2025-08-21T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,13,16,3,0,40.722525000000005,-73.884555,data_cb5_signal_studies.csv
 CQ25-0412,FAIRVIEW AVENUE,GREENE AVENUE,All-Way Stop,denied,2025-02-19,2025-07-08T00:00:00.000,Study Request Denial,,,No,16,19,5,0,40.708553,-73.908966,data_cb5_signal_studies.csv
-CQ25-0361B,WOODHAVEN BOULEVARD,ELIOT AVENUE,Traffic Signal,denied,2025-02-10,2025-07-29T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,6,7,1,0,40.7156525,-73.875467,data_cb5_signal_studies.csv
 CQ25-0296B,86 STREET,ELIOT AVENUE,Leading Pedestrian Interval,denied,2025-02-03,2025-07-29T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,21,26,4,1,40.72911,-73.87161,data_cb5_signal_studies.csv
 CQ25-0286B,ELIOT AVENUE,84 STREET,Leading Pedestrian Interval,denied,2025-01-28,2025-04-25T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,6,9,1,0,40.72709,-73.87472,data_cb5_signal_studies.csv
 CQ25-0285B,ELIOT AVENUE,84 STREET,Traffic Signal,denied,2025-01-28,2025-04-24T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,6,9,1,0,40.72709,-73.87472,data_cb5_signal_studies.csv
@@ -49,7 +48,6 @@ CQ24-3516B,SENECA AVENUE,CATALPA AVENUE,Traffic Signal,denied,2024-10-30,2025-02
 CQ24-3431,PUTNAM AVENUE,WOODWARD AVENUE,Traffic Signal,denied,2024-08-09,2025-03-13T00:00:00.000,Study Request Denial,,SAINT MATTHIAS SCHOOL,No,22,25,8,0,40.703537,-73.90339,data_cb5_signal_studies.csv
 CQ24-3155,STEPHEN STREET,WYCKOFF AVENUE,All-Way Stop,denied,2024-09-23,2025-03-13T00:00:00.000,Study Request Denial,,,No,8,9,4,0,40.695526,-73.903946,data_cb5_signal_studies.csv
 CQ24-2945,65 STREET,CATALPA AVENUE,All-Way Stop,denied,2024-09-10,2024-10-02T00:00:00.000,Study Request Denial,,,No,7,7,3,0,40.704845,-73.892136,data_cb5_signal_studies.csv
-CQ24-2882,DRY HARBOR ROAD,85 STREET,All-Way Stop,denied,2024-09-06,2025-03-17T00:00:00.000,Study Request Denial,,RESURRECTION ASCENSION CATHOLIC ACADEMY,No,4,4,1,0,40.7250515,-73.87297749999999,data_cb5_signal_studies.csv
 CQ24-2843,66 ROAD,71 STREET,All-Way Stop,denied,2024-09-04,2025-03-12T00:00:00.000,Study Request Denial,,Q255 D75 @ PS 128,No,5,12,1,0,40.71395,-73.884209,data_cb5_signal_studies.csv
 CQ24-2742B,METROPOLITAN AVENUE,GRANDVIEW AVENUE,Leading Pedestrian Interval,denied,2024-08-06,2025-03-21T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,17,20,1,0,40.713333,-73.91305,data_cb5_signal_studies.csv
 CQ24-2734B,64 PLACE,CENTRAL AVENUE,Traffic Signal,denied,2024-08-06,2024-09-10T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,36,44,8,0,40.702126,-73.89164,data_cb5_signal_studies.csv
@@ -85,7 +83,6 @@ CQ24-1264B,METROPOLITAN AVENUE,75 STREET,Left Turn Arrow/Signal,denied,2024-03-1
 CQ24-1263B,METROPOLITAN AVENUE,69 STREET,Left Turn Arrow/Signal,denied,2024-03-13,2024-08-27T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,21,24,6,0,40.712204,-73.88638,data_cb5_signal_studies.csv
 CQ24-1262B,METROPOLITAN AVENUE,HIMROD STREET,Left Turn Arrow/Signal,denied,2024-03-13,2024-07-27T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,44,53,14,0,40.712948,-73.90693,data_cb5_signal_studies.csv
 CQ24-1257,67 STREET,OTTO ROAD,All-Way Stop,denied,2024-04-12,2024-05-06T00:00:00.000,Study Request Denial,,,No,2,2,0,0,40.7056,-73.889118,data_cb5_signal_studies.csv
-CQ24-1255B,80 STREET,COOPER AVENUE,Traffic Signal,denied,2024-03-12,2024-07-09T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,5,8,2,0,40.70774925,-73.877156,data_cb5_signal_studies.csv
 CQ24-1249B,WOODHAVEN BOULEVARD,DANA COURT,Traffic Signal,denied,2024-03-12,2024-03-19T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,8,9,3,0,40.722619,-73.869554,data_cb5_signal_studies.csv
 CQ24-1128,67 STREET,ELIOT AVENUE,Traffic Signal,denied,2024-04-04,2024-04-30T00:00:00.000,Study Request Denial,,,No,7,20,0,0,40.718204,-73.89377,data_cb5_signal_studies.csv
 CQ24-1127,68 STREET,61 ROAD,All-Way Stop,denied,2024-04-03,2024-05-06T00:00:00.000,Study Request Denial,,,No,9,22,0,0,40.718182,-73.891997,data_cb5_signal_studies.csv
@@ -97,7 +94,6 @@ CQ24-0875B,METROPOLITAN AVENUE,74 STREET,Left Turn Arrow/Signal,denied,2024-03-1
 CQ24-0873B,MYRTLE AVENUE,FRESH POND ROAD,Left Turn Arrow/Signal,denied,2024-03-13,2024-08-21T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,28,34,6,0,40.700798,-73.894585,data_cb5_signal_studies.csv
 CQ24-0872B,MYRTLE AVENUE,73 PLACE,Left Turn Arrow/Signal,denied,2024-03-13,2024-08-12T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,11,14,1,0,40.702374,-73.87544,data_cb5_signal_studies.csv
 CQ24-0798,69 ROAD,74 STREET,All-Way Stop,denied,2024-03-11,2024-04-16T00:00:00.000,Study Request Denial,,,No,4,7,1,0,40.70796,-73.877777,data_cb5_signal_studies.csv
-CQ24-0797,69 ROAD,79 STREET,All-Way Stop,denied,2024-03-11,2024-08-27T00:00:00.000,Study Request Denial,,,No,7,7,2,0,40.709789,-73.87482,data_cb5_signal_studies.csv
 CQ24-0796,69 ROAD,73 PLACE,All-Way Stop,denied,2024-03-11,2024-04-08T00:00:00.000,Study Request Denial,,,No,4,7,1,0,40.70796,-73.877785,data_cb5_signal_studies.csv
 CQ24-0736B,BORDEN AVENUE,HAMILTON PLACE,Traffic Signal,denied,2024-02-15,2024-06-15T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,24,28,3,0,40.72616,-73.90012,data_cb5_signal_studies.csv
 CQ24-0613,PLEASANT VIEW STREET,PENELOPE AVENUE,All-Way Stop,denied,2024-02-25,2024-04-16T00:00:00.000,Study Request Denial,,,No,1,1,0,0,40.71637375498335,-73.8824929995786,data_cb5_signal_studies.csv
@@ -107,7 +103,6 @@ CQ24-0499B,WOODHAVEN BOULEVARD,FURMANVILLE AVENUE,Traffic Signal,denied,2024-01-
 CQ24-0468,CALDWELL AVENUE,69 LANE,Traffic Signal,denied,2024-02-15,2024-08-21T00:00:00.000,Study Request Denial,,,No,5,6,0,0,40.724839,-73.892293,data_cb5_signal_studies.csv
 CQ24-0295B,FRESH POND ROAD,ELIOT AVENUE,Leading Pedestrian Interval,denied,2024-01-30,2024-04-19T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,33,42,7,1,40.714622,-73.90117,data_cb5_signal_studies.csv
 CQ24-0154B,GRAND AVENUE,BORDEN AVENUE,Left Turn Arrow/Signal,denied,2024-01-02,2024-02-27T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,34,43,6,0,40.725635,-73.895856,data_cb5_signal_studies.csv
-CQ24-0062B,WOODHAVEN BOULEVARD,ELIOT AVENUE,Traffic Signal,denied,2023-12-12,2024-01-12T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,6,7,1,0,40.7156525,-73.875467,data_cb5_signal_studies.csv
 CQ24-0024B,MYRTLE AVENUE,ST NICHOLAS AVENUE,Traffic Signal,denied,2023-12-27,2024-02-28T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,37,40,11,0,40.69984,-73.90868,data_cb5_signal_studies.csv
 CQ23-3634,RUST STREET,FLUSHING AVENUE,All-Way Stop,denied,2023-12-28,2024-02-20T00:00:00.000,Study Request Denial,,WALTER REED PUBLIC SCHOOL 9,No,3,3,2,0,40.71677820600362,-73.9090663474871,data_cb5_signal_studies.csv
 CQ23-3628,WOODBINE STREET,64 STREET,All-Way Stop,denied,2023-12-27,2024-03-11T00:00:00.000,Study Request Denial,,,No,29,42,7,0,40.70776,-73.897565,data_cb5_signal_studies.csv
@@ -118,7 +113,6 @@ CQ23-3380,64 PLACE,74 AVENUE,All-Way Stop,denied,2023-11-28,2024-03-11T00:00:00.
 CQ23-3228,72 STREET,CENTRAL AVENUE,Traffic Signal,denied,2023-11-15,2024-01-17T00:00:00.000,Study Request Denial,,,No,8,8,2,0,40.705017,-73.87944,data_cb5_signal_studies.csv
 CQ23-3227B,METROPOLITAN AVENUE,73 PLACE,Leading Pedestrian Interval,denied,2023-05-25,2024-01-23T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,23,28,12,0,40.712727,-73.87935,data_cb5_signal_studies.csv
 CQ23-3191,73 PLACE,66 ROAD,All-Way Stop,denied,2023-11-13,2024-01-17T00:00:00.000,Study Request Denial,,,No,8,9,4,0,40.715053,-73.881151,data_cb5_signal_studies.csv
-CQ23-3106B,63 DRIVE,WOODHAVEN BOULEVARD,Traffic Signal,denied,2023-10-27,2024-03-13T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,18,21,1,0,40.709262,-73.85948399999998,data_cb5_signal_studies.csv
 CQ23-3093B,FRESH POND ROAD,60 ROAD,Leading Pedestrian Interval,denied,2023-10-26,2024-01-23T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,6,7,1,0,40.716143,-73.901585,data_cb5_signal_studies.csv
 CQ23-3043,69 STREET,COOPER AVENUE,All-Way Stop,denied,2023-10-24,2024-06-24T00:00:00.000,Study Request Denial,,REDEEMER LUTHERAN SCHOOL /  WATCH US GROW GROUP FAMILY DAYCARE.,No,24,29,6,0,40.70086,-73.882454,data_cb5_signal_studies.csv
 CQ23-3012,69 ROAD,75 STREET,All-Way Stop,denied,2023-10-20,2023-11-20T00:00:00.000,Study Request Denial,,,No,4,7,2,0,40.70844,-73.87621,data_cb5_signal_studies.csv
@@ -126,7 +120,6 @@ CQ23-2785B,METROPOLITAN AVENUE,TONSOR STREET,Leading Pedestrian Interval,denied,
 CQ23-2703,SENECA AVENUE,GREENE AVENUE,All-Way Stop,denied,2023-09-25,2023-11-20T00:00:00.000,Study Request Denial,,P.S. 81Q (ANNEX),No,22,30,4,0,40.705437,-73.91214,data_cb5_signal_studies.csv
 CQ23-2677B,FOREST AVENUE,METROPOLITAN AVENUE,Traffic Signal,denied,2023-09-22,2024-06-21T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,54,64,19,0,40.712902,-73.90608,data_cb5_signal_studies.csv
 CQ23-2646,PUTNAM AVENUE,60 PLACE,All-Way Stop,denied,2023-09-19,2023-12-04T00:00:00.000,Study Request Denial,,,No,9,10,4,0,40.705772,-73.89997,data_cb5_signal_studies.csv
-CQ23-2644,WOODHAVEN BOULEVARD,ELIOT AVENUE,Traffic Signal,denied,2023-09-18,2023-12-11T00:00:00.000,Study Request Denial,,RESURRECTION ASCENSION CATHOLIC ACADEMY,No,6,7,1,0,40.7156525,-73.875467,data_cb5_signal_studies.csv
 CQ23-2629,PUTNAM AVENUE,60 LANE,Traffic Signal,denied,2023-09-19,2023-10-30T00:00:00.000,Study Request Denial,,,No,9,10,4,0,40.706017,-73.89896,data_cb5_signal_studies.csv
 CQ23-2567,ONDERDONK AVENUE,HIMROD STREET,All-Way Stop,denied,2023-09-14,2024-06-24T00:00:00.000,Study Request Denial,,THE JUNGLE DAYCARE / YAMI & GRANDMA'S DAYCARE.,No,19,28,4,0,40.707222,-73.912695,data_cb5_signal_studies.csv
 CQ23-2566,68 PLACE,70 AVENUE,All-Way Stop,denied,2023-09-14,2023-11-08T00:00:00.000,Study Request Denial,,PS 91Q- THE RICHARD ARKWRIGHT SCHOOL,No,7,9,1,0,40.705204,-73.885185,data_cb5_signal_studies.csv
@@ -259,7 +252,6 @@ CQ22-0485B,COOPER AVENUE,CYPRESS HILLS STREET,Leading Pedestrian Interval,denied
 CQ22-0484B,COOPER AVENUE,METROPOLITAN AVENUE,Leading Pedestrian Interval,denied,2022-02-17,2023-07-19T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,28,44,2,0,40.7122,-73.86208,data_cb5_signal_studies.csv
 CQ22-0482,FLUSHING AVENUE,58 DRIVE,Traffic Signal,denied,2022-02-16,2023-01-23T00:00:00.000,Study Request Denial,,,No,10,15,2,0,40.719711,-73.908257,data_cb5_signal_studies.csv
 CQ22-0479B,COOPER AVENUE,83 STREET,Leading Pedestrian Interval,denied,2022-02-17,2022-03-29T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,12,16,3,1,40.7104,-73.866625,data_cb5_signal_studies.csv
-CQ22-0476B,COOPER AVENUE,80 STREET,Leading Pedestrian Interval,denied,2022-02-17,2022-03-28T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,5,8,2,0,40.70774925,-73.877156,data_cb5_signal_studies.csv
 CQ22-0475B,73 PLACE,COOPER AVENUE,Leading Pedestrian Interval,denied,2022-02-17,2022-03-29T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,12,16,4,0,40.70547251451677,-73.87649615255108,data_cb5_signal_studies.csv
 CQ22-0474B,COOPER AVENUE,66 STREET,Leading Pedestrian Interval,denied,2022-02-17,2022-03-29T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,4,4,0,0,40.699678,-73.887714,data_cb5_signal_studies.csv
 CQ22-0473B,COOPER AVENUE,64 STREET,Leading Pedestrian Interval,denied,2022-02-17,2022-03-29T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,15,22,2,0,40.697933,-73.892006,data_cb5_signal_studies.csv
@@ -273,7 +265,6 @@ CQ22-0432B,COOPER AVENUE,CYPRESS AVENUE,Leading Pedestrian Interval,denied,2022-
 CQ22-0405,68 AVENUE,80 STREET,Traffic Signal,denied,2022-02-10,2022-05-25T00:00:00.000,Study Request Denial,,PS 87,No,11,16,2,0,40.711246,-73.87095,data_cb5_signal_studies.csv
 CQ22-0262,70 AVENUE,65 PLACE,Traffic Signal,denied,2022-02-02,2022-09-26T00:00:00.000,Study Request Denial,,,No,8,9,0,0,40.703968,-73.89041,data_cb5_signal_studies.csv
 CQ22-0247,MYRTLE AVENUE,81 STREET,Traffic Signal,denied,2022-02-01,2022-08-22T00:00:00.000,Study Request Denial,,,No,11,13,3,0,40.7030515,-73.867253,data_cb5_signal_studies.csv
-CQ22-0218,MYRTLE AVENUE,81 ROAD,Traffic Signal,denied,2022-01-28,2022-08-22T00:00:00.000,Study Request Denial,,,No,9,12,1,0,40.702782,-73.874364,data_cb5_signal_studies.csv
 CQ22-0217,79 STREET,78 AVENUE,All-Way Stop,denied,2022-01-28,2022-10-24T00:00:00.000,Study Request Denial,,PS / IS 119 THE GLENDALE SCHOOL,No,4,6,0,0,40.704704,-73.87154,data_cb5_signal_studies.csv
 CQ22-0173B,FRESH POND ROAD,METROPOLITAN AVENUE,Left Turn Arrow/Signal,denied,2022-01-26,2023-08-15T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,57,64,17,0,40.712696,-73.900604,data_cb5_signal_studies.csv
 CQ22-0051B,PENELOPE AVENUE,80 STREET,Traffic Signal,denied,2022-01-10,2022-02-24T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,18,27,2,0,40.719395,-73.87471,data_cb5_signal_studies.csv
@@ -302,7 +293,6 @@ CQ21-1754,66 STREET,53 AVENUE,All-Way Stop,denied,2021-08-17,2022-04-18T00:00:00
 CQ21-1549,COOPER AVENUE,60 STREET,Traffic Signal,denied,2021-07-23,2022-03-28T00:00:00.000,Study Request Denial,,PS 68Q,No,8,8,3,0,40.69513,-73.895615,data_cb5_signal_studies.csv
 CQ21-1518,69 STREET,59 DRIVE,All-Way Stop,denied,2021-07-19,2022-05-04T00:00:00.000,Study Request Denial,,,No,28,33,0,0,40.72203,-73.89322,data_cb5_signal_studies.csv
 CQ21-1506B,MYRTLE AVENUE,62 STREET,Traffic Signal,denied,2021-07-20,,Engineering Study Completed     (Signals Engineering),,,No,22,26,7,0,40.70089,-73.89336,data_cb5_signal_studies.csv
-CQ21-1495,ADMIRAL AVENUE,TERRACE COURT,All-Way Stop,denied,2021-07-15,2022-05-04T00:00:00.000,Study Request Denial,,,No,7,8,0,0,40.712283,-73.89770199999998,data_cb5_signal_studies.csv
 CQ21-1386,GRANDVIEW AVENUE,GROVE STREET,All-Way Stop,denied,2021-07-02,2024-04-25T00:00:00.000,Study Request Denial,,,No,11,13,3,0,40.708427,-73.905525,data_cb5_signal_studies.csv
 CQ21-1339,69 AVENUE,73 PLACE,All-Way Stop,denied,2021-09-24,2022-03-28T00:00:00.000,Study Request Denial,,,No,4,4,1,0,40.709814,-73.87853099999998,data_cb5_signal_studies.csv
 CQ21-1280B,CYPRESS AVENUE,COOPER AVENUE,Traffic Signal,denied,2021-06-22,2021-07-30T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,55,70,12,0,40.694107,-73.89737,data_cb5_signal_studies.csv
@@ -317,10 +307,9 @@ CQ21-0912B,FOREST AVENUE,67 AVENUE,Traffic Signal,denied,2021-05-05,2021-05-20T0
 CQ21-0868B,METROPOLITAN AVENUE,WOODHAVEN BOULEVARD,Left Turn Arrow/Signal,denied,2021-04-29,2022-02-10T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,46,69,3,0,40.711845,-73.859764,data_cb5_signal_studies.csv
 CQ21-0791,69 STREET,55 AVENUE,All-Way Stop,denied,2021-04-23,2021-10-18T00:00:00.000,Study Request Denial,,,No,24,28,5,0,40.727787,-73.89551,data_cb5_signal_studies.csv
 CQ21-0748B,FRESH POND ROAD,MENAHAN STREET,Traffic Signal,denied,2021-04-21,2021-10-04T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,13,16,5,0,40.710851,-73.901268,data_cb5_signal_studies.csv
-CQ21-0722,74 STREET,MYRTLE AVENUE,Traffic Signal,denied,2021-04-16,2022-01-24T00:00:00.000,Study Request Denial,,,No,0,0,0,0,40.714807,-73.8896015,data_cb5_signal_studies.csv
+CQ21-0722,74 STREET,MYRTLE AVENUE,Traffic Signal,denied,2021-04-16,2022-01-24T00:00:00.000,Study Request Denial,,,No,13,16,1,0,40.7024,-73.8749,data_cb5_signal_studies.csv
 CQ21-0614,60 AVENUE,71 STREET,All-Way Stop,denied,2021-04-06,2021-09-27T00:00:00.000,Study Request Denial,,,No,7,9,2,0,40.72325,-73.888824,data_cb5_signal_studies.csv
 CQ21-0579,BROWN PLACE,58 AVENUE,All-Way Stop,denied,2021-03-29,2021-10-04T00:00:00.000,Study Request Denial,,,No,10,12,2,0,40.724068,-73.895776,data_cb5_signal_studies.csv
-CQ21-0577,CENTRE STREET,WYCKOFF AVENUE,Traffic Signal,denied,2021-03-30,2021-10-12T00:00:00.000,Study Request Denial,,,No,19,33,7,0,40.6975555,-73.9030955,data_cb5_signal_studies.csv
 CQ21-0557,60 STREET,67 AVENUE,All-Way Stop,denied,2021-03-26,2021-10-25T00:00:00.000,Study Request Denial,,PUCHATEK DAYCARE,No,15,17,6,0,40.7046605130931,-73.9004080569593,data_cb5_signal_studies.csv
 CQ21-0425B,FLUSHING AVENUE,ONDERDONK AVENUE,Left Turn Arrow/Signal,denied,2021-03-04,2021-09-13T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,16,21,1,0,40.711452,-73.91987,data_cb5_signal_studies.csv
 CQ21-0391B,METROPOLITAN AVENUE,FLUSHING AVENUE,Left Turn Arrow/Signal,denied,2021-02-25,2021-10-18T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,18,22,0,0,40.713295,-73.916238,data_cb5_signal_studies.csv
@@ -332,18 +321,15 @@ CQ20-2509B,GRAND AVENUE,74 STREET,Traffic Signal,denied,2020-12-08,2021-01-19T00
 CQ20-2507B,WOODHAVEN BOULEVARD,UNION TURNPIKE,Leading Pedestrian Interval,denied,2020-12-08,2021-12-09T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,33,44,3,0,40.70559,-73.85823,data_cb5_signal_studies.csv
 CQ20-2463,53 DRIVE,67 STREET,All-Way Stop,denied,2020-12-04,2021-07-06T00:00:00.000,Study Request Denial,,,No,1,1,0,0,40.729603,-73.89784,data_cb5_signal_studies.csv
 CQ20-2399,60 ROAD,69 STREET,Traffic Signal,denied,2020-11-16,2021-07-06T00:00:00.000,Study Request Denial,,,No,25,32,2,0,40.72082,-73.892265,data_cb5_signal_studies.csv
-CQ20-2348B,GRAND AVENUE,69 PLACE,Traffic Signal,denied,2020-11-16,2021-02-18T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,1,1,0,0,40.7216685,-73.89512500000001,data_cb5_signal_studies.csv
 CQ20-2345,METROPOLITAN AVENUE,ADMIRAL AVENUE,Traffic Signal,denied,2020-11-13,2021-07-06T00:00:00.000,Study Request Denial,,,No,7,8,0,0,40.71258,-73.897684,data_cb5_signal_studies.csv
 CQ20-2281,METROPOLITAN AVENUE,FLUSHING AVENUE,Traffic Signal,denied,2020-11-05,2021-06-21T00:00:00.000,Study Request Denial,,,No,18,22,0,0,40.713295,-73.916238,data_cb5_signal_studies.csv
 CQ20-2280B,69 STREET,62 AVENUE,Traffic Signal,denied,2020-11-05,2020-11-18T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,4,7,2,0,40.717617,-73.88954,data_cb5_signal_studies.csv
 CQ20-2242,76 STREET,60 ROAD,All-Way Stop,denied,2020-10-28,2021-06-14T00:00:00.000,Study Request Denial,,,No,1,1,0,0,40.71487910247034,-73.9170547061539,data_cb5_signal_studies.csv
 CQ20-2241,CALDWELL AVENUE,76 STREET,All-Way Stop,denied,2020-10-28,2021-06-14T00:00:00.000,Study Request Denial,,,No,1,1,1,0,40.7247871573391,-73.88493300424899,data_cb5_signal_studies.csv
-CQ20-2167,58 AVENUE,79 STREET,All-Way Stop,denied,2020-10-22,2021-07-06T00:00:00.000,Study Request Denial,,,No,0,0,0,0,40.71999075,-73.8825975,data_cb5_signal_studies.csv
 CQ20-2164,CATALPA AVENUE,65 STREET,All-Way Stop,denied,2020-10-22,2021-06-21T00:00:00.000,Study Request Denial,,,No,7,7,3,0,40.704845,-73.892136,data_cb5_signal_studies.csv
 CQ20-2144,GATES AVENUE,60 PLACE,All-Way Stop,denied,2020-10-20,2021-06-01T00:00:00.000,Study Request Denial,,,No,10,10,2,0,40.70832,-73.90144,data_cb5_signal_studies.csv
 CQ20-2017,64 STREET,75 AVENUE,Traffic Signal,denied,2020-09-29,2021-06-01T00:00:00.000,Study Request Denial,,,No,10,13,2,0,40.698814,-73.89215,data_cb5_signal_studies.csv
 CQ20-2012B,METROPOLITAN AVENUE,80 STREET,Left Turn Arrow/Signal,denied,2020-09-29,2021-02-17T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,29,32,5,0,40.713287,-73.87163,data_cb5_signal_studies.csv
-CQ20-1961B,WOODHAVEN BOULEVARD,ELIOT AVENUE,Traffic Signal,denied,2020-09-22,2020-10-27T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,6,7,1,0,40.7156525,-73.875467,data_cb5_signal_studies.csv
 CQ20-1838,68 AVENUE,64 STREET,All-Way Stop,denied,2020-09-03,2021-06-01T00:00:00.000,Study Request Denial,,,No,8,8,3,0,40.705734,-73.89449,data_cb5_signal_studies.csv
 CQ20-1796B,CENTRAL AVENUE,69 PLACE,Leading Pedestrian Interval,denied,2020-09-03,2020-11-10T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,13,13,3,1,40.7042,-73.88288,data_cb5_signal_studies.csv
 CQ20-1781,58 AVENUE,81 STREET,All-Way Stop,denied,2020-08-25,2021-06-01T00:00:00.000,Study Request Denial,,,No,7,10,0,0,40.727367,-73.87995,data_cb5_signal_studies.csv
@@ -352,11 +338,9 @@ CQ20-1587,53 AVENUE,62 STREET,All-Way Stop,denied,2020-07-31,2021-05-04T00:00:00
 CQ20-1575,GROVE STREET,60 PLACE,All-Way Stop,denied,2020-07-30,2021-05-04T00:00:00.000,Study Request Denial,,,No,9,10,1,0,40.709633,-73.90223,data_cb5_signal_studies.csv
 CQ20-1559B,GRAND AVENUE,BORDEN AVENUE,Traffic Signal,denied,2020-07-28,2020-11-18T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,34,43,6,0,40.725635,-73.895856,data_cb5_signal_studies.csv
 CQ20-1458B,77 AVENUE,88 STREET,Traffic Signal,denied,2020-07-20,2020-11-13T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,3,5,3,0,40.7064593049998,-73.8615312271111,data_cb5_signal_studies.csv
-CQ20-1439B,METROPOLITAN AVENUE,J ROBINSON PY WB EN METROPOLITAN,Traffic Signal,denied,2020-07-20,2020-10-27T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,54,64,19,0,40.7129023175027,-73.906077007385,data_cb5_signal_studies.csv
 CQ20-1355B,FRESH POND ROAD,PUTNAM AVENUE,Traffic Signal,denied,2020-07-14,2021-03-01T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,38,53,12,0,40.706497,-73.89695,data_cb5_signal_studies.csv
 CQ20-1334B,MYRTLE AVENUE,NORMAN STREET,Traffic Signal,denied,2020-07-14,2020-09-10T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,38,49,15,0,40.700516,-73.89799,data_cb5_signal_studies.csv
 CQ20-1293,WOODWARD AVENUE,BLEECKER STREET,All-Way Stop,denied,2020-07-06,2021-04-26T00:00:00.000,Study Request Denial,,,No,18,19,4,0,40.70703,-73.909325,data_cb5_signal_studies.csv
-CQ20-1166,62 STREET,61 STREET,All-Way Stop,denied,2020-06-02,2021-04-26T00:00:00.000,Study Request Denial,,,No,45,51,12,0,40.713271500000005,-73.899743,data_cb5_signal_studies.csv
 CQ20-1155,METROPOLITAN AVENUE,65 LANE,Traffic Signal,denied,2020-05-28,2021-04-19T00:00:00.000,Study Request Denial,,,No,17,19,2,0,40.71244,-73.894025,data_cb5_signal_studies.csv
 CQ20-1132,58 ROAD,64 STREET,All-Way Stop,denied,2020-05-14,2021-04-12T00:00:00.000,Study Request Denial,,,No,2,2,0,0,40.720743,-73.900914,data_cb5_signal_studies.csv
 CQ20-1090,68 AVENUE,62 STREET,All-Way Stop,denied,2020-04-21,2021-04-12T00:00:00.000,Study Request Denial,,THE SENEEA SCHOOL,No,21,23,9,0,40.705513,-73.89538,data_cb5_signal_studies.csv
@@ -365,7 +349,6 @@ CQ20-1017,51 ROAD,69 STREET,Traffic Signal,denied,2020-03-05,2022-01-31T00:00:00
 CQ20-0925B,SENECA AVENUE,CENTRE STREET,Traffic Signal,denied,2020-03-11,2020-12-10T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,35,51,8,0,40.699585,-73.902245,data_cb5_signal_studies.csv
 CQ20-0924B,MYRTLE AVENUE,SENECA AVENUE,Traffic Signal,denied,2020-03-11,2020-12-10T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,49,60,15,0,40.70041,-73.90368,data_cb5_signal_studies.csv
 CQ20-0921B,FRESH POND ROAD,BLEECKER STREET,Traffic Signal,denied,2020-03-11,2020-11-17T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,54,64,16,0,40.711903,-73.90019,data_cb5_signal_studies.csv
-CQ20-0888B,WOODHAVEN BOULEVARD,ELIOT AVENUE,Traffic Signal,denied,2020-03-09,2020-11-20T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,6,7,1,0,40.7156525,-73.875467,data_cb5_signal_studies.csv
 CQ20-0871B,69 STREET,LONG ISLAND EXPRESSWAY,Leading Pedestrian Interval,denied,2020-03-09,2020-11-10T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,5,5,2,0,40.73288011770822,-73.89420718490693,data_cb5_signal_studies.csv
 CQ20-0756B,JUNIPER BOULEVARD SOUTH,71 STREET,Traffic Signal,denied,2020-02-28,2020-11-17T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,8,9,3,0,40.71752,-73.88423,data_cb5_signal_studies.csv
 CQ20-0698B,METROPOLITAN AVENUE,60 STREET,Traffic Signal,denied,2020-02-26,2020-12-14T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,54,64,19,0,40.7129023175027,-73.906077007385,data_cb5_signal_studies.csv
@@ -378,7 +361,6 @@ CQ20-0360B,GRAND AVENUE,74 STREET,Left Turn Arrow/Signal,denied,2020-01-29,2021-
 CQ20-0347,60 ROAD,60 STREET,All-Way Stop,denied,2020-01-24,2022-02-22T00:00:00.000,Study Request Denial,,PS 153,No,10,11,5,0,40.71574,-73.90603,data_cb5_signal_studies.csv
 CQ20-0334B,58 AVENUE,69 STREET,Traffic Signal,denied,2020-01-27,2020-10-05T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,9,11,1,0,40.72462,-73.89455,data_cb5_signal_studies.csv
 CQ20-0285,PENELOPE AVENUE,69 PLACE,All-Way Stop,denied,2020-01-22,2021-12-20T00:00:00.000,Study Request Denial,,PS 128,No,7,9,1,0,40.716017,-73.886351,data_cb5_signal_studies.csv
-CQ20-0278,LONG ISLAND EXPRESSWAY,58 ROAD,Traffic Signal,denied,2020-01-16,2021-03-22T00:00:00.000,Study Request Denial,,,No,21,26,3,0,40.725825,-73.90054,data_cb5_signal_studies.csv
 CQ20-0251,79 STREET,68 ROAD,All-Way Stop,denied,2020-01-17,2022-01-18T00:00:00.000,Study Request Denial,,PS 87,No,5,5,1,0,40.710453,-73.87339,data_cb5_signal_studies.csv
 CQ20-0199B,69 STREET,LONG ISLAND EXPRESSWAY,Traffic Signal,denied,2020-01-16,2020-10-05T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,5,5,2,0,40.73288011770822,-73.89420718490693,data_cb5_signal_studies.csv
 CQ20-0191B,59 DRIVE,60 STREET,Traffic Signal,denied,2020-01-16,2020-01-28T00:00:00.000,Engineering Study Completed     (Signals Engineering),,,No,9,9,2,0,40.71736,-73.9064,data_cb5_signal_studies.csv

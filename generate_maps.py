@@ -36,6 +36,16 @@ CB5_BOUNDARY_URL = "https://raw.githubusercontent.com/nycehs/NYC_geography/maste
 # Proximity analysis radius in meters
 PROXIMITY_RADIUS_M = 150
 
+# Manual coordinate corrections for misplaced geocodes.
+# Key: reference number, Value: (latitude, longitude)
+# These override any cached or computed coordinates.
+GEOCODE_OVERRIDES = {
+    'CQ21-0722': (40.7024, -73.8749),  # 74 St & Myrtle Ave — interpolated from crash data
+}
+
+# Data bundle version (semantic versioning)
+DATA_BUNDLE_VERSION = "1.0"
+
 # CB5 center for map defaults
 CB5_CENTER = [40.714, -73.889]
 CB5_ZOOM = 14
@@ -66,6 +76,8 @@ MAP_FONT_CSS = """
   .leaflet-popup-content { font-size: 12px; line-height: 1.5; }
   .leaflet-popup-content b { font-size: 13px; }
   .leaflet-control-layers-list { font-size: 12px; }
+  /* Spotlight radius circles (dashed stroke) must not intercept clicks */
+  .leaflet-overlay-pane path[stroke-dasharray] { pointer-events: none !important; }
 </style>
 """
 
@@ -105,11 +117,15 @@ def _add_dynamic_title(m):
             }
             var spotlight = isActive('Top 15 Denied');
             var effectiveness = isActive('DOT Effectiveness');
+            var crashTop10 = isActive('Top 10 Crash');
             var signals = isActive('Denied Signal') || isActive('Approved Signal');
             var srts = isActive('Denied Speed') || isActive('Approved Speed');
             if (effectiveness) {
                 titleEl.textContent = 'DOT Effectiveness: Crash Outcomes After Installation';
                 subtitleEl.textContent = 'Before-After Analysis, Confirmed Installations, QCB5';
+            } else if (crashTop10) {
+                titleEl.textContent = 'Top 10 Crash Intersections: QCB5';
+                subtitleEl.textContent = 'Highest Crash-Frequency Intersections (2020\u20132025)';
             } else if (spotlight) {
                 titleEl.textContent = 'Top 15 Denied Locations by Nearby Crash Count';
                 subtitleEl.textContent = '150m Analysis Radius, QCB5';
@@ -140,6 +156,142 @@ def _add_dynamic_title(m):
     });
     </script>'''
     m.get_root().html.add_child(folium.Element(html))
+
+
+def _add_search_box(m, search_entries):
+    """Add a search-by-reference-number box to the map.
+
+    search_entries: list of dicts with keys ref, lat, lon, label, type, outcome.
+    """
+    import json as _json
+    index_json = _json.dumps({e['ref']: e for e in search_entries if e.get('ref')})
+    html = f'''
+    <div id="search-container" style="position:fixed;top:60px;right:12px;z-index:1001;
+        font-family:'Times New Roman',Georgia,serif;">
+      <div style="background:rgba(255,255,255,0.95);border:1px solid #666;padding:6px 8px;
+          border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,0.2);">
+        <input id="ref-search" type="text" placeholder="Search ref # (e.g. CQ21-0722)"
+          style="width:200px;padding:4px 6px;font-family:'Times New Roman',Georgia,serif;
+          font-size:12px;border:1px solid #999;border-radius:2px;" autocomplete="off">
+        <button id="ref-search-btn" style="padding:4px 8px;font-family:'Times New Roman',Georgia,serif;
+          font-size:12px;cursor:pointer;border:1px solid #999;background:#f5f5f5;
+          border-radius:2px;margin-left:2px;">Go</button>
+        <div id="ref-search-msg" style="font-size:11px;margin-top:3px;color:#666;"></div>
+        <div id="ref-search-dropdown" style="display:none;position:absolute;background:white;
+          border:1px solid #ccc;max-height:180px;overflow-y:auto;width:270px;
+          font-size:11px;z-index:1002;box-shadow:0 2px 6px rgba(0,0,0,0.15);"></div>
+      </div>
+    </div>
+    <script>
+    (function() {{
+      var SEARCH_INDEX = {index_json};
+      var allRefs = Object.keys(SEARCH_INDEX);
+      var highlightLayer = null;
+      var highlightTimeout = null;
+
+      function getMap() {{
+        var maps = [];
+        document.querySelectorAll('.folium-map').forEach(function(el) {{
+          if (el._leaflet_id) {{
+            for (var k in window) {{
+              if (window[k] instanceof L.Map) maps.push(window[k]);
+            }}
+          }}
+        }});
+        return maps[0] || null;
+      }}
+
+      function clearHighlight() {{
+        if (highlightLayer) {{
+          try {{ highlightLayer.remove(); }} catch(e) {{}}
+          highlightLayer = null;
+        }}
+        if (highlightTimeout) {{ clearTimeout(highlightTimeout); highlightTimeout = null; }}
+      }}
+
+      function doSearch(ref) {{
+        ref = ref.trim().toUpperCase();
+        var msgEl = document.getElementById('ref-search-msg');
+        var entry = SEARCH_INDEX[ref];
+        if (!entry) {{
+          msgEl.style.color = '#B44040';
+          msgEl.textContent = 'Not found: ' + ref;
+          return;
+        }}
+        msgEl.style.color = '#4A7C59';
+        msgEl.textContent = entry.label + ' (' + entry.outcome + ')';
+        var map = getMap();
+        if (!map) return;
+        clearHighlight();
+        map.setView([entry.lat, entry.lon], 17);
+        // Pulsing highlight ring
+        highlightLayer = L.layerGroup();
+        var ring = L.circleMarker([entry.lat, entry.lon], {{
+          radius: 18, color: '#B8860B', weight: 3, fill: false, opacity: 0.9
+        }});
+        ring.addTo(highlightLayer);
+        var popup = L.popup({{offset: [0, -8]}}).setLatLng([entry.lat, entry.lon])
+          .setContent('<div style="font-family:Times New Roman,serif;font-size:12px;">' +
+            '<b>' + entry.label + '</b><br>' + entry.ref + '<br>' +
+            'Type: ' + (entry.type || 'N/A') + '<br>' +
+            'Outcome: <b>' + entry.outcome + '</b></div>');
+        popup.addTo(highlightLayer);
+        highlightLayer.addTo(map);
+        // Pulse animation
+        var grow = true;
+        var pulseInt = setInterval(function() {{
+          if (!highlightLayer) {{ clearInterval(pulseInt); return; }}
+          ring.setRadius(grow ? 24 : 18);
+          ring.setStyle({{opacity: grow ? 0.5 : 0.9}});
+          grow = !grow;
+        }}, 600);
+        highlightTimeout = setTimeout(function() {{
+          clearHighlight(); clearInterval(pulseInt);
+        }}, 8000);
+        map.once('click', function() {{ clearHighlight(); clearInterval(pulseInt); }});
+      }}
+
+      function showDropdown(query) {{
+        var dd = document.getElementById('ref-search-dropdown');
+        if (!query || query.length < 2) {{ dd.style.display = 'none'; return; }}
+        query = query.toUpperCase();
+        var matches = allRefs.filter(function(r) {{ return r.indexOf(query) >= 0; }}).slice(0, 10);
+        if (matches.length === 0) {{ dd.style.display = 'none'; return; }}
+        dd.innerHTML = '';
+        matches.forEach(function(ref) {{
+          var entry = SEARCH_INDEX[ref];
+          var div = document.createElement('div');
+          div.style.cssText = 'padding:4px 8px;cursor:pointer;border-bottom:1px solid #eee;';
+          div.textContent = ref + ' — ' + (entry.label || '');
+          div.onmouseover = function() {{ this.style.background = '#f0f0f0'; }};
+          div.onmouseout = function() {{ this.style.background = 'white'; }};
+          div.onclick = function() {{
+            document.getElementById('ref-search').value = ref;
+            dd.style.display = 'none';
+            doSearch(ref);
+          }};
+          dd.appendChild(div);
+        }});
+        dd.style.display = 'block';
+      }}
+
+      document.addEventListener('DOMContentLoaded', function() {{
+        var input = document.getElementById('ref-search');
+        var btn = document.getElementById('ref-search-btn');
+        btn.onclick = function() {{ doSearch(input.value); }};
+        input.onkeyup = function(e) {{
+          if (e.key === 'Enter') {{ doSearch(input.value); document.getElementById('ref-search-dropdown').style.display = 'none'; }}
+          else showDropdown(input.value);
+        }};
+        document.addEventListener('click', function(e) {{
+          if (!document.getElementById('search-container').contains(e.target))
+            document.getElementById('ref-search-dropdown').style.display = 'none';
+        }});
+      }});
+    }})();
+    </script>'''
+    m.get_root().html.add_child(folium.Element(html))
+
 
 # Academic styling — matches generate_charts.py
 plt.rcParams.update({
@@ -473,7 +625,76 @@ def geocode_signal_studies(data):
                 print(f"  Removing {n_outside} cached points outside CB5 polygon")
                 cache.loc[has_coords & ~inside.reindex(cache.index, fill_value=True), ['latitude', 'longitude']] = np.nan
                 cache.loc[has_coords & ~inside.reindex(cache.index, fill_value=True), 'geocode_tier'] = ''
-                cache.to_csv(GEOCODE_CACHE_PATH, index=False)
+
+        # Clear stale-tier geocodes (old interpolation methods) for re-processing
+        stale_tiers = {'crash_interp_cb5', 'srts_interp_cb5', 'srts_cb5'}
+        stale_mask = cache['geocode_tier'].isin(stale_tiers)
+        if stale_mask.any():
+            print(f"  Clearing {stale_mask.sum()} stale-tier geocodes for re-processing")
+            cache.loc[stale_mask, ['latitude', 'longitude']] = np.nan
+            cache.loc[stale_mask, 'geocode_tier'] = ''
+
+        # Re-geocode any records that are now missing coordinates
+        needs_geocode = cache['latitude'].isna()
+        if needs_geocode.any():
+            print(f"  Re-geocoding {needs_geocode.sum()} records...")
+            # Ensure normalized street names exist
+            if 'main_norm' not in cache.columns:
+                cache['main_norm'] = cache['mainstreet'].apply(_normalize_street_name)
+                cache['cross_norm'] = cache['crossstreet1'].apply(_normalize_street_name)
+            crash_lookup = _build_crash_location_lookup(data['crashes'])
+            srts_lookup = _build_srts_location_lookup(data['srts'])
+            crash_keys = {}
+            for idx, row in crash_lookup.iterrows():
+                key = tuple(sorted([row['street_a'], row['street_b']]))
+                crash_keys[key] = (row['lat'], row['lon'])
+            srts_keys = dict(srts_lookup)
+            street_lines = _build_street_lines(crash_lookup, srts_lookup)
+
+            re_t1 = re_t2 = re_t3 = 0
+            for i in cache.index[needs_geocode]:
+                main = cache.at[i, 'main_norm']
+                cross = cache.at[i, 'cross_norm']
+                if not main or not cross or pd.isna(main) or pd.isna(cross):
+                    continue
+                key = tuple(sorted([main, cross]))
+                # Tier 1: crash match
+                if key in crash_keys:
+                    lat, lon = crash_keys[key]
+                    if _in_cb5(lat, lon):
+                        cache.at[i, 'latitude'] = lat
+                        cache.at[i, 'longitude'] = lon
+                        cache.at[i, 'geocode_tier'] = 'crash'
+                        re_t1 += 1; continue
+                # Tier 2: SRTS match
+                if key in srts_keys:
+                    lat, lon = srts_keys[key]
+                    if _in_cb5(lat, lon):
+                        cache.at[i, 'latitude'] = lat
+                        cache.at[i, 'longitude'] = lon
+                        cache.at[i, 'geocode_tier'] = 'srts'
+                        re_t2 += 1; continue
+                # Tier 3: street-line intersection
+                if main in street_lines and cross in street_lines:
+                    result = _intersect_lines(street_lines[main], street_lines[cross])
+                    if result is not None:
+                        lat, lon = result
+                        if _in_cb5(lat, lon):
+                            cache.at[i, 'latitude'] = lat
+                            cache.at[i, 'longitude'] = lon
+                            cache.at[i, 'geocode_tier'] = 'street_line'
+                            re_t3 += 1
+            print(f"    Re-geocoded: {re_t1} crash, {re_t2} SRTS, {re_t3} street-line")
+
+        # Apply manual overrides
+        for ref, (lat, lon) in GEOCODE_OVERRIDES.items():
+            mask = cache['referencenumber'] == ref
+            if mask.any():
+                cache.loc[mask, ['latitude', 'longitude']] = [lat, lon]
+                cache.loc[mask, 'geocode_tier'] = 'manual'
+                print(f"  Override applied: {ref} → ({lat}, {lon})")
+
+        cache.to_csv(GEOCODE_CACHE_PATH, index=False)
         geocoded = cache['latitude'].notna().sum()
         print(f"  Cache: {len(cache)} records, {geocoded} geocoded ({geocoded/len(cache)*100:.0f}%)")
         return cache
@@ -922,6 +1143,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
     top-15 spotlight.
     """
     print("  Generating consolidated map (print style)...")
+    search_entries = []  # Populated during marker loops for search feature
 
     # --- Base map: no-label tiles for print clarity ---
     m = folium.Map(
@@ -1099,6 +1321,9 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             popup=folium.Popup(popup_html, max_width=340),
             tooltip=f"{row.get('mainstreet', '')} & {row.get('crossstreet1', '')} — {row.get('requesttype', '')} (DENIED)"
         ).add_to(denied_signals)
+        search_entries.append({'ref': row.get('referencenumber', ''), 'lat': row['latitude'],
+            'lon': row['longitude'], 'label': f"{row.get('mainstreet', '')} & {row.get('crossstreet1', '')}",
+            'type': row.get('requesttype', ''), 'outcome': 'denied'})
     denied_signals.add_to(m)
 
     # --- Layer 3: Approved Signal Studies ---
@@ -1115,6 +1340,9 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             popup=folium.Popup(popup_html, max_width=340),
             tooltip=f"{row.get('mainstreet', '')} & {row.get('crossstreet1', '')} — {row.get('requesttype', '')} (APPROVED)"
         ).add_to(approved_signals)
+        search_entries.append({'ref': row.get('referencenumber', ''), 'lat': row['latitude'],
+            'lon': row['longitude'], 'label': f"{row.get('mainstreet', '')} & {row.get('crossstreet1', '')}",
+            'type': row.get('requesttype', ''), 'outcome': 'approved'})
     approved_signals.add_to(m)
 
     # --- Helper: build SRTS popup ---
@@ -1173,6 +1401,9 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             popup=folium.Popup(popup_html, max_width=340),
             tooltip=f"{row.get('onstreet', '')} ({row.get('fromstreet', '')} to {row.get('tostreet', '')}) — DENIED"
         ).add_to(denied_srts)
+        search_entries.append({'ref': str(row.get('projectcode', '')), 'lat': row['latitude'],
+            'lon': row['longitude'], 'label': f"{row.get('onstreet', '')} ({row.get('fromstreet', '')} to {row.get('tostreet', '')})",
+            'type': 'Speed Bump', 'outcome': 'denied'})
     denied_srts.add_to(m)
 
     # --- Layer 5: Approved Speed Bumps ---
@@ -1189,6 +1420,9 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             popup=folium.Popup(popup_html, max_width=340),
             tooltip=f"{row.get('onstreet', '')} ({row.get('fromstreet', '')} to {row.get('tostreet', '')}) — APPROVED"
         ).add_to(approved_srts)
+        search_entries.append({'ref': str(row.get('projectcode', '')), 'lat': row['latitude'],
+            'lon': row['longitude'], 'label': f"{row.get('onstreet', '')} ({row.get('fromstreet', '')} to {row.get('tostreet', '')})",
+            'type': 'Speed Bump', 'outcome': 'approved'})
     approved_srts.add_to(m)
 
     # --- Layer 6: DOT Effectiveness — before-after for installed locations ---
@@ -1304,17 +1538,59 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             tooltip=f"#{rank}: {row['location_name']} ({int(row['crashes_150m'])} crashes)"
         ).add_to(spotlight_fg)
 
-        # Rank label
+        # Rank label (non-interactive so it doesn't block clicks on markers below)
         folium.Marker(
             [row['latitude'], row['longitude']],
             icon=folium.DivIcon(
                 html=(f"<div style=\"font-family:'Times New Roman',Georgia,serif;"
                       f"font-size:10px;font-weight:bold;color:white;"
-                      f"text-align:center;margin-top:-5px;\">{rank}</div>"),
-                icon_size=(20, 20), icon_anchor=(10, 10))
+                      f"text-align:center;margin-top:-5px;"
+                      f"pointer-events:none;\">{rank}</div>"),
+                icon_size=(20, 20), icon_anchor=(10, 10)),
+            interactive=False,
         ).add_to(spotlight_fg)
 
     spotlight_fg.add_to(m)
+
+    # --- Layer 8: Top 10 Crash Intersections (default OFF) ---
+    crash_with_streets = crash_with_coords.dropna(subset=['on_street_name', 'off_street_name']).copy()
+    crash_with_streets['intersection'] = crash_with_streets.apply(
+        lambda r: _normalize_intersection(r['on_street_name'], r['off_street_name']), axis=1)
+    crash_agg = crash_with_streets.groupby('intersection').agg(
+        crashes=('collision_id', 'count'),
+        injuries=('number_of_persons_injured', 'sum'),
+        ped_injuries=('number_of_pedestrians_injured', 'sum'),
+        cyc_injuries=('number_of_cyclist_injured', 'sum'),
+        fatalities=('number_of_persons_killed', 'sum'),
+        lat=('latitude', 'median'),
+        lon=('longitude', 'median'),
+    ).reset_index().sort_values('crashes', ascending=False)
+    top10_crashes = crash_agg.head(10)
+
+    crash_top_fg = folium.FeatureGroup(
+        name=f'Top 10 Crash Intersections (2020\u20132025)', show=False)
+    max_crashes = top10_crashes['crashes'].max()
+    for rank, (_, cr) in enumerate(top10_crashes.iterrows(), 1):
+        r = 6 + 6 * (cr['crashes'] / max_crashes)  # Scale radius 6–12
+        popup_html = (
+            f"<div style=\"{_popup_style}\">"
+            f"<b>#{rank}: {cr['intersection']}</b>"
+            f"{_hr}"
+            f"<b>Crashes:</b> {int(cr['crashes'])}<br>"
+            f"<b>Total injuries:</b> {int(cr['injuries'])}<br>"
+            f"Pedestrian: {int(cr['ped_injuries'])}<br>"
+            f"Cyclist: {int(cr['cyc_injuries'])}<br>"
+            f"<b>Fatalities:</b> {int(cr['fatalities'])}"
+            f"</div>"
+        )
+        folium.CircleMarker(
+            [cr['lat'], cr['lon']], radius=r,
+            color='#663300', fill=True, fill_color=COLORS['crash'],
+            fill_opacity=0.8, weight=2,
+            popup=folium.Popup(popup_html, max_width=300),
+            tooltip=f"#{rank}: {cr['intersection']} ({int(cr['crashes'])} crashes)"
+        ).add_to(crash_top_fg)
+    crash_top_fg.add_to(m)
 
     # --- Legend (print-ready, no heatmap entry) ---
     legend_items = [
@@ -1322,6 +1598,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         (COLORS['approved'], 'Approved request'),
         ('#888888', 'Injury crash (dot = 1 crash)'),
         ('#1a1a1a', 'Fatal crash'),
+        (COLORS['crash'], 'Top 10 crash intersection'),
     ]
     if before_after_df is not None:
         legend_items.extend([
@@ -1331,9 +1608,10 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
     legend_html = _make_legend_html(legend_items)
     m.get_root().html.add_child(folium.Element(legend_html))
 
-    # --- CSS + dynamic title ---
+    # --- CSS + dynamic title + search ---
     _inject_map_css(m)
     _add_dynamic_title(m)
+    _add_search_box(m, search_entries)
 
     # --- Layer control ---
     folium.LayerControl(collapsed=False).add_to(m)
@@ -1931,6 +2209,26 @@ def save_data_tables(signal_prox, srts_prox):
 
 
 # ============================================================
+# Data Bundle
+# ============================================================
+
+def generate_data_bundle():
+    """Create a versioned ZIP of all charts, CSVs, map, and methodology."""
+    import zipfile
+    import glob as _glob
+    version = DATA_BUNDLE_VERSION
+    bundle_path = os.path.join(OUTPUT_DIR, f'data_bundle_v{version}.zip')
+    patterns = ['chart_*.png', 'table_*.csv', 'map_01_*.html',
+                'map_layer_*.csv', 'METHODOLOGY.md']
+    with zipfile.ZipFile(bundle_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for pattern in patterns:
+            for f in sorted(_glob.glob(os.path.join(OUTPUT_DIR, pattern))):
+                zf.write(f, os.path.basename(f))
+    n_files = sum(1 for _ in zipfile.ZipFile(bundle_path).namelist())
+    print(f"  Data bundle saved: {bundle_path} ({n_files} files)")
+
+
+# ============================================================
 # Main
 # ============================================================
 
@@ -1986,6 +2284,10 @@ def main():
     # Step 5: Data tables
     print("\nStep 5: Saving data tables...")
     save_data_tables(signal_prox, srts_prox)
+
+    # Step 6: Data bundle
+    print("\nStep 6: Creating data bundle...")
+    generate_data_bundle()
 
     print("\n" + "=" * 60)
     print("All Part 2 outputs saved to output/")
