@@ -78,6 +78,20 @@ MAP_FONT_CSS = """
   .leaflet-control-layers-list { font-size: 12px; }
   /* Spotlight radius circles (dashed stroke) must not intercept clicks */
   .leaflet-overlay-pane path[stroke-dasharray] { pointer-events: none !important; }
+  /* Mobile-responsive legend + title */
+  @media (max-width: 600px) {
+    .map-legend {
+      font-size: 10px !important; padding: 6px 8px !important;
+      bottom: 10px !important; left: 10px !important; max-width: 160px;
+    }
+    .map-legend .legend-header { font-size: 11px !important; }
+    .map-legend .legend-dot { width: 9px !important; height: 9px !important; }
+    .map-title {
+      font-size: 13px !important; padding: 5px 12px !important;
+    }
+    .map-title #map-dynamic-title { font-size: 13px !important; }
+    .map-title #map-dynamic-subtitle { font-size: 9px !important; }
+  }
 </style>
 """
 
@@ -1006,17 +1020,64 @@ def run_proximity_analysis(signal_geo, srts_df, cb5_crashes):
 # ============================================================
 
 def _make_legend_html(items):
-    """Generate HTML for a simple map legend — academic style."""
-    html = ('<div class="map-legend" style="position:fixed;bottom:30px;left:30px;z-index:1000;'
-            'background:white;padding:10px 14px;border:1px solid #666;'
+    """Generate HTML for a dynamic map legend — items show/hide with layer toggles.
+
+    items: list of (color, label, layer_prefixes_csv) tuples.
+        layer_prefixes_csv is a comma-separated string of layer name prefixes
+        that control this legend item's visibility.
+    """
+    html = ('<div class="map-legend" id="map-legend" style="position:fixed;bottom:30px;left:30px;'
+            'z-index:1000;background:white;padding:10px 14px;border:1px solid #666;'
             "font-family:'Times New Roman',Georgia,serif;font-size:12px;line-height:1.8;\">")
-    html += ('<span style="font-size:13px;font-weight:bold;border-bottom:1px solid #999;'
-             'display:block;margin-bottom:4px;padding-bottom:2px;">Legend</span>')
-    for color, label in items:
-        html += (f'<span style="display:inline-block;width:12px;height:12px;background:{color};'
-                 f'border:1px solid #999;border-radius:50%;margin-right:6px;'
-                 f'vertical-align:middle;"></span>{label}<br>')
+    html += ('<span class="legend-header" style="font-size:13px;font-weight:bold;'
+             'border-bottom:1px solid #999;display:block;margin-bottom:4px;'
+             'padding-bottom:2px;">Legend</span>')
+    for color, label, layer_prefixes in items:
+        html += (f'<span class="legend-item" data-layers="{layer_prefixes}" '
+                 f'style="display:block;">'
+                 f'<span class="legend-dot" style="display:inline-block;width:12px;height:12px;'
+                 f'background:{color};border:1px solid #999;border-radius:50%;'
+                 f'margin-right:6px;vertical-align:middle;"></span>{label}</span>')
     html += '</div>'
+    # JS: sync legend items with layer control checkboxes
+    html += '''
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        function updateLegend() {
+            var checkboxes = document.querySelectorAll('.leaflet-control-layers-overlays label');
+            var layers = {};
+            checkboxes.forEach(function(label) {
+                var cb = label.querySelector('input');
+                var name = label.textContent.trim();
+                layers[name] = cb && cb.checked;
+            });
+            function isActive(prefix) {
+                for (var key in layers) {
+                    if (key.indexOf(prefix) === 0 && layers[key]) return true;
+                }
+                return false;
+            }
+            var anyVisible = false;
+            document.querySelectorAll('.legend-item').forEach(function(el) {
+                var prefixes = el.getAttribute('data-layers').split(',');
+                var show = prefixes.some(function(p) { return isActive(p.trim()); });
+                el.style.display = show ? 'block' : 'none';
+                if (show) anyVisible = true;
+            });
+            var legend = document.getElementById('map-legend');
+            if (legend) legend.style.display = anyVisible ? '' : 'none';
+        }
+        var observer = new MutationObserver(function(mutations, obs) {
+            var overlays = document.querySelector('.leaflet-control-layers-overlays');
+            if (overlays) {
+                obs.disconnect();
+                overlays.addEventListener('change', updateLegend);
+                updateLegend();
+            }
+        });
+        observer.observe(document.body, {childList: true, subtree: true});
+    });
+    </script>'''
     return html
 
 
@@ -1660,16 +1721,16 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
 
     # --- Legend (print-ready, no heatmap entry) ---
     legend_items = [
-        (COLORS['denied'], 'Denied request'),
-        (COLORS['approved'], 'Approved request'),
-        ('#888888', 'Injury crash (dot = 1 crash)'),
-        ('#1a1a1a', 'Fatal crash'),
-        (COLORS['primary'], 'Top 10 crash intersection'),
+        (COLORS['denied'], 'Denied request', 'Denied Signal,Denied Speed'),
+        (COLORS['approved'], 'Approved request', 'Approved Signal,Approved Speed'),
+        ('#888888', 'Injury crash (dot = 1 crash)', 'Injury Crashes'),
+        ('#1a1a1a', 'Fatal crash', 'Injury Crashes'),
+        (COLORS['primary'], 'Top 10 crash intersection', 'Top 10 Crash'),
     ]
     if before_after_df is not None:
         legend_items.extend([
-            ('#2d7d46', 'Installed \u2014 crashes decreased'),
-            ('#cc8400', 'Installed \u2014 crashes increased'),
+            ('#2d7d46', 'Installed \u2014 crashes decreased', 'DOT Effectiveness'),
+            ('#cc8400', 'Installed \u2014 crashes increased', 'DOT Effectiveness'),
         ])
     legend_html = _make_legend_html(legend_items)
     m.get_root().html.add_child(folium.Element(legend_html))
