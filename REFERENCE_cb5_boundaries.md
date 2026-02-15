@@ -73,13 +73,17 @@ All other records with `cb=405` are included, specifically:
 
 ## Filtering Results
 
-| Metric | Count |
-|--------|-------|
-| Raw records (cb=405) | 1,988 |
-| After cross-street filter | 1,913 |
-| Excluded | 75 |
+SRTS records pass through three mandatory filtering layers:
 
-The 75 excluded records are demonstrably north of the LIE based on their cross streets (52nd Ave, 53rd Ave, Calamus Ave, etc.).
+| Step | Metric | Count |
+|------|--------|-------|
+| 1 | Raw records (cb=405) | 1,988 |
+| 2 | After cross-street exclusion | 1,913 |
+| 3 | After polygon boundary filter | ~1,959 (resolved) |
+| — | Excluded by cross-street filter | 75 |
+| — | Excluded by polygon filter | ~23 additional |
+
+The 75 cross-street exclusions are demonstrably north of the LIE (52nd Ave, 53rd Ave, Calamus Ave, etc.). The polygon filter catches an additional ~23 records that pass `cb=405` but fall outside the official CB5 boundary geometry. **All three layers are mandatory** — see `_load_cb5_srts_full()` in `generate_maps.py`.
 
 ## Sources
 

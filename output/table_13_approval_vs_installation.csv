@@ -1,3 +1,3 @@
-Dataset,Source File,Denied,Approved,Confirmed Installed,Paper Approval Rate (%),Install Rate of Approved (%)
-Signal Studies,data_cb5_signal_studies.csv,399,43,15,9.7,34.9
-Speed Bumps,srts_citywide.csv,1722,237,101,12.1,42.6
+Dataset,Source File,Denied,Approved,Approval Rate (%)
+Signal Studies,data_cb5_signal_studies.csv,399,43,9.7
+Speed Bumps,srts_citywide.csv,1722,237,12.1

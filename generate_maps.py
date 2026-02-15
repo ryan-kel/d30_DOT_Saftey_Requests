@@ -1323,6 +1323,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             radius=PROXIMITY_RADIUS_M,
             color=COLORS['denied'], fill=True, fill_color=COLORS['denied'],
             fill_opacity=0.08, weight=1.5, dash_array='5 3',
+            interactive=False,
         ).add_to(spotlight_fg)
 
         popup_html = (
@@ -1671,8 +1672,8 @@ def chart_09b_top_denied_ranking(signal_prox):
 
 
 def chart_13_approval_vs_installation():
-    """Chart 13: Paper Approval Rate vs Confirmed Installation Rate."""
-    print("  Generating Chart 13: Approval vs Installation Rate...")
+    """Chart 13: DOT Outcomes — Denied vs Approved."""
+    print("  Generating Chart 13: DOT Outcomes...")
 
     # --- Signal Studies ---
     sig = pd.read_csv(f'{OUTPUT_DIR}/data_cb5_signal_studies.csv', low_memory=False)
@@ -1682,50 +1683,39 @@ def chart_13_approval_vs_installation():
 
     sig_denied = (sig_no_aps['outcome'] == 'denied').sum()
     sig_approved = (sig_no_aps['outcome'] == 'approved').sum()
-    sig_installed = sig_no_aps[
-        sig_no_aps['aw_installdate'].notna() | sig_no_aps['signalinstalldate'].notna()
-    ].drop_duplicates('referencenumber').shape[0]
 
     # --- SRTS (full pipeline: cb=405 + cross-street exclusion + polygon filter) ---
     cb5_srts = _load_cb5_srts_full()
     srts_resolved = cb5_srts[cb5_srts['segmentstatusdescription'].isin(['Not Feasible', 'Feasible'])]
     srts_denied = (srts_resolved['segmentstatusdescription'] == 'Not Feasible').sum()
     srts_feasible = (srts_resolved['segmentstatusdescription'] == 'Feasible').sum()
-    srts_installed = cb5_srts[
-        (cb5_srts['segmentstatusdescription'] == 'Feasible') &
-        cb5_srts['installationdate'].notna() &
-        ~cb5_srts['projectstatus'].str.contains('Cancel|Reject|denied', case=False, na=False)
-    ].shape[0]
 
     fig, axes = plt.subplots(1, 2, figsize=(13, 6))
 
     # Panel 1: Signal Studies
-    categories = ['Denied', 'Approved\n(on paper)', 'Confirmed\nInstalled']
-    sig_vals = [sig_denied, sig_approved, sig_installed]
-    sig_colors = [COLORS['denied'], COLORS['approved'], '#2d7d46']
+    categories = ['Denied', 'Approved']
+    sig_vals = [sig_denied, sig_approved]
+    sig_colors = [COLORS['denied'], COLORS['approved']]
     bars = axes[0].bar(categories, sig_vals, color=sig_colors, edgecolor='black', zorder=3)
     for bar, val in zip(bars, sig_vals):
         axes[0].text(bar.get_x() + bar.get_width()/2, val + 2,
                      str(val), ha='center', va='bottom', fontweight='bold', fontsize=11)
-    sig_paper_rate = sig_approved / (sig_denied + sig_approved) * 100
-    sig_install_rate = sig_installed / sig_approved * 100 if sig_approved > 0 else 0
+    sig_approval_rate = sig_approved / (sig_denied + sig_approved) * 100
     axes[0].set_title(f'QCB5 Signal Studies\n(Excl. APS, n={len(sig_no_aps):,}, 2020–2025)', fontweight='bold', fontsize=12)
     axes[0].set_ylabel('Number of Requests', fontweight='bold')
     axes[0].xaxis.grid(False)
     axes[0].annotate(
-        f'Paper approval rate: {sig_paper_rate:.1f}%\n'
-        f'Install rate (of approved): {sig_install_rate:.1f}%',
+        f'Approval rate: {sig_approval_rate:.1f}%',
         xy=(0.98, 0.95), xycoords='axes fraction', ha='right', va='top',
         fontsize=10, bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='gray', alpha=0.9))
 
     # Panel 2: SRTS
-    srts_vals = [srts_denied, srts_feasible, srts_installed]
+    srts_vals = [srts_denied, srts_feasible]
     bars2 = axes[1].bar(categories, srts_vals, color=sig_colors, edgecolor='black', zorder=3)
     for bar, val in zip(bars2, srts_vals):
         axes[1].text(bar.get_x() + bar.get_width()/2, val + 15,
                      str(val), ha='center', va='bottom', fontweight='bold', fontsize=11)
-    srts_paper_rate = srts_feasible / (srts_denied + srts_feasible) * 100
-    srts_install_rate = srts_installed / srts_feasible * 100 if srts_feasible > 0 else 0
+    srts_approval_rate = srts_feasible / (srts_denied + srts_feasible) * 100
     _rd = pd.to_datetime(cb5_srts['requestdate'], errors='coerce')
     srts_min_yr = int(_rd.dt.year.min())
     srts_max_yr = min(int(_rd.dt.year.max()), 2025)
@@ -1733,16 +1723,14 @@ def chart_13_approval_vs_installation():
     axes[1].set_ylabel('Number of Requests', fontweight='bold')
     axes[1].xaxis.grid(False)
     axes[1].annotate(
-        f'Paper approval rate: {srts_paper_rate:.1f}%\n'
-        f'Install rate (of approved): {srts_install_rate:.1f}%',
+        f'Approval rate: {srts_approval_rate:.1f}%',
         xy=(0.98, 0.95), xycoords='axes fraction', ha='right', va='top',
         fontsize=10, bbox=dict(boxstyle='round', facecolor='lightyellow', edgecolor='gray', alpha=0.9))
 
-    fig.suptitle(f'QCB5 Paper Approvals vs Confirmed Installations',
+    fig.suptitle(f'QCB5 DOT Request Outcomes: Denied vs Approved',
                  fontweight='bold', fontsize=14, y=1.02)
     fig.text(0.01, -0.03,
-             'Source: NYC Open Data — Signal Studies [w76s-c5u4], Speed Reducer Tracking System [9n6h-pt9g]\n'
-             'Confirmed = installation date recorded in DOT system',
+             'Source: NYC Open Data — Signal Studies [w76s-c5u4], Speed Reducer Tracking System [9n6h-pt9g]',
              ha='left', fontsize=9, style='italic', color='#333333')
 
     plt.tight_layout()
@@ -1754,127 +1742,13 @@ def chart_13_approval_vs_installation():
     table_13 = pd.DataFrame([
         {'Dataset': 'Signal Studies', 'Source File': 'data_cb5_signal_studies.csv',
          'Denied': sig_denied, 'Approved': sig_approved,
-         'Confirmed Installed': sig_installed,
-         'Paper Approval Rate (%)': round(sig_paper_rate, 1),
-         'Install Rate of Approved (%)': round(sig_install_rate, 1)},
+         'Approval Rate (%)': round(sig_approval_rate, 1)},
         {'Dataset': 'Speed Bumps', 'Source File': 'srts_citywide.csv',
          'Denied': srts_denied, 'Approved': srts_feasible,
-         'Confirmed Installed': srts_installed,
-         'Paper Approval Rate (%)': round(srts_paper_rate, 1),
-         'Install Rate of Approved (%)': round(srts_install_rate, 1)},
+         'Approval Rate (%)': round(srts_approval_rate, 1)},
     ])
     table_13.to_csv(f'{OUTPUT_DIR}/table_13_approval_vs_installation.csv', index=False)
     print("    Chart 13 saved.")
-
-
-def chart_14_installation_wait_times():
-    """Chart 14: How long approved requests wait — installed baseline vs still waiting."""
-    print("  Generating Chart 14: Installation Wait Times...")
-
-    sig = pd.read_csv(f'{OUTPUT_DIR}/data_cb5_signal_studies.csv', low_memory=False)
-    sig['outcome'] = sig['statusdescription'].apply(_classify_outcome)
-    approved = sig[(sig['outcome'] == 'approved') &
-                   (sig['requesttype'] != 'Accessible Pedestrian Signal')].copy()
-
-    approved['statusdate_dt'] = pd.to_datetime(approved['statusdate'], errors='coerce')
-    approved['install_dt'] = pd.to_datetime(
-        approved['aw_installdate'].fillna(approved['signalinstalldate']), errors='coerce')
-    approved['confirmed'] = approved['install_dt'].notna()
-    approved = approved.drop_duplicates('referencenumber')
-
-    installed = approved[approved['confirmed']].copy()
-    installed['wait_months'] = (installed['install_dt'] - installed['statusdate_dt']).dt.days / 30.44
-
-    not_installed = approved[~approved['confirmed']].copy()
-    not_installed['wait_months'] = (pd.Timestamp.now() - not_installed['statusdate_dt']).dt.days / 30.44
-
-    max_baseline = installed['wait_months'].max()
-
-    fig, ax = plt.subplots(figsize=(14, 7))
-
-    # Combine for a single horizontal bar chart
-    installed_sorted = installed.sort_values('wait_months')
-    not_installed_sorted = not_installed.sort_values('wait_months')
-
-    all_locations = pd.concat([installed_sorted, not_installed_sorted], ignore_index=True)
-
-    # Abbreviate street names for cleaner labels
-    def _abbreviate(name):
-        s = str(name).strip()
-        for full, short in [('AVENUE', 'Ave'), ('STREET', 'St'), ('BOULEVARD', 'Blvd'),
-                             ('ROAD', 'Rd'), ('PLACE', 'Pl'), ('DRIVE', 'Dr'),
-                             ('LANE', 'Ln'), ('COURT', 'Ct'), ('PARKWAY', 'Pkwy'),
-                             ('EXPRESSWAY', 'Expwy'), ('TURNPIKE', 'Tpke')]:
-            s = s.replace(full, short)
-        return s.title()
-
-    # Short codes for request types
-    _TYPE_ABBREV = {
-        'Traffic Signal': 'TS', 'All-Way Stop': 'AWS',
-        'Leading Pedestrian Interval': 'LPI', 'Left Turn Arrow/Signal': 'LT',
-    }
-    all_locations['type_code'] = all_locations['requesttype'].map(_TYPE_ABBREV).fillna('Other')
-    all_locations['label'] = all_locations.apply(
-        lambda r: _abbreviate(r['mainstreet'] or '') + ' & ' + _abbreviate(r['crossstreet1'] or ''), axis=1)
-    all_locations['label'] = all_locations.apply(
-        lambda r: r['label'][:30] + f' ({r["type_code"]})'
-                  + (' [Installed]' if r['confirmed'] else ' [Approved]'), axis=1)
-
-    y = np.arange(len(all_locations))
-    colors = [COLORS['approved'] if c else '#cc8400' for c in all_locations['confirmed']]
-
-    ax.barh(y, all_locations['wait_months'], color=colors, edgecolor='black', zorder=3, height=0.7)
-
-    # Baseline line: max known install time
-    # Position label at the transition between green (installed) and amber (waiting)
-    n_installed = len(installed_sorted)
-    ax.axvline(x=max_baseline, color=COLORS['denied'], linestyle='--', linewidth=1.5, zorder=5)
-    ax.text(max_baseline + 0.5, max(0, n_installed - 4),
-            f'Longest known\ninstall time\n({max_baseline:.0f} mo.)',
-            fontsize=8, color=COLORS['denied'], va='center', fontweight='bold')
-
-    # Labels
-    for i, (_, row) in enumerate(all_locations.iterrows()):
-        val = row['wait_months']
-        ax.text(val + 0.5, i, f'{val:.0f} mo.',
-                va='center', ha='left', fontsize=8)
-
-    ax.set_yticks(y)
-    ax.set_yticklabels(all_locations['label'], fontsize=8)
-    ax.invert_yaxis()
-    ax.set_xlabel('Months Since Approval', fontweight='bold')
-    ax.set_title(f'QCB5 Approved Signal Studies: Time to Installation\n'
-                 f'(Excl. APS, n={len(all_locations):,}, 2020–2025)',
-                 fontweight='bold', fontsize=12)
-    ax.yaxis.grid(False)
-
-    from matplotlib.patches import Patch
-    ax.legend(handles=[
-        Patch(facecolor=COLORS['approved'], edgecolor='black', label='Approved & Installed'),
-        Patch(facecolor='#cc8400', edgecolor='black', label='Approved, Not Yet Installed'),
-    ], loc='upper right')
-
-    fig.text(0.01, -0.03,
-             'Source: NYC Open Data — Signal Studies [w76s-c5u4] | Dashed line = longest observed approval-to-install time\n'
-             'Wait times for uninstalled approvals measured through [Feb 2026]',
-             ha='left', fontsize=9, style='italic', color='#333333')
-
-    plt.tight_layout()
-    plt.savefig(f'{OUTPUT_DIR}/chart_14_installation_wait_times.png', dpi=300,
-                bbox_inches='tight', facecolor='white', edgecolor='none')
-    plt.close()
-
-    # Save accompanying CSV (with reference numbers for traceability)
-    table_14 = all_locations[['referencenumber', 'label', 'mainstreet', 'crossstreet1',
-                               'requesttype', 'daterequested', 'statusdate_dt', 'install_dt',
-                               'confirmed', 'wait_months']].copy()
-    table_14.columns = ['Reference Number', 'Label', 'Main Street', 'Cross Street',
-                         'Request Type', 'Date Requested', 'Date Approved', 'Install Date',
-                         'Installed', 'Wait Months']
-    table_14['Wait Months'] = table_14['Wait Months'].round(1)
-    table_14['Source File'] = 'data_cb5_signal_studies.csv'
-    table_14.to_csv(f'{OUTPUT_DIR}/table_14_installation_wait_times.csv', index=False)
-    print("    Chart 14 saved.")
 
 
 def chart_15_srts_funnel():
@@ -2311,7 +2185,6 @@ def main():
     chart_09_crash_proximity(signal_prox, srts_prox)
     chart_09b_top_denied_ranking(signal_prox)
     chart_13_approval_vs_installation()
-    chart_14_installation_wait_times()
     chart_15_srts_funnel()
     chart_16_srts_wait_times()
     chart_16z_srts_wait_times_full()

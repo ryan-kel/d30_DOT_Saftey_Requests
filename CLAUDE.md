@@ -40,9 +40,9 @@ jupyter notebook analysis_notebook.ipynb
 |---------|-------------|---------|
 | Signal Studies | `w76s-c5u4` | Primary - traffic signals, stop signs, APS requests |
 | Speed Reducers (SRTS) | `9n6h-pt9g` | Speed bump/hump requests |
-| APS Installed | `de3m-c5p4` | Installed accessible pedestrian signals |
 | Motor Vehicle Crashes | `h9gi-nx95` | Crash data for correlation |
-| 311 Requests | `erm2-nwe9` | Maintenance complaints (less reliable for new infrastructure) |
+
+*Note: `scripts_fetch_data.py` also downloads APS Installed (`de3m-c5p4`) and 311 Requests (`erm2-nwe9`) but these are not consumed by the analysis pipeline.*
 
 ## Analysis Logic
 

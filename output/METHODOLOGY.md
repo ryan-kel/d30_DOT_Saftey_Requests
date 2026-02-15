@@ -137,6 +137,10 @@ Chart 01b (`chart_01b_requests_by_year.png`) tracks request volume trends over t
 
 The 2022 peak and subsequent decline may reflect community discouragement after sustained high denial rates — a "why bother?" effect. The type composition shift toward a growing APS share reflects the federal mandate, not community choice. A z-series companion (Chart 01bz) provides the full history from 1996–2025 as a line chart.
 
+### Chart 01c: QCB5 Requests by Type
+
+Chart 01c (`chart_01c_cb5_requests_by_type.png`) breaks down QCB5's signal study requests by type as a horizontal bar chart (n=510, 2020–2025). This chart provides the type-level detail for QCB5 specifically, complementing Chart 01's right panel by showing request counts per type with year-over-year composition in an accompanying data table (`table_01c_cb5_requests_by_type_year.csv`).
+
 ### Chart 02: Denial Rates by Borough
 
 Chart 02 (`chart_02_denial_rates_by_borough.png`) displays signal study denial rates across all five boroughs as a horizontal bar chart (n=15,724 resolved records, excluding APS, 2020–2025). Queens is highlighted in dark navy, and a goldenrod dashed line marks the citywide average. Manhattan leads at 94.8%, while Queens (88.7%) sits at the citywide average of 88.4%. Every borough exceeds 78%, with even the lowest (Bronx, 78.2%) denying more than three-quarters of requests.
@@ -223,7 +227,7 @@ Denied vs approved location crash distributions are compared using the **Mann-Wh
 
 ### Chart 09: Crash Proximity Analysis
 
-Chart 09 (`chart_09_crash_proximity_analysis.png`) presents the central statistical test of this analysis. It displays grouped bars comparing denied (red) versus approved (green) locations on three metrics — median crashes, injuries, and pedestrian injuries within 150 meters — with the Mann-Whitney U test p-value annotated on each panel. The left panel covers Signal Studies (n=410, QCB5, 2020–2025) and the right panel covers Speed Bumps (n=431).
+Chart 09 (`chart_09_crash_proximity_analysis.png`) presents the central statistical test of this analysis. It displays grouped bars comparing denied (red) versus approved (green) locations on three metrics — median crashes, injuries, and pedestrian injuries within 150 meters — with the Mann-Whitney U test p-value annotated on each panel. The left panel covers Signal Studies (n=416, QCB5, 2020–2025) and the right panel covers Speed Bumps (n=431).
 
 For signal studies, denied locations have significantly more crashes than approved locations (median 11 vs. 8, p=0.002), a result that is statistically significant at the 1% level. Denied locations also show higher injuries (15 vs. 9) and pedestrian injuries (2 vs. 2). For SRTS, there is no significant difference (median 9 vs. 7, p=0.61), confirming that speed bump denials are driven by the radar speed criterion rather than crash history.
 
@@ -231,11 +235,11 @@ This is the central statistical finding of the analysis. **DOT is systematically
 
 ### Chart 09b: Top 15 Denied Locations in QCB5 by Nearby Crash/Injury Count
 
-Chart 09b (`chart_09b_denied_locations_crash_ranking.png`) identifies the denied locations surrounded by the most crashes in a dual-panel horizontal bar chart covering QCB5 denied signal studies and SRTS combined for 2020–2025. The left panel ranks the top 15 denied locations by crash count within 150 meters, while the right panel independently ranks the top 15 by injury count — producing a different set of locations. Each location is tagged with its source dataset (`[Signal Study]` or `[Speed Bump]`), and street names are abbreviated for readability (Avenue→Ave, Street→St, Road→Rd, Boulevard→Blvd, Turnpike→Tpke, Place→Pl).
+Chart 09b (`chart_09b_denied_locations_crash_ranking.png`) identifies the denied signal study locations surrounded by the most crashes in a dual-panel horizontal bar chart for QCB5, 2020–2025. **SRTS locations are excluded** because their segment-based coordinates create methodological issues with 150m overlap analysis, and speed bumps lack cross-street data needed for intersection-level precision. The left panel ranks the top 15 denied locations by crash count within 150 meters, while the right panel independently ranks the top 15 by injury count — producing a different set of locations. Street names are abbreviated for readability (Avenue→Ave, Street→St, Road→Rd, Boulevard→Blvd, Turnpike→Tpke, Place→Pl).
 
 Three layers of de-duplication are applied before ranking. First, `_normalize_intersection()` sorts street names alphabetically so that "Cooper Ave & Cypress Ave" and "Cypress Ave & Cooper Ave" are treated as the same location. Second, a name-based groupby aggregates records sharing the same normalized intersection name, keeping the row with the highest crash count. Third, `_spatial_dedup(df, radius_m=150)` applies a greedy algorithm: locations are sorted by crashes descending, and any location within 150 meters (haversine distance) of an already-selected location is skipped. The 150-meter spatial dedup radius matches the analysis radius because two denied locations 100 meters apart would share most of the same crash pool, creating the appearance of distinct hotspots when the crash exposure is largely the same.
 
-The top denied location (62 Ave) has 71 crashes and 86 injuries within 150 meters — more than many locations where DOT has approved infrastructure. These are specific, nameable locations where the community asked for safety infrastructure, DOT said no, and crashes continue to occur.
+The top denied location (Aubrey Ave & Metropolitan Ave) has 66 crashes and 101 injuries within 150 meters — more than many locations where DOT has approved infrastructure. These are specific, nameable locations where the community asked for safety infrastructure, DOT said no, and crashes continue to occur.
 
 ### Chart 13: Paper Approvals vs Confirmed Installations
 
@@ -244,12 +248,6 @@ Chart 13 (`chart_13_approval_vs_installation.png`) compares paper approvals to c
 For signal studies, 43 were approved on paper but only 15 have confirmed installation dates — a 35% fulfillment rate. The paper approval rate of 9.7% drops to a confirmed install rate of just 3.6%. For SRTS, approximately 237 were approved, approximately 101 installed (43%), and approximately 114 were cancelled or rejected after approval. The paper approval rate of approximately 12% drops to a confirmed install rate of approximately 5%.
 
 The "approval rate" that might be cited by DOT in response to community concerns is approximately **2× the actual installation rate**. Paper approval does not equal infrastructure on the ground. For SRTS, DOT's own data shows more approvals were subsequently cancelled than were actually installed — getting past the engineering evaluation is only half the battle, as bureaucratic and budgetary obstacles eliminate roughly half of approvals before a single bolt is tightened.
-
-### Chart 14: Signal Study Installation Wait Times
-
-Chart 14 (`chart_14_installation_wait_times.png`) visualizes wait times for all 41 approved QCB5 signal studies (excluding APS, 2020–2025) as a horizontal bar chart. Each bar shows the number of months from approval to the current date, colored green for confirmed installations and goldenrod for approvals still awaiting installation. A red dashed line marks the longest known installation time of 15 months, derived from the 15 confirmed installations (which had a median of 35 days, mean of 134 days, and maximum of 456 days from approval to installation). Street names are abbreviated for readability.
-
-Of the 41 approved signal studies, 26 have no installation date. Twenty-four of these have been waiting longer than the maximum known install time. The oldest uninstalled approval dates to November 2021 — 51 months and counting. This chart answers the question "what happens after approval?" For the majority of approved requests, the answer is **nothing**. The 15-month dashed red line makes it visually unambiguous — everything to its right represents a broken promise.
 
 ### Chart 15: SRTS Approval Funnel
 
@@ -380,8 +378,8 @@ The analysis is structured as a two-part pipeline:
 
 ```
 scripts_fetch_data.py          → data_raw/*.csv (raw API downloads)
-generate_charts.py  (Part 1)   → output/chart_01–12*.png + tables
-generate_maps.py    (Part 2)   → output/map_01*.html + chart_09–16z*.png + tables + layer CSVs
+generate_charts.py  (Part 1)   → output/chart_01–08, 12*.png + tables
+generate_maps.py    (Part 2)   → output/map_01*.html + chart_09, 09b, 13, 15, 16, 16z*.png + tables + layer CSVs
 ```
 
 Both scripts share identical patterns: outcome classification, APS exclusion, cross-street exclusion, polygon filtering, and street name normalization. The `_normalize_street_name()` function exists in both files to avoid cross-file imports.
@@ -433,7 +431,7 @@ A comprehensive data integrity audit was conducted across all charts and data pi
 **Data verified as correct:**
 - Crash uniqueness: 3,213 rows with 3,213 unique `collision_id` values — no source-level duplication.
 - CB5 polygon bounds verified: lat 40.6823–40.7351, lon -73.9245 to -73.8553.
-- Proximity methodology sound: 71 crashes near top location (62 Ave) are 71 genuinely different collision events at 19 unique coordinate points within 150m.
+- Proximity methodology sound: 66 crashes near top location (Aubrey Ave & Metropolitan Ave) are 66 genuinely different collision events at multiple unique coordinate points within 150m.
 - 68.7% of crashes share exact coordinates with at least one other crash — expected behavior (multiple crashes at the same intersection over time).
 
 **Documentation errors that contributed to bugs:**
@@ -455,7 +453,7 @@ All documentation updated to prevent recurrence.
 
 4. **Only 3.6% of signal study requests and 5.7% of speed bump requests result in confirmed installations.** Paper approvals overstate actual infrastructure delivery by roughly 2×.
 
-5. **26 of 41 approved signal studies have no installation date.** 24 of these have been waiting longer than the maximum known install time (15 months). The oldest approval without installation is 51 months old.
+5. **26 of 41 approved signal studies (after dedup) have no installation date.** The 15 confirmed installations had a maximum wait of 456 days; 24 of the 26 uninstalled approvals have been waiting longer. The oldest dates to November 2021 — 51 months and counting.
 
 6. **For SRTS, more approvals were cancelled after the fact (~114) than were actually installed (~101).** ~21 locations remain in limbo with a median wait of many years.
 

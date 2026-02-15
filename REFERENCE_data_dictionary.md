@@ -209,7 +209,9 @@ For new infrastructure analysis, use the **Signal Studies** and **SRTS** dataset
 
 ## CB5 Key Statistics Summary
 
-### Traffic Signals & Stop Signs (from Signal Studies)
+**Note:** The all-time figures below cover each dataset's full history. The primary analysis uses **2020–2025 only** — see `output/METHODOLOGY.md` for those figures (e.g., 445 signal study requests excl. APS, 431 speed bump requests, ~90% signal denial rate).
+
+### Traffic Signals & Stop Signs — All-Time (from Signal Studies)
 
 | Metric | CB5 | Citywide | Difference |
 |--------|-----|----------|------------|
@@ -217,7 +219,7 @@ For new infrastructure analysis, use the **Signal Studies** and **SRTS** dataset
 | Denial Rate | 84.2% | 83.3% | +0.9 pts |
 | Batting Average | 15.8% | 16.7% | -0.9 pts |
 
-### Speed Bumps (from SRTS)
+### Speed Bumps — All-Time (from SRTS)
 
 | Metric | CB5 | Queens | Citywide |
 |--------|-----|--------|----------|
@@ -225,7 +227,7 @@ For new infrastructure analysis, use the **Signal Studies** and **SRTS** dataset
 | Denial Rate | **87.7%** | 87.4% | 84.7% |
 | Batting Average | **12.3%** | 12.6% | 15.3% |
 
-CB5 has one of the highest speed bump denial rates in the city.
+CB5 has one of the highest speed bump denial rates in the city. For 2020–2025 specifically, the rate climbs to effectively 100%.
 
 ---
 

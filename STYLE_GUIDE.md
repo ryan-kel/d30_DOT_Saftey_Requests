@@ -219,11 +219,12 @@ Tooltips are brief summaries shown on hover (before clicking):
 ### 4.5 Dynamic Title
 
 Map title updates via JavaScript MutationObserver based on active layer checkboxes. Priority conditions (first match wins):
-1. Top 15 Spotlight active → "Top 15 Denied Locations..."
-2. Effectiveness active → "DOT Effectiveness..."
-3. Denied + Crashes active → "Crash-Denial Overlay..."
-4. Only Denied active → "Denied Requests..."
-5. Default → "QCB5 Safety Infrastructure..."
+1. Effectiveness active → "DOT Effectiveness: Crash Outcomes After Installation"
+2. Top 15 Spotlight active → "Top 15 Denied Locations by Nearby Crash Count"
+3. Both Signals + SRTS active → "Safety Request Outcomes: QCB5"
+4. Only Signals active → "Signal Study Outcomes: QCB5"
+5. Only SRTS active → "Speed Bump Requests & Injury Crashes"
+6. Default → "Safety Infrastructure Data: QCB5"
 
 ---
 
