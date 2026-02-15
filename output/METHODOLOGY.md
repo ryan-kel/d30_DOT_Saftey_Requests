@@ -79,7 +79,7 @@ The `borough` field contains inconsistent values including codes ("QK", "MB", "9
 
 For the interactive map and proximity analysis (Part 2), SRTS data is filtered to **2020–2025** to match the crash data and signal study windows. This excluded 1,528 pre-2020 SRTS records.
 
-Charts 13, 15, 16, and 16z examine SRTS installation history using the full date range. These charts load SRTS data via the shared `_load_cb5_srts_full()` helper, which applies the complete CB5 filtering pipeline (cb=405 + cross-street exclusion + polygon filter) before any chart-specific year logic.
+Charts 13 and 15 examine SRTS installation history using the full date range. These charts load SRTS data via the shared `_load_cb5_srts_full()` helper, which applies the complete CB5 filtering pipeline (cb=405 + cross-street exclusion + polygon filter) before any chart-specific year logic.
 
 **Rationale:** Crash data is only available from 2020 onward. Plotting a speed bump request denied in 2005 against crash data from 2020–2025 would create a misleading temporal mismatch. All data on the map shares the same 2020–2025 window.
 
@@ -255,12 +255,6 @@ Chart 15 (`chart_15_srts_funnel.png`) traces the full lifecycle of approximately
 
 This is the full lifecycle view of an SRTS approval. Only approximately 43% of approvals result in installation. The locations still waiting have a median wait of many years, with some dating to 2009. A speed bump approved during the Bloomberg administration remains uninstalled in 2026. The approximately 48% cancellation rate after approval means the community cannot even rely on a "yes" from DOT.
 
-### Chart 16: SRTS Wait Times (2020–2025)
-
-Chart 16 (`chart_16_srts_wait_times.png`) displays wait times for the 6 feasible QCB5 SRTS requests from 2020–2025 as a horizontal bar chart. Each bar shows months since the initial request, colored green for installed locations and goldenrod for approved-but-not-installed locations, with a red dashed line marking the longest known installation time. The sample is small — 3 installed, 3 waiting — but the pattern is consistent: approved locations are waiting beyond known install timelines.
-
-A z-series companion (Chart 16z) extends the view to the full 1999–2025 history with n=38 locations (the 15 longest-installed of 106 total, plus all 23 still waiting). Wait times in the z-series extend to 197 months — more than 16 years from request to the present day with no installation.
-
 ---
 
 ## 7. Interactive Map
@@ -379,7 +373,7 @@ The analysis is structured as a two-part pipeline:
 ```
 scripts_fetch_data.py          → data_raw/*.csv (raw API downloads)
 generate_charts.py  (Part 1)   → output/chart_01–08, 12*.png + tables
-generate_maps.py    (Part 2)   → output/map_01*.html + chart_09, 09b, 13, 15, 16, 16z*.png + tables + layer CSVs
+generate_maps.py    (Part 2)   → output/map_01*.html + chart_09, 09b, 13, 15*.png + tables + layer CSVs
 ```
 
 Both scripts share identical patterns: outcome classification, APS exclusion, cross-street exclusion, polygon filtering, and street name normalization. The `_normalize_street_name()` function exists in both files to avoid cross-file imports.
@@ -390,7 +384,7 @@ Each chart function is self-contained: it loads its data, computes its metrics, 
 
 | Function | Purpose |
 |----------|---------|
-| `_load_cb5_srts_full()` | Centralized SRTS loader applying full CB5 pipeline (cb=405 + cross-street exclusion + polygon filter). Used by charts 13, 15, 16, 16z. |
+| `_load_cb5_srts_full()` | Centralized SRTS loader applying full CB5 pipeline (cb=405 + cross-street exclusion + polygon filter). Used by charts 13, 15. |
 | `_normalize_intersection(a, b)` | Alphabetically sort two street names to prevent reversed-name duplicates ("A & B" == "B & A"). |
 | `_spatial_dedup(df, radius_m)` | Greedy spatial de-duplication: sort by crashes desc, skip entries within `radius_m` (haversine) of already-selected locations. |
 | `_filter_points_in_cb5(df)` | Polygon filter against official CB5 boundary. Excludes rows without coordinates. |
@@ -422,7 +416,7 @@ A comprehensive data integrity audit was conducted across all charts and data pi
 | # | Bug | Impact | Fix |
 |---|-----|--------|-----|
 | 1 | **`_filter_points_in_cb5()` included no-coordinate rows** | Crash count inflated from 3,213 to 3,938 (+725). No-coord rows had NaN lat/lon so did not affect proximity analysis, but inflated n= in chart titles (Chart 08, map layer counts). | Exclude rows without valid coordinates. Applied in both `generate_charts.py` and `generate_maps.py`. |
-| 2 | **Charts 13, 15, 16, 16z loaded SRTS without full CB5 filtering** | These charts loaded SRTS directly from CSV with only `cb=405`, missing cross-street exclusion and polygon filter. ~29 records outside actual CB5 boundary were included. SRTS approved count was 245 (should be ~237); installed was 106 (should be ~101). | Created `_load_cb5_srts_full()` shared helper. Refactored all four charts to use it. |
+| 2 | **Charts 13, 15 loaded SRTS without full CB5 filtering** | These charts loaded SRTS directly from CSV with only `cb=405`, missing cross-street exclusion and polygon filter. ~29 records outside actual CB5 boundary were included. SRTS approved count was 245 (should be ~237); installed was 106 (should be ~101). | Created `_load_cb5_srts_full()` shared helper. Refactored affected charts to use it. |
 | 3 | **Chart 06 missing year filter** | Title claimed "2020–2025" but no year filter was applied. Included all-years data in a chart labeled as 2020–2025. | Added explicit `.between(2020, 2025)` year filter. |
 | 4 | **Chart 09b reversed intersection duplicates** | "Cooper Ave & Cypress Ave" and "Cypress Ave & Cooper Ave" treated as different locations. | Created `_normalize_intersection()` to sort street names alphabetically. |
 | 5 | **Chart 09b spatial duplicates from overlapping 150m radii** | Nearby denied locations (e.g., same intersection in Signal Studies and SRTS) counted overlapping crash pools, appearing as separate hotspots. | Created `_spatial_dedup()` with 150m radius matching the analysis radius. Applied to chart 09b, map Top 15 spotlight, and table_09c. |
@@ -436,7 +430,7 @@ A comprehensive data integrity audit was conducted across all charts and data pi
 
 **Documentation errors that contributed to bugs:**
 - `CLAUDE.md` "CB5 Identification" section listed only `cb='405'` for SRTS without mentioning mandatory cross-street exclusion and polygon filter — this omission led to charts 13–16 being built without proper filtering.
-- `decisions.md` documented "Charts 13, 15, 16z load SRTS independently from CSV" as intentional design rather than identifying it as inconsistent with the centralized pipeline.
+- `decisions.md` documented "Charts 13, 15 load SRTS independently from CSV" as intentional design rather than identifying it as inconsistent with the centralized pipeline.
 - `METHODOLOGY.md` section 3.3 described independent loading as deliberate behavior.
 
 All documentation updated to prevent recurrence.
