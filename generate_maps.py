@@ -14,7 +14,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
 import folium
-from folium.plugins import HeatMap  # kept for fallback; primary map uses dot density
+from folium.plugins import HeatMap, MarkerCluster
 from shapely.geometry import shape, Point
 from shapely.prepared import prep
 import json
@@ -1293,16 +1293,41 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
     crash_with_coords = cb5_crashes[cb5_crashes['latitude'].notna()].copy()
     crash_dots = folium.FeatureGroup(
         name=f'Injury Crashes (n={len(crash_with_coords):,}, 2020–2025)', show=True)
+    # Cluster overlapping crash dots — click a cluster to zoom/spiderfy
+    _cluster_icon_fn = """
+    function(cluster) {
+        var count = cluster.getChildCount();
+        var size = count < 10 ? 26 : count < 50 ? 32 : 38;
+        return L.divIcon({
+            html: '<div style="background:rgba(136,136,136,0.8);color:white;' +
+                  'font-weight:bold;font-family:Times New Roman,serif;font-size:11px;' +
+                  'text-align:center;line-height:' + size + 'px;border-radius:50%;' +
+                  'border:1.5px solid #666;">' + count + '</div>',
+            className: '',
+            iconSize: L.point(size, size)
+        });
+    }
+    """
+    crash_cluster = MarkerCluster(
+        icon_create_function=_cluster_icon_fn,
+        options={
+            'maxClusterRadius': 25,
+            'spiderfyOnMaxZoom': True,
+            'showCoverageOnHover': False,
+            'zoomToBoundsOnClick': True,
+            'spiderfyDistanceMultiplier': 1.5,
+        },
+    )
     for _, crow in crash_with_coords.iterrows():
         injured = int(crow.get('number_of_persons_injured', 0))
         killed = int(crow.get('number_of_persons_killed', 0))
-        # Size by severity: fatal=4, injury=2, other=1.5
+        # Size by severity: fatal=8px, injury=5px, other=4px
         if killed > 0:
-            r, color, opacity = 3.5, '#1a1a1a', 0.8
+            d, color, opacity = 8, '#1a1a1a', 0.85
         elif injured > 0:
-            r, color, opacity = 1.8, '#888888', 0.35
+            d, color, opacity = 5, '#888888', 0.5
         else:
-            r, color, opacity = 1.2, '#aaaaaa', 0.2
+            d, color, opacity = 4, '#aaaaaa', 0.3
 
         # --- Crash popup/tooltip ---
         c_date = _fmt_date(crow.get('crash_date'))
@@ -1353,13 +1378,16 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         _sev = 'Fatal' if killed > 0 else f'{injured} injured' if injured > 0 else 'Crash'
         crash_tooltip = f"{c_loc} — {_sev}, {c_date}"
 
-        folium.CircleMarker(
-            [crow['latitude'], crow['longitude']], radius=r,
-            color=color, fill=True, fill_color=color,
-            fill_opacity=opacity, weight=0.3,
+        icon_html = (f'<div style="width:{d}px;height:{d}px;background:{color};'
+                     f'border-radius:50%;opacity:{opacity};"></div>')
+        folium.Marker(
+            [crow['latitude'], crow['longitude']],
+            icon=folium.DivIcon(html=icon_html, icon_size=(d, d),
+                                icon_anchor=(d // 2, d // 2)),
             popup=folium.Popup(crash_popup, max_width=320),
             tooltip=crash_tooltip,
-        ).add_to(crash_dots)
+        ).add_to(crash_cluster)
+    crash_cluster.add_to(crash_dots)
     crash_dots.add_to(m)
 
     # --- Helper: build signal study popup ---
