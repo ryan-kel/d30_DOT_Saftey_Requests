@@ -112,7 +112,8 @@ def _add_dynamic_title(m):
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        function updateTitle() {
+        // Shared: read active layers from checkboxes
+        function getActiveLayers() {
             var checkboxes = document.querySelectorAll('.leaflet-control-layers-overlays label');
             var layers = {};
             checkboxes.forEach(function(label) {
@@ -120,20 +121,23 @@ def _add_dynamic_title(m):
                 var name = label.textContent.trim();
                 layers[name] = cb && cb.checked;
             });
+            return layers;
+        }
+        function isActive(layers, prefix) {
+            for (var key in layers) {
+                if (key.indexOf(prefix) === 0 && layers[key]) return true;
+            }
+            return false;
+        }
+
+        function updateTitle(layers) {
             var titleEl = document.getElementById('map-dynamic-title');
             var subtitleEl = document.getElementById('map-dynamic-subtitle');
-            // Match layer names by prefix (names now include n= and year suffixes)
-            function isActive(prefix) {
-                for (var key in layers) {
-                    if (key.indexOf(prefix) === 0 && layers[key]) return true;
-                }
-                return false;
-            }
-            var spotlight = isActive('Top 15 Denied');
-            var effectiveness = isActive('DOT Effectiveness');
-            var crashTop10 = isActive('Top 10 Crash');
-            var signals = isActive('Denied Signal') || isActive('Approved Signal');
-            var srts = isActive('Denied Speed') || isActive('Approved Speed');
+            var spotlight = isActive(layers, 'Top 15 Denied');
+            var effectiveness = isActive(layers, 'DOT Effectiveness');
+            var crashTop10 = isActive(layers, 'Top 10 Crash');
+            var signals = isActive(layers, 'Denied Signal') || isActive(layers, 'Approved Signal');
+            var srts = isActive(layers, 'Denied Speed') || isActive(layers, 'Approved Speed');
             if (effectiveness) {
                 titleEl.textContent = 'DOT Effectiveness: Crash Outcomes After Installation';
                 subtitleEl.textContent = 'Before-After Analysis, Confirmed Installations, QCB5';
@@ -157,13 +161,35 @@ def _add_dynamic_title(m):
                 subtitleEl.textContent = 'Use layer controls to explore';
             }
         }
+
+        function updateLegend(layers) {
+            var anyVisible = false;
+            document.querySelectorAll('.legend-item').forEach(function(el) {
+                var prefixes = el.getAttribute('data-layers').split(',');
+                var show = prefixes.some(function(p) { return isActive(layers, p.trim()); });
+                el.style.display = show ? 'block' : 'none';
+                if (show) anyVisible = true;
+            });
+            var legend = document.getElementById('map-legend');
+            if (legend) legend.style.display = anyVisible ? '' : 'none';
+        }
+
+        function onLayerChange() {
+            var layers = getActiveLayers();
+            updateTitle(layers);
+            updateLegend(layers);
+        }
+
         // Wait for Leaflet layer control to render, then attach listeners
         var observer = new MutationObserver(function(mutations, obs) {
             var overlays = document.querySelector('.leaflet-control-layers-overlays');
             if (overlays) {
                 obs.disconnect();
-                overlays.addEventListener('change', updateTitle);
-                updateTitle();
+                overlays.addEventListener('change', onLayerChange);
+                overlays.addEventListener('click', function() {
+                    setTimeout(onLayerChange, 50);
+                });
+                onLayerChange();
             }
         });
         observer.observe(document.body, {childList: true, subtree: true});
@@ -1039,45 +1065,6 @@ def _make_legend_html(items):
                  f'background:{color};border:1px solid #999;border-radius:50%;'
                  f'margin-right:6px;vertical-align:middle;"></span>{label}</span>')
     html += '</div>'
-    # JS: sync legend items with layer control checkboxes
-    html += '''
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        function updateLegend() {
-            var checkboxes = document.querySelectorAll('.leaflet-control-layers-overlays label');
-            var layers = {};
-            checkboxes.forEach(function(label) {
-                var cb = label.querySelector('input');
-                var name = label.textContent.trim();
-                layers[name] = cb && cb.checked;
-            });
-            function isActive(prefix) {
-                for (var key in layers) {
-                    if (key.indexOf(prefix) === 0 && layers[key]) return true;
-                }
-                return false;
-            }
-            var anyVisible = false;
-            document.querySelectorAll('.legend-item').forEach(function(el) {
-                var prefixes = el.getAttribute('data-layers').split(',');
-                var show = prefixes.some(function(p) { return isActive(p.trim()); });
-                el.style.display = show ? 'block' : 'none';
-                if (show) anyVisible = true;
-            });
-            var legend = document.getElementById('map-legend');
-            if (legend) legend.style.display = anyVisible ? '' : 'none';
-        }
-        var observer = new MutationObserver(function(mutations, obs) {
-            var overlays = document.querySelector('.leaflet-control-layers-overlays');
-            if (overlays) {
-                obs.disconnect();
-                overlays.addEventListener('change', updateLegend);
-                updateLegend();
-            }
-        });
-        observer.observe(document.body, {childList: true, subtree: true});
-    });
-    </script>'''
     return html
 
 
@@ -1264,6 +1251,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         name='Street Labels',
         overlay=True,
         control=False,
+        opacity=0.55,
     ).add_to(m)
 
     _add_cb5_boundary(m)
