@@ -166,8 +166,8 @@ def _add_search_box(m, search_entries):
     import json as _json
     index_json = _json.dumps({e['ref']: e for e in search_entries if e.get('ref')})
     html = f'''
-    <div id="search-container" style="position:fixed;top:60px;right:12px;z-index:1001;
-        font-family:'Times New Roman',Georgia,serif;">
+    <div id="search-container" style="position:fixed;right:12px;z-index:1001;
+        font-family:'Times New Roman',Georgia,serif;display:none;">
       <div style="background:rgba(255,255,255,0.95);border:1px solid #666;padding:6px 8px;
           border-radius:3px;box-shadow:0 1px 4px rgba(0,0,0,0.2);">
         <input id="ref-search" type="text" placeholder="Search ref # (e.g. CQ21-0722)"
@@ -209,15 +209,35 @@ def _add_search_box(m, search_entries):
         if (highlightTimeout) {{ clearTimeout(highlightTimeout); highlightTimeout = null; }}
       }}
 
+      function normalize(s) {{ return s.replace(/[-\\s]/g, '').toUpperCase(); }}
+
+      function fuzzyFind(ref) {{
+        // Exact match
+        if (SEARCH_INDEX[ref]) return ref;
+        // Normalized match
+        var nq = normalize(ref);
+        for (var i = 0; i < allRefs.length; i++) {{
+          if (normalize(allRefs[i]) === nq) return allRefs[i];
+        }}
+        // Substring match on normalized keys
+        for (var i = 0; i < allRefs.length; i++) {{
+          if (normalize(allRefs[i]).indexOf(nq) >= 0) return allRefs[i];
+        }}
+        return null;
+      }}
+
       function doSearch(ref) {{
         ref = ref.trim().toUpperCase();
         var msgEl = document.getElementById('ref-search-msg');
-        var entry = SEARCH_INDEX[ref];
-        if (!entry) {{
+        var found = fuzzyFind(ref);
+        if (!found) {{
           msgEl.style.color = '#B44040';
           msgEl.textContent = 'Not found: ' + ref;
           return;
         }}
+        ref = found;
+        var entry = SEARCH_INDEX[ref];
+        document.getElementById('ref-search').value = ref;
         msgEl.style.color = '#4A7C59';
         msgEl.textContent = entry.label + ' (' + entry.outcome + ')';
         var map = getMap();
@@ -254,8 +274,11 @@ def _add_search_box(m, search_entries):
       function showDropdown(query) {{
         var dd = document.getElementById('ref-search-dropdown');
         if (!query || query.length < 2) {{ dd.style.display = 'none'; return; }}
-        query = query.toUpperCase();
-        var matches = allRefs.filter(function(r) {{ return r.indexOf(query) >= 0; }}).slice(0, 10);
+        var uq = query.toUpperCase();
+        var nq = normalize(query);
+        var matches = allRefs.filter(function(r) {{
+          return r.indexOf(uq) >= 0 || normalize(r).indexOf(nq) >= 0;
+        }}).slice(0, 10);
         if (matches.length === 0) {{ dd.style.display = 'none'; return; }}
         dd.innerHTML = '';
         matches.forEach(function(ref) {{
@@ -287,6 +310,23 @@ def _add_search_box(m, search_entries):
           if (!document.getElementById('search-container').contains(e.target))
             document.getElementById('ref-search-dropdown').style.display = 'none';
         }});
+        // Position search box below layer control
+        function positionSearch() {{
+          var lc = document.querySelector('.leaflet-control-layers');
+          var sc = document.getElementById('search-container');
+          if (lc && sc) {{
+            var rect = lc.getBoundingClientRect();
+            sc.style.top = (rect.bottom + 6) + 'px';
+            sc.style.display = 'block';
+          }}
+        }}
+        var posObs = new MutationObserver(function(mutations, obs) {{
+          if (document.querySelector('.leaflet-control-layers')) {{
+            obs.disconnect();
+            positionSearch();
+          }}
+        }});
+        posObs.observe(document.body, {{childList: true, subtree: true}});
       }});
     }})();
     </script>'''
@@ -1155,6 +1195,14 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         tiles='https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
         attr='&copy; OpenStreetMap contributors &copy; CARTO',
         name='Base Map',
+        control=False,
+    ).add_to(m)
+    folium.TileLayer(
+        tiles='https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',
+        attr='&copy; OpenStreetMap contributors &copy; CARTO',
+        name='Street Labels',
+        overlay=True,
+        control=False,
     ).add_to(m)
 
     _add_cb5_boundary(m)
@@ -1569,9 +1617,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
 
     crash_top_fg = folium.FeatureGroup(
         name=f'Top 10 Crash Intersections (2020\u20132025)', show=False)
-    max_crashes = top10_crashes['crashes'].max()
     for rank, (_, cr) in enumerate(top10_crashes.iterrows(), 1):
-        r = 6 + 6 * (cr['crashes'] / max_crashes)  # Scale radius 6–12
         popup_html = (
             f"<div style=\"{_popup_style}\">"
             f"<b>#{rank}: {cr['intersection']}</b>"
@@ -1583,12 +1629,32 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             f"<b>Fatalities:</b> {int(cr['fatalities'])}"
             f"</div>"
         )
+        # 150m radius circle (dashed outline, non-interactive)
+        folium.Circle(
+            [cr['lat'], cr['lon']],
+            radius=PROXIMITY_RADIUS_M,
+            color=COLORS['primary'], fill=True, fill_color=COLORS['primary'],
+            fill_opacity=0.08, weight=1.5, dash_array='5 3',
+            interactive=False,
+        ).add_to(crash_top_fg)
+        # Center dot
         folium.CircleMarker(
-            [cr['lat'], cr['lon']], radius=r,
-            color='#663300', fill=True, fill_color=COLORS['crash'],
-            fill_opacity=0.8, weight=2,
+            [cr['lat'], cr['lon']], radius=9,
+            color='#333333', fill=True, fill_color=COLORS['primary'],
+            fill_opacity=0.85, weight=2,
             popup=folium.Popup(popup_html, max_width=300),
             tooltip=f"#{rank}: {cr['intersection']} ({int(cr['crashes'])} crashes)"
+        ).add_to(crash_top_fg)
+        # Rank label (non-interactive)
+        folium.Marker(
+            [cr['lat'], cr['lon']],
+            icon=folium.DivIcon(
+                html=(f"<div style=\"font-family:'Times New Roman',Georgia,serif;"
+                      f"font-size:10px;font-weight:bold;color:white;"
+                      f"text-align:center;margin-top:-5px;"
+                      f"pointer-events:none;\">{rank}</div>"),
+                icon_size=(20, 20), icon_anchor=(10, 10)),
+            interactive=False,
         ).add_to(crash_top_fg)
     crash_top_fg.add_to(m)
 
@@ -1598,7 +1664,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         (COLORS['approved'], 'Approved request'),
         ('#888888', 'Injury crash (dot = 1 crash)'),
         ('#1a1a1a', 'Fatal crash'),
-        (COLORS['crash'], 'Top 10 crash intersection'),
+        (COLORS['primary'], 'Top 10 crash intersection'),
     ]
     if before_after_df is not None:
         legend_items.extend([
