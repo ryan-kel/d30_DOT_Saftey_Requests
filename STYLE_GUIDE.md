@@ -1,83 +1,80 @@
-# QCB5 DOT Safety Analysis — Official Style Guide
+# Electoral Analytics — Visual Style Guide
 
-This document defines the visual language for all charts, maps, and data visualizations in this project. **All future work must follow these conventions exactly.** When in doubt, reference the hex codes and rules below — do not improvise.
+This document defines the visual language for all charts, maps, and data visualizations produced by Electoral Analytics. **All projects must follow these conventions.** When in doubt, reference the hex codes and rules below — do not improvise.
 
 ---
 
 ## 1. Color Palette
 
-### 1.1 Semantic Colors (Primary)
+### 1.1 Core Semantic Colors
 
-These colors have fixed meanings. Never swap them or use them for other purposes.
+These colors have fixed meanings across all projects. Never swap them or repurpose them.
 
 | Role | Hex | Swatch | Usage |
 |------|-----|--------|-------|
-| **QCB5 / Local** | `#2C5F8B` | Navy blue | QCB5 bars, QCB5 trend lines, primary subject data |
-| **Citywide / Comparison** | `#B8860B` | Dark goldenrod | Citywide bars, citywide trend lines, citywide avg reference lines |
-| **Denied** | `#B44040` | Muted red | Denied request markers (maps + charts), denial-themed bars |
-| **Approved** | `#4A7C59` | Muted green | Approved request markers (maps + charts), approval-themed bars |
-| **Crash data** | `#996633` | Warm brown | Crash count bars, crash density |
-| **Crash alt (injuries)** | `#CC9966` | Light warm brown | Injury count overlays |
+| **Primary / Local subject** | `#2C5F8B` | Navy blue | The main subject of analysis (e.g., a specific district, neighborhood, agency) |
+| **Comparison / Baseline** | `#B8860B` | Dark goldenrod | Citywide averages, comparison groups, reference lines |
+| **Negative outcome** | `#B44040` | Muted red | Denials, failures, declines, unfavorable outcomes |
+| **Positive outcome** | `#4A7C59` | Muted green | Approvals, successes, improvements, favorable outcomes |
+| **Neutral data (primary)** | `#996633` | Warm brown | Raw counts, volume metrics (e.g., crash counts) |
+| **Neutral data (secondary)** | `#CC9966` | Light warm brown | Secondary metrics, injury overlays |
 
-### 1.2 Semantic Colors (Secondary)
+### 1.2 Extended Palette
 
 | Role | Hex | Usage |
 |------|-----|-------|
-| **QCB5 highlight** | `#1B3F5E` | Darker navy — used to highlight QCB5/Queens in ranked borough lists |
-| **Installed (improved)** | `#2d7d46` | Strong green — before-after markers where crashes decreased |
-| **Installed (worse)** | `#cc8400` | Amber — before-after markers where crashes increased |
-| **Installed (no change)** | `#777777` | Neutral gray — before-after markers with no change |
-| **Neutral / secondary text** | `#666666` | Gray — secondary labels, muted annotations |
-| **APS / court-mandated** | `#999999` | Gray with `///` hatch — Accessible Pedestrian Signals (excluded from analysis) |
+| **Subject highlight** | `#1B3F5E` | Darker navy — highlight the primary subject in ranked lists |
+| **Improved (before-after)** | `#2d7d46` | Strong green — outcome improved after intervention |
+| **Worsened (before-after)** | `#cc8400` | Amber — outcome worsened after intervention |
+| **No change** | `#777777` | Neutral gray — no measurable change |
+| **Muted / secondary text** | `#666666` | Gray — secondary labels, annotations |
+| **Excluded / not applicable** | `#999999` | Gray with `///` hatch — excluded categories (e.g., court-mandated items) |
 
-### 1.3 Denial Shade Gradient
+### 1.3 Gradient Shades
 
-For ranked denial bars (darkest = most denied, lightest = least):
+For ranked bars (darkest = highest value, lightest = lowest):
 
+**Negative outcome gradient:**
 ```
 '#8B2020', '#B44040', '#C46060', '#D48080', '#DDA0A0', '#E6B8B8', '#EED0D0'
 ```
 
-### 1.4 Categorical Palette (Stacked Bars)
+### 1.4 Categorical Palette
 
-For multi-category breakdowns (e.g., request type stacked bars). Order matches typical request type frequency:
+For multi-category stacked/grouped bars, assign in this order. Where a category aligns with a semantic role, reuse its semantic color.
 
-| Category | Hex | Color |
-|----------|-----|-------|
-| Traffic Signal | `#2C5F8B` | Navy (matches QCB5 primary) |
-| All-Way Stop | `#B8860B` | Goldenrod (matches citywide) |
-| Leading Pedestrian Interval | `#4A7C59` | Green (matches approved) |
-| Left Turn Arrow/Signal | `#B44040` | Red (matches denied) |
-| APS | `#999999` | Gray + `///` hatch |
-| Other | `#D4D4D4` | Light gray |
+```
+'#2C5F8B', '#B8860B', '#4A7C59', '#B44040', '#999999', '#D4D4D4'
+  Navy      Goldenrod   Green      Red       Gray     Light gray
+```
 
-### 1.5 Injury-Type Palette (Chart 08 Stacked Bars)
+### 1.5 Injury-Type Palette
 
-For the crash hotspots chart, injuries are broken down by victim type:
+For victim/person-type breakdowns (pedestrian, cyclist, motorist):
 
-| Category | Hex | Color |
-|----------|-----|-------|
-| Pedestrians | `#B44040` | Red (matches denied — policy-critical) |
-| Cyclists | `#B8860B` | Goldenrod (matches citywide) |
-| Motorists | `#CC9966` | Tan (matches crash_alt) |
+| Category | Hex | Rationale |
+|----------|-----|-----------|
+| Pedestrians | `#B44040` | Red — highest policy priority |
+| Cyclists | `#B8860B` | Goldenrod |
+| Motorists | `#CC9966` | Tan |
 
 ### 1.6 Map-Specific Colors
 
-| Element | Hex | Opacity | Usage |
-|---------|-----|---------|-------|
-| Fatal crash dot | `#1a1a1a` | 0.8 | Black, radius 3.5 |
-| Injury crash dot | `#888888` | 0.35 | Gray, radius 1.8 |
-| Property damage dot | `#aaaaaa` | 0.2 | Light gray, radius 1.2 |
-| Marker outline | `#333333` | — | Dark outline on all request markers |
-| CB5 boundary | — | — | GeoJSON polygon, semi-transparent |
+| Element | Hex | Opacity | Size |
+|---------|-----|---------|------|
+| Fatal incident | `#1a1a1a` | 0.8 | r=3.5 |
+| Injury incident | `#888888` | 0.35 | r=1.8 |
+| Property damage / minor | `#aaaaaa` | 0.2 | r=1.2 |
+| Marker outline | `#333333` | — | weight=2 |
+| Spotlight radius circle | Same as dot | 0.08 fill | 150m, dashed stroke `5 3` |
 
-### 1.6 Rules
+### 1.7 Color Rules
 
-1. **QCB5 is ALWAYS navy blue (`#2C5F8B`).** Never use goldenrod, gray, or any other color for QCB5/Queens data.
-2. **Citywide is ALWAYS dark goldenrod (`#B8860B`).** This includes: comparison bars, comparison trend lines, citywide average reference lines.
-3. **Denied is ALWAYS muted red (`#B44040`).** Approved is ALWAYS muted green (`#4A7C59`).
-4. **Never use denied red for non-denial elements** (e.g., average lines, borders, neutral data).
-5. **The categorical palette reuses semantic colors** where the category aligns (Traffic Signal = navy, etc.). This keeps visual language consistent even in stacked charts.
+1. **Primary subject is ALWAYS navy (`#2C5F8B`).** Never use goldenrod or gray for the primary subject.
+2. **Comparison/baseline is ALWAYS goldenrod (`#B8860B`).** This includes: comparison bars, comparison trend lines, average reference lines.
+3. **Negative = red (`#B44040`), Positive = green (`#4A7C59`).** No exceptions.
+4. **Never use negative red for non-negative elements** (e.g., average lines, borders, neutral data).
+5. **The categorical palette reuses semantic colors** where the category aligns. This keeps visual language consistent even in stacked charts.
 
 ---
 
@@ -85,19 +82,40 @@ For the crash hotspots chart, injuries are broken down by victim type:
 
 ### 2.1 Charts (Matplotlib)
 
-- **Font family**: System default (DejaVu Sans / Helvetica) — clean and readable at print DPI
-- **Suptitle**: 14pt, bold
-- **Panel titles**: 12pt, bold
-- **Axis labels**: bold (default size)
-- **Source citations**: 9pt, italic, color `#333333`
-- **Data labels on bars**: 9pt, bold
+| Element | Size | Weight | Color |
+|---------|------|--------|-------|
+| Suptitle | 14pt | Bold | Black |
+| Panel titles | 12pt | Bold | Black |
+| Axis labels | Default | Bold | Black |
+| Data labels on bars | 9pt | Bold | Black |
+| Source citation | 9pt | Italic | `#333333` |
 
-### 2.2 Maps (Folium/Leaflet)
+- **Font family**: System default (DejaVu Sans / Helvetica)
+- **Background**: White (`facecolor='white'`)
+- **DPI**: 150 for screen, 300 for saved PNGs
 
-- **Font family**: `'Times New Roman', Georgia, serif` — applied via injected CSS to all Leaflet elements
-- **Popup body**: 12px, line-height 1.5
-- **Popup section dividers**: `<hr>` with `border-top: 1px solid #ccc`
-- **Dynamic title**: Injected via JavaScript, Times New Roman
+### 2.2 Maps (Folium / Leaflet)
+
+| Element | Size | Notes |
+|---------|------|-------|
+| All UI text | — | `'Times New Roman', Georgia, serif` via injected CSS |
+| Popup body | 12px | line-height 1.5 |
+| Popup bold headers | 13px | Bold |
+| Layer control | 12px | |
+| Dynamic title | 15px | Bold, centered, white background at 92% opacity |
+| Dynamic subtitle | 11px | Color `#555` |
+| Legend header | 13px | Bold, bottom border |
+| Legend items | 12px | line-height 1.8 |
+
+### 2.3 Mobile (< 600px)
+
+| Element | Adjustment |
+|---------|-----------|
+| Legend | 10px font, 6px 8px padding, max-width 160px |
+| Legend header | 11px |
+| Legend dots | 9px |
+| Title | 13px, 5px 12px padding |
+| Subtitle | 9px |
 
 ---
 
@@ -107,47 +125,45 @@ For the crash hotspots chart, injuries are broken down by victim type:
 
 Every chart title **must** include:
 
-1. **Specific year range** as `YYYY–YYYY` (en-dash, not hyphen)
-2. **Sample size** as `n=X,XXX` (with comma formatting)
-3. **QCB5** shorthand (never "CB5", "Queens CB5", or "Queens Community Board 5" in titles)
+1. **Year range** as `YYYY–YYYY` (en-dash `–`, not hyphen `-`)
+2. **Sample size** as `n=X,XXX` (comma-formatted)
+3. **Subject identifier** in the main title line (e.g., QCB5, Borough name)
 
-**Format**: QCB5 or Citywide **always** in the main title line, **never** in the parenthetical subtitle. Parentheses contain only data qualifiers (n=, dates, Excl. APS).
+**Format**: Subject name **always in the main title**, never in a parenthetical subtitle. Parentheses contain only data qualifiers (n=, dates, exclusion notes).
 
-- Correct: `QCB5 Signal Study Requests by Type\n(n=499, 2020–2025)`
-- Correct: `Citywide Signal Study Requests by Borough\n(n=17,824, 2020–2025)`
-- Wrong: `Signal Study Requests by Type\n(QCB5, n=499, 2020–2025)`
+```
+Correct:  QCB5 Signal Study Requests by Type\n(n=499, 2020–2025)
+Correct:  Citywide Requests by Borough\n(n=17,824, 2020–2025)
+Wrong:    Signal Study Requests by Type\n(QCB5, n=499, 2020–2025)
+```
 
 ### 3.2 Date Ranges
 
-- **Main charts** (01–12): Filter to **2020–2025** only
-- **Z-series charts** (01z, 03z, etc.): Use **actual year range from data** (e.g., 1999–2025), hard-capped at 2025
-- **Never** use "Full History", "All Years", or any vague date language
-- All dynamic year computations must be capped: `min(computed_year, 2025)`
+- **Main charts**: Filter to the project's primary analysis window (e.g., 2020–2025)
+- **Extended charts**: Use actual year range from data, hard-capped at the current year
+- **Never** use "Full History", "All Years", "vs", or vague date language
+- All dynamic year computations: `min(computed_year, CURRENT_YEAR)`
 
-### 3.3 APS Exclusion
-
-Accessible Pedestrian Signals are **always excluded** from approval/denial rate calculations. When excluded, title must include `Excl. APS`. When shown in bar charts, use gray with `///` hatch pattern.
-
-### 3.4 Source Citations
+### 3.3 Source Citations
 
 Every chart includes a bottom-left source citation:
 
 ```
-Source: NYC Open Data — Signal Studies [w76s-c5u4], Speed Reducer Tracking System [9n6h-pt9g]
+Source: NYC Open Data — Dataset Name [endpoint_id]
 ```
 
 Rules:
-- Use em dash `—` (not hyphen `-`) after "NYC Open Data"
-- Dataset IDs in **square brackets** `[w76s-c5u4]` (not parentheses)
-- Spell out "Speed Reducer Tracking System" (never abbreviate as "SRTS" in source lines)
+- Em dash `—` after the data provider name
+- Dataset endpoint IDs in **square brackets** `[xxxx-xxxx]`
+- Spell out full dataset names (no abbreviations in source lines)
 - Format: 9pt italic, color `#333333`, positioned at `fig.text(0.01, -0.02, ...)`
 
-### 3.5 Grid & Layout
+### 3.4 Grid & Layout
 
-- Axes grid: ON, alpha 0.3, dashed
-- X-axis grid: OFF for bar charts (vertical gridlines not useful for discrete bars)
-- DPI: 150 for display, 300 for saved PNGs
-- Background: white (`facecolor='white'`)
+- Y-axis grid: ON, alpha 0.3, dashed
+- X-axis grid: OFF for bar charts
+- Background: white
+- Tight layout with padding for source citation
 
 ---
 
@@ -155,127 +171,119 @@ Rules:
 
 ### 4.1 Base Map
 
-- Tiles: CartoDB Positron No Labels (`light_nolabels`) — clean, minimal, print-friendly
-- Center: `[40.714, -73.889]` (CB5 center)
-- Default zoom: 14
-- Scale control: enabled
+- **Tiles**: CartoDB Positron — split into two layers:
+  - `light_nolabels` — base (non-interactive)
+  - `light_only_labels` — overlay, opacity 0.55 (tames label repetition)
+- **Scale control**: enabled
+- **Layer control**: expanded (not collapsed)
 
-### 4.2 Layers (7 total)
+### 4.2 Marker Styles
 
-| # | Layer | Default | Marker Style |
-|---|-------|---------|-------------|
-| 1 | Injury Crashes (2020–2025) | ON | Dot density — size/color by severity |
-| 2 | Denied Signal Studies | ON | CircleMarker, r=6, denied red fill |
-| 3 | Approved Signal Studies | ON | CircleMarker, r=6, approved green fill |
-| 4 | Denied Speed Bumps | ON | CircleMarker, r=4, denied red fill |
-| 5 | Approved Speed Bumps | ON | CircleMarker, r=4, approved green fill |
-| 6 | DOT Effectiveness (Installed) | OFF | CircleMarker, r=7–14 (scaled by data), green/amber/gray fill |
-| 7 | Top 15 Denied Spotlight | OFF | CircleMarker r=9 + 150m dashed circle + rank DivIcon |
+| Type | Marker | Size | Fill Opacity |
+|------|--------|------|-------------|
+| Request (denied/approved) | CircleMarker | r=4–6 | 0.85 |
+| Incident dot | CircleMarker | r=1.2–3.5 by severity | 0.2–0.8 |
+| Spotlight / ranked | CircleMarker r=9 + 150m dashed Circle + rank DivIcon | — | 0.85 dot, 0.08 radius |
+| Before-after | CircleMarker r=7–14 (scaled by data volume) + 150m dashed Circle | — | 0.8 |
 
-### 4.3 Popup Content Standards
+### 4.3 Overlapping Points
 
-Every clickable marker must include **complete context**. Minimum fields by layer:
+When many data points share the same coordinates (e.g., crashes at an intersection):
+- **Default**: Apply small coordinate jitter (~5m / 0.00005°, seeded RNG) so dots spread apart and are individually clickable
+- **Optional analysis layer**: MarkerCluster (off by default) with custom gray cluster icons, spiderfy on max zoom, `maxClusterRadius: 25`
 
-**Crash dots:**
-- Location (streets), date, time
-- Severity tag (FATAL / INJURY / Property damage)
-- Pedestrian / cyclist / motorist injury breakdown
-- Contributing factor, vehicle type
-- Collision ID
+### 4.4 Legend
 
-**Signal studies (denied/approved):**
-- Location, reference number
-- Request type, outcome (color-coded)
-- Date requested, status date, status description
-- School name (if applicable), Vision Zero flag, findings
-- Nearby crash metrics: crashes, injuries, ped. injuries, fatalities within 150m
-
-**Speed bumps / SRTS (denied/approved):**
-- Street segment (on/from/to), project code
-- Outcome (color-coded), request date, project status
-- Denial reason (if denied), install date (if installed)
-- Traffic direction
-- Nearby crash metrics within 150m
-
-**DOT Effectiveness (installed):**
-- Location, reference number
-- Request type, date requested, install date
-- Before-after crash and injury comparison with % change
-- Analysis window (months)
-
-**Top 15 Denied Spotlight:**
-- Rank, location, dataset, request type
-- Full crash metrics within 150m (crashes, injuries, ped. injuries, fatalities)
-
-### 4.4 Tooltips (Hover)
-
-Tooltips are brief summaries shown on hover (before clicking):
-- Crash dots: `"Location — Date"`
-- Signal studies: `"Location — Type (DENIED/APPROVED)"`
-- Speed bumps: `"Street (From to To) — DENIED/APPROVED"`
-- Effectiveness: `"Location — X% fewer/more crashes"`
-- Top 15: `"#Rank: Location (X crashes)"`
+- **Position**: fixed, bottom-left (30px from edges)
+- **Dynamic**: Items show/hide based on active layer checkboxes via JavaScript
+- **Entire legend hides** when no matching layers are active
+- **Icon styles**:
+  - `dot` — filled circle (12px) with 1px solid `#999` border
+  - `spotlight` — 16px dashed-border circle with 6px filled dot centered inside
+- **Mobile**: scales down per Section 2.3
 
 ### 4.5 Dynamic Title
 
-Map title updates via JavaScript MutationObserver based on active layer checkboxes. Priority conditions (first match wins):
-1. Effectiveness active → "DOT Effectiveness: Crash Outcomes After Installation"
-2. Top 15 Spotlight active → "Top 15 Denied Locations by Nearby Crash Count"
-3. Both Signals + SRTS active → "Safety Request Outcomes: QCB5"
-4. Only Signals active → "Signal Study Outcomes: QCB5"
-5. Only SRTS active → "Speed Bump Requests & Injury Crashes"
-6. Default → "Safety Infrastructure Data: QCB5"
+Title bar updates via JavaScript MutationObserver + change/click listeners on the layer control. Shows context-appropriate title based on which layers are active. Falls back to a generic title when no specific combination matches.
+
+### 4.6 Popups
+
+Every clickable marker must include **complete context**:
+- Location (streets/intersection)
+- Date and identifier (reference number, collision ID, etc.)
+- Outcome or severity (color-coded inline)
+- Key metrics with clear labels
+- Section dividers: `<hr>` with `border-top: 1px solid #ccc`
+
+### 4.7 Tooltips (Hover)
+
+Brief one-line summaries: `"Location — Key metric, Date"`
 
 ---
 
 ## 5. Naming Conventions
 
-| Term | Standard Form | Never Use |
-|------|--------------|-----------|
-| Community Board | QCB5 | CB5, Queens CB5, Queens Community Board 5 |
-| Year ranges | 2020–2025 (en-dash) | 2020-2025 (hyphen), "Full History", "All Years" |
-| Approval | Approved | Feasible (except raw SRTS field names) |
-| Denial | Denied | Not Feasible (except raw SRTS field names) |
-| Speed bumps | Speed Bumps | Speed reducers, humps, "SRTS" in titles |
-| SRTS dataset | Speed Reducer Tracking System | SRTS (in source citations) |
+| Concept | Standard Form | Avoid |
+|---------|--------------|-------|
+| Year ranges | 2020–2025 (en-dash) | Hyphens, "Full History", "All Years" |
+| Comparisons | "and" | "vs", "vs." |
+| Positive outcome | Approved | Feasible (unless raw field name) |
+| Negative outcome | Denied | Not Feasible (unless raw field name) |
+| Community boards | QCB5, QCB1, etc. | CB5, Queens CB5 |
 
 ---
 
 ## 6. File Naming
 
-- Charts: `chart_XX_descriptive_name.png` (main), `chart_XXz_descriptive_name.png` (z-series)
-- Maps: `map_01_crash_denial_overlay.html` (consolidated)
-- Data tables: `table_XX_descriptive_name.csv`
-- Cache: `geocode_cache_signal_studies.csv`
+| Type | Pattern | Example |
+|------|---------|---------|
+| Charts (main) | `chart_XX_descriptive_name.png` | `chart_01_request_volume.png` |
+| Charts (extended) | `chart_XXz_descriptive_name.png` | `chart_01z_request_volume_full.png` |
+| Maps | `map_XX_descriptive_name.html` | `map_01_crash_denial_overlay.html` |
+| Data tables | `table_XX_descriptive_name.csv` | `table_09_crash_proximity.csv` |
+| Map layer exports | `map_layer_descriptive_name.csv` | `map_layer_denied_signals.csv` |
+| Data bundles | `data_bundle_vX.X.zip` | `data_bundle_v1.0.zip` |
 
 ---
 
-## 7. Quick Reference: Color Hex Codes
+## 7. Quick Reference: All Hex Codes
 
 ```python
+# === Core semantic colors ===
 COLORS = {
-    'primary':       '#2C5F8B',   # Navy blue — QCB5 / local subject
-    'citywide':      '#B8860B',   # Dark goldenrod — citywide comparison
-    'denied':        '#B44040',   # Muted red — denied requests
-    'approved':      '#4A7C59',   # Muted green — approved requests
-    'crash':         '#996633',   # Warm brown — crash data
-    'crash_alt':     '#CC9966',   # Light brown — injury data
-    'avg_line':      '#B8860B',   # Goldenrod dashed — citywide average reference
-    'cb5_highlight': '#1B3F5E',   # Dark navy — QCB5 highlight in ranked lists
-    'secondary':     '#666666',   # Gray — secondary/muted elements
+    'primary':       '#2C5F8B',   # Navy — primary subject
+    'citywide':      '#B8860B',   # Goldenrod — comparison / baseline
+    'denied':        '#B44040',   # Red — negative outcome
+    'approved':      '#4A7C59',   # Green — positive outcome
+    'crash':         '#996633',   # Brown — neutral data (primary)
+    'crash_alt':     '#CC9966',   # Tan — neutral data (secondary)
 }
 
-DENIAL_SHADES = ['#8B2020', '#B44040', '#C46060', '#D48080', '#DDA0A0', '#E6B8B8', '#EED0D0']
+# === Extended palette ===
+HIGHLIGHT       = '#1B3F5E'   # Dark navy — subject highlight in ranked lists
+IMPROVED        = '#2d7d46'   # Green — outcome improved
+WORSENED        = '#cc8400'   # Amber — outcome worsened
+NO_CHANGE       = '#777777'   # Gray — no change
+SECONDARY_TEXT  = '#666666'   # Gray — muted labels
+EXCLUDED        = '#999999'   # Gray + /// hatch — excluded categories
 
-CATEGORY_PALETTE = ['#2C5F8B', '#B8860B', '#4A7C59', '#B44040', '#999999', '#D4D4D4']
+# === Gradients ===
+NEGATIVE_SHADES = ['#8B2020', '#B44040', '#C46060', '#D48080', '#DDA0A0', '#E6B8B8', '#EED0D0']
+CATEGORY_ORDER  = ['#2C5F8B', '#B8860B', '#4A7C59', '#B44040', '#999999', '#D4D4D4']
 
-# Map crash dots
-CRASH_FATAL   = '#1a1a1a'  # opacity 0.8, r=3.5
-CRASH_INJURY  = '#888888'  # opacity 0.35, r=1.8
-CRASH_OTHER   = '#aaaaaa'  # opacity 0.2, r=1.2
+# === Injury-type palette ===
+PEDESTRIAN = '#B44040'
+CYCLIST    = '#B8860B'
+MOTORIST   = '#CC9966'
 
-# Before-after effectiveness
+# === Map incident dots ===
+FATAL    = '#1a1a1a'   # opacity 0.8,  r=3.5
+INJURY   = '#888888'   # opacity 0.35, r=1.8
+MINOR    = '#aaaaaa'   # opacity 0.2,  r=1.2
+OUTLINE  = '#333333'   # marker outlines
+
+# === Before-after markers ===
 EFFECTIVE_IMPROVED  = '#2d7d46'
-EFFECTIVE_WORSE     = '#cc8400'
+EFFECTIVE_WORSENED  = '#cc8400'
 EFFECTIVE_NOCHANGE  = '#777777'
 ```
