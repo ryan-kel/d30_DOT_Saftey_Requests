@@ -1052,7 +1052,7 @@ def _make_legend_html(items):
         layer_prefixes_csv: comma-separated layer name prefixes for visibility.
         icon_style: 'dot' (default) or 'spotlight' (dot + dashed radius circle).
     """
-    html = ('<div class="map-legend" id="map-legend" style="position:fixed;bottom:30px;left:30px;'
+    html = ('<div class="map-legend" id="map-legend" style="position:fixed;bottom:40px;left:18px;'
             'z-index:1000;background:white;padding:10px 14px;border:1px solid #666;'
             "font-family:'Times New Roman',Georgia,serif;font-size:12px;line-height:1.8;\">")
     html += ('<span class="legend-header" style="font-size:13px;font-weight:bold;'

@@ -1,0 +1,19 @@
+name: Notify Website
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'output/**/*.html'
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger website rebuild
+        run: |
+          curl -sfL -X POST \
+            -H "Authorization: token ${{ secrets.SITE_DEPLOY_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/ryan-kel/electoralanalytics-site/dispatches \
+            -d '{"event_type": "project-updated"}'
