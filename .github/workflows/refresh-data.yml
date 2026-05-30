@@ -10,30 +10,86 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
           cache: 'pip'
 
+      - name: Check source freshness
+        id: freshness
+        run: |
+          set -uo pipefail
+          SENTINEL="data_raw/.rows_updated_at"
+          # Datasets the analysis actually consumes: signal studies, SRTS (speed bumps),
+          # crashes (drives crash-proximity maps/charts), and APS-installed (APS chart).
+          VIEWS="w76s-c5u4 9n6h-pt9g h9gi-nx95 de3m-c5p4"
+
+          # Fail-open: any error fetching/parsing metadata -> proceed with refresh.
+          max=""
+          for v in $VIEWS; do
+            body="$(curl -sfL --max-time 30 "https://data.cityofnewyork.us/api/views/${v}.json")" || {
+              echo "WARN: metadata fetch failed for ${v}; proceeding with refresh (fail-open)."
+              echo "skip=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            }
+            ru="$(printf '%s' "$body" | jq -r '.rowsUpdatedAt')" || ru=""
+            case "$ru" in
+              ''|*[!0-9]*)
+                echo "WARN: invalid rowsUpdatedAt for ${v} (got '${ru}'); proceeding with refresh (fail-open)."
+                echo "skip=false" >> "$GITHUB_OUTPUT"
+                exit 0
+                ;;
+            esac
+            echo "INFO: ${v} rowsUpdatedAt=${ru}"
+            if [ -z "$max" ] || [ "$ru" -gt "$max" ]; then
+              max="$ru"
+            fi
+          done
+
+          echo "INFO: max rowsUpdatedAt across sources = ${max}"
+
+          prev=""
+          if [ -f "$SENTINEL" ]; then
+            prev="$(tr -dc '0-9' < "$SENTINEL")"
+          fi
+          echo "INFO: previous sentinel = '${prev}'"
+
+          if [ -n "$prev" ] && [ "$max" = "$prev" ]; then
+            echo "INFO: sources unchanged since last run; skipping refresh."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "INFO: sources changed (or no prior sentinel); proceeding with refresh."
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            # Record the new max so it is committed with the other outputs.
+            echo "$max" > "$SENTINEL"
+          fi
+
       - name: Install dependencies
+        if: steps.freshness.outputs.skip != 'true'
         run: pip install -r requirements.txt
 
       - name: Fetch fresh data from NYC Open Data
+        if: steps.freshness.outputs.skip != 'true'
         run: python scripts_fetch_data.py
 
       - name: Generate charts (Part 1)
+        if: steps.freshness.outputs.skip != 'true'
         run: python generate_charts.py
 
       - name: Generate maps & analysis (Part 2)
+        if: steps.freshness.outputs.skip != 'true'
         run: python generate_maps.py
 
       - name: Commit updated outputs
+        if: steps.freshness.outputs.skip != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -44,11 +100,3 @@ jobs:
             git commit -m "Automated data refresh $(date +%Y-%m-%d)"
             git push
           fi
-
-      - name: Trigger website rebuild
-        if: success()
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.SITE_REBUILD_TOKEN }}
-          repository: ryan-kel/electoralanalytics-site
-          event-type: data-refresh

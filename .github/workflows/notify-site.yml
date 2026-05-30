@@ -4,7 +4,7 @@ on:
   push:
     branches: [master]
     paths:
-      - 'output/**/*.html'
+      - 'output/**'
 
 jobs:
   notify:

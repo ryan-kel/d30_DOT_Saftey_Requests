@@ -21,6 +21,7 @@ import json
 import warnings
 import os
 import math
+import datetime
 
 warnings.filterwarnings('ignore')
 
@@ -28,6 +29,11 @@ warnings.filterwarnings('ignore')
 DATA_DIR = "data_raw"
 OUTPUT_DIR = "output"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# Study window: 2020 through the last COMPLETE calendar year.
+# The partial current year is excluded (auto-extends every Jan 1).
+STUDY_START_YEAR = 2020
+LAST_COMPLETE_YEAR = datetime.date.today().year - 1   # complete calendar years only; partial current year excluded
 
 GEOCODE_CACHE_PATH = f"{OUTPUT_DIR}/geocode_cache_signal_studies.csv"
 CB5_BOUNDARY_PATH = f"{DATA_DIR}/cb5_boundary.geojson"
@@ -126,6 +132,7 @@ def _inject_map_css(m):
 
 def _add_dynamic_title(m):
     """Add a dynamic title that updates based on which layer checkboxes are active."""
+    _yr_range = f'{STUDY_START_YEAR}–{LAST_COMPLETE_YEAR}'
     html = '''<div class="map-title" id="map-title-container" style="position:fixed;top:10px;left:50%;
         transform:translateX(-50%);z-index:1000;background:rgba(255,255,255,0.92);
         padding:8px 20px;border:1px solid #666;
@@ -218,6 +225,7 @@ def _add_dynamic_title(m):
         observer.observe(document.body, {childList: true, subtree: true});
     });
     </script>'''
+    html = html.replace('2020–2025', _yr_range)
     m.get_root().html.add_child(folium.Element(html))
 
 
@@ -550,15 +558,15 @@ def load_and_prepare_data():
         cb5_srts, lat_col='fromlatitude', lon_col='fromlongitude')
     print(f"  CB5 SRTS: {len(cb5_srts_raw):,} raw -> {len(cb5_srts):,} after polygon filter ({n_srts_excluded} excluded)")
 
-    # Filter SRTS to 2020–2025 for consistency with signal studies and crashes
+    # Filter SRTS to the study window for consistency with signal studies and crashes
     n_before_year = len(cb5_srts)
-    cb5_srts = cb5_srts[cb5_srts['year'].between(2020, 2025)].copy()
-    print(f"  CB5 SRTS: -> {len(cb5_srts):,} after 2020–2025 filter ({n_before_year - len(cb5_srts)} excluded)")
+    cb5_srts = cb5_srts[cb5_srts['year'].between(STUDY_START_YEAR, LAST_COMPLETE_YEAR)].copy()
+    print(f"  CB5 SRTS: -> {len(cb5_srts):,} after {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR} filter ({n_before_year - len(cb5_srts)} excluded)")
 
     # --- Crashes ---
     crashes['crash_date'] = pd.to_datetime(crashes['crash_date'], errors='coerce')
     crashes['year'] = crashes['crash_date'].dt.year
-    crashes = crashes[crashes['year'].between(2020, 2025)]
+    crashes = crashes[crashes['year'].between(STUDY_START_YEAR, LAST_COMPLETE_YEAR)]
     crashes['latitude'] = pd.to_numeric(crashes['latitude'], errors='coerce')
     crashes['longitude'] = pd.to_numeric(crashes['longitude'], errors='coerce')
     crashes['number_of_persons_injured'] = pd.to_numeric(crashes['number_of_persons_injured'], errors='coerce').fillna(0)
@@ -1185,10 +1193,10 @@ def _compute_before_after(data):
     crash_injured = cb5_crashes['number_of_persons_injured'].values
     crash_ped_inj = cb5_crashes['number_of_pedestrians_injured'].values
 
-    DATA_START = pd.Timestamp('2020-01-01')
+    DATA_START = pd.Timestamp(f'{STUDY_START_YEAR}-01-01')
     DATA_END = cb5_crashes['crash_date'].max()
     if pd.isna(DATA_END):
-        DATA_END = pd.Timestamp('2025-12-31')
+        DATA_END = pd.Timestamp(f'{LAST_COMPLETE_YEAR}-12-31')
 
     results = []
     for _, row in installed.iterrows():
@@ -1542,6 +1550,12 @@ def _build_interactive_html(map_data_json_str):
     with custom layer checkboxes instead of Leaflet's floating control.
     """
 
+    # Year dropdown options span the study window; default selected = last complete year.
+    _year_options = ''.join(
+        f'<option value="{y}"{" selected" if y == LAST_COMPLETE_YEAR else ""}>{y}</option>'
+        for y in range(STUDY_START_YEAR, LAST_COMPLETE_YEAR + 1)
+    )
+
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1740,7 +1754,7 @@ html, body {{ margin:0; padding:0; height:100%; font-family:var(--font); }}
   <div class="panel">
     <div class="panel-header">
       <h1 id="title-main">Safety Request Outcomes: QCB5</h1>
-      <div class="subtitle" id="title-sub">Signal Studies &amp; Speed Bumps vs. Injury Crashes (2020&ndash;2025)</div>
+      <div class="subtitle" id="title-sub">Signal Studies &amp; Speed Bumps vs. Injury Crashes ({STUDY_START_YEAR}&ndash;{LAST_COMPLETE_YEAR})</div>
     </div>
 
     <div class="panel-section" style="position:relative;">
@@ -1758,17 +1772,11 @@ html, body {{ margin:0; padding:0; height:100%; font-family:var(--font); }}
       <div class="year-filter">
         <label>From</label>
         <select id="year-start">
-          <option value="2020">2020</option>
-          <option value="2021">2021</option><option value="2022">2022</option>
-          <option value="2023">2023</option><option value="2024">2024</option>
-          <option value="2025" selected>2025</option>
+          {_year_options}
         </select>
         <label>To</label>
         <select id="year-end">
-          <option value="2020">2020</option><option value="2021">2021</option>
-          <option value="2022">2022</option><option value="2023">2023</option>
-          <option value="2024">2024</option>
-          <option value="2025" selected>2025</option>
+          {_year_options}
         </select>
         <button class="btn-apply" id="year-apply">Apply</button>
         <button class="btn-reset" id="year-reset">Reset</button>
@@ -1805,7 +1813,7 @@ html, body {{ margin:0; padding:0; height:100%; font-family:var(--font); }}
     </div>
 
     <div class="panel-section">
-      <div class="section-title" id="stats-title">Statistics (2020&#8211;2025)</div>
+      <div class="section-title" id="stats-title">Statistics ({STUDY_START_YEAR}&#8211;{LAST_COMPLETE_YEAR})</div>
       <div id="stats-body"></div>
     </div>
 
@@ -1834,7 +1842,7 @@ var popupStyle = "font-family:Georgia,'Times New Roman',serif;font-size:12px;lin
 var hr = "<hr style='border:0;border-top:1px solid #eee;margin:4px 0;'>";
 
 // Current year range
-var yearStart = 2025, yearEnd = 2025;
+var yearStart = {LAST_COMPLETE_YEAR}, yearEnd = {LAST_COMPLETE_YEAR};
 
 // Map
 var map = L.map('map', {{center:[40.714,-73.889], zoom:14, zoomControl:false}});
@@ -1956,7 +1964,7 @@ function signalPopup(r) {{
     +'Type: '+r.type+'<br>'
     +'Outcome: <span style="color:'+ocColor+';font-weight:bold;">'+oc+'</span>'
     +hr+'Requested: '+r.reqDt+'<br>Status date: '+r.statusDt+'<br>Status: '+r.status
-    +hr+extras+'<b>Within 150m (2020\\u20132025):</b><br>'
+    +hr+extras+'<b>Within 150m ({STUDY_START_YEAR}\\u2013{LAST_COMPLETE_YEAR}):</b><br>'
     +'Crashes: '+r.cr+'<br>Injuries: '+r.inj+'<br>Ped. injuries: '+r.pinj+'<br>Fatalities: '+r.fat+'</div>';
 }}
 
@@ -1985,7 +1993,7 @@ function srtsPopup(r) {{
     +'<span style="color:#666;font-size:10px;">'+r.code+'</span><br>'
     +'Outcome: <span style="color:'+ocColor+';font-weight:bold;">'+oc+'</span>'
     +hr+'Requested: '+r.reqDt+'<br>Decision date: '+r.closedDt+'<br>Project status: '+r.projStatus
-    +hr+extras+'<b>Within 150m (2020\\u20132025):</b><br>'
+    +hr+extras+'<b>Within 150m ({STUDY_START_YEAR}\\u2013{LAST_COMPLETE_YEAR}):</b><br>'
     +'Crashes: '+r.cr+'<br>Injuries: '+r.inj+'<br>Ped. injuries: '+r.pinj+'<br>Fatalities: '+r.fat+'</div>';
 }}
 
@@ -2300,7 +2308,7 @@ document.getElementById('year-apply').addEventListener('click', function() {{
   enforceYearRange(); rebuildYearLayers();
 }});
 document.getElementById('year-reset').addEventListener('click', function() {{
-  selStart.value = '2020'; selEnd.value = '2025'; rebuildYearLayers();
+  selStart.value = '{STUDY_START_YEAR}'; selEnd.value = '{LAST_COMPLETE_YEAR}'; rebuildYearLayers();
 }});
 
 // === Stats panel ===
@@ -2349,7 +2357,7 @@ function updateTitle() {{
     subEl.textContent = 'Before-After Analysis, Confirmed Installations, QCB5';
   }} else if (isLayerActive('Top 10 Crash')) {{
     titleEl.textContent = 'Top 10 Crash Intersections: QCB5';
-    subEl.textContent = 'Highest Crash-Frequency Intersections (2020\\u20132025)';
+    subEl.textContent = 'Highest Crash-Frequency Intersections ({STUDY_START_YEAR}\\u2013{LAST_COMPLETE_YEAR})';
   }} else if (isLayerActive('Top 15 Denied')) {{
     titleEl.textContent = 'Top 15 Denied Locations by Nearby Crash Count';
     subEl.textContent = '150m Analysis Radius, QCB5';
@@ -2473,7 +2481,7 @@ document.addEventListener('click', function(e){{
 window.addEventListener('message', function(ev) {{
   if (!ev.data || ev.data.type !== 'setYearRange') return;
   var s = parseInt(ev.data.start), e = parseInt(ev.data.end);
-  if (isNaN(s) || isNaN(e) || s < 2020 || e > 2025 || s > e) return;
+  if (isNaN(s) || isNaN(e) || s < {STUDY_START_YEAR} || e > {LAST_COMPLETE_YEAR} || s > e) return;
   selStart.value = String(s);
   selEnd.value = String(e);
   rebuildYearLayers();
@@ -2486,7 +2494,7 @@ if (window !== window.top) {{
 }}
 
 window.setYearRange = function(s, e) {{
-  if (isNaN(s) || isNaN(e) || s < 2020 || e > 2025 || s > e) return;
+  if (isNaN(s) || isNaN(e) || s < {STUDY_START_YEAR} || e > {LAST_COMPLETE_YEAR} || s > e) return;
   selStart.value = String(s);
   selEnd.value = String(e);
   rebuildYearLayers();
@@ -2578,7 +2586,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
     # --- Layer 1: Crash Dot Density (replaces heatmap) ---
     crash_with_coords = cb5_crashes[cb5_crashes['latitude'].notna()].copy()
     crash_dots = folium.FeatureGroup(
-        name=f'Injury Crashes (n={len(crash_with_coords):,}, 2020–2025)', show=True)
+        name=f'Injury Crashes (n={len(crash_with_coords):,}, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})', show=True)
     # Jitter stacked dots so crashes at the same intersection spread apart
     # ~5m offset (0.00005°) — enough to unstick dots, imperceptible geographically
     rng = np.random.RandomState(42)
@@ -2734,7 +2742,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             f"Status: {status_desc}"
             f"{_hr}"
             f"{extras}"
-            f"<b>Within 150m (2020–2025):</b><br>"
+            f"<b>Within 150m ({STUDY_START_YEAR}–{LAST_COMPLETE_YEAR}):</b><br>"
             f"Crashes: {int(row.get('crashes_150m', 0))}<br>"
             f"Injuries: {int(row.get('injuries_150m', 0))}<br>"
             f"Ped. injuries: {ped_inj}<br>"
@@ -2744,7 +2752,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
 
     # --- Layer 2: Denied Signal Studies ---
     denied_signals = folium.FeatureGroup(
-        name=f'Denied Signal Studies (n={n_sig_denied:,}, 2020–2025)', show=True)
+        name=f'Denied Signal Studies (n={n_sig_denied:,}, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})', show=True)
     for _, row in signal_prox[signal_prox['outcome'] == 'denied'].iterrows():
         if pd.isna(row['latitude']):
             continue
@@ -2763,7 +2771,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
 
     # --- Layer 3: Approved Signal Studies ---
     approved_signals = folium.FeatureGroup(
-        name=f'Approved Signal Studies (n={n_sig_approved:,}, 2020–2025)', show=True)
+        name=f'Approved Signal Studies (n={n_sig_approved:,}, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})', show=True)
     for _, row in signal_prox[signal_prox['outcome'] == 'approved'].iterrows():
         if pd.isna(row['latitude']):
             continue
@@ -2814,7 +2822,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             f"Project status: {proj_status}"
             f"{_hr}"
             f"{extras}"
-            f"<b>Within 150m (2020–2025):</b><br>"
+            f"<b>Within 150m ({STUDY_START_YEAR}–{LAST_COMPLETE_YEAR}):</b><br>"
             f"Crashes: {int(row.get('crashes_150m', 0))}<br>"
             f"Injuries: {int(row.get('injuries_150m', 0))}<br>"
             f"Ped. injuries: {ped_inj}<br>"
@@ -2824,7 +2832,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
 
     # --- Layer 4: Denied Speed Bumps ---
     denied_srts = folium.FeatureGroup(
-        name=f'Denied Speed Bumps (n={n_srts_denied:,}, 2020–2025)', show=True)
+        name=f'Denied Speed Bumps (n={n_srts_denied:,}, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})', show=True)
     for _, row in srts_prox[srts_prox['outcome'] == 'denied'].iterrows():
         if pd.isna(row['latitude']):
             continue
@@ -2843,7 +2851,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
 
     # --- Layer 5: Approved Speed Bumps ---
     approved_srts = folium.FeatureGroup(
-        name=f'Approved Speed Bumps (n={n_srts_approved:,}, 2020–2025)', show=True)
+        name=f'Approved Speed Bumps (n={n_srts_approved:,}, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})', show=True)
     for _, row in srts_prox[srts_prox['outcome'] == 'approved'].iterrows():
         if pd.isna(row['latitude']):
             continue
@@ -2869,9 +2877,9 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         aps_installed['date_insta'] = pd.to_datetime(aps_installed['date_insta'], errors='coerce')
         aps_installed['year'] = aps_installed['date_insta'].dt.year
 
-        # Filter: borocd=405 + polygon + 2020–2025
+        # Filter: borocd=405 + polygon + study window
         cb5_aps = aps_installed[aps_installed['borocd'].astype(str).str.strip() == '405'].copy()
-        cb5_aps = cb5_aps[cb5_aps['year'].between(2020, 2025)]
+        cb5_aps = cb5_aps[cb5_aps['year'].between(STUDY_START_YEAR, LAST_COMPLETE_YEAR)]
         has_coords = cb5_aps['point_x'].notna() & cb5_aps['point_y'].notna()
         cb5_aps = cb5_aps[has_coords]
         _aps_poly = prep(_load_cb5_polygon())
@@ -2881,7 +2889,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
 
         n_aps = len(cb5_aps)
         aps_fg = folium.FeatureGroup(
-            name=f'APS Installed (n={n_aps:,}, 2020–2025)', show=False)
+            name=f'APS Installed (n={n_aps:,}, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})', show=False)
 
         APS_COLOR = '#7B68AE'  # muted purple — distinct from denied/approved/crash
         for _, row in cb5_aps.iterrows():
@@ -2924,7 +2932,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
     if data is not None:
         before_after_df = _compute_before_after(data)
         effectiveness_fg = folium.FeatureGroup(
-            name=f'DOT Effectiveness (n={len(before_after_df)}, Installed, 2020–2025)', show=False)
+            name=f'DOT Effectiveness (n={len(before_after_df)}, Installed, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})', show=False)
 
         for _, ba in before_after_df.iterrows():
             change = ba['crash_change']
@@ -3008,7 +3016,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
     spotlight_data = _spatial_dedup(spotlight_data, radius_m=150)
     top15 = spotlight_data.nlargest(15, 'crashes_150m')
 
-    spotlight_fg = folium.FeatureGroup(name='Top 15 Denied Spotlight (2020–2025)', show=False)
+    spotlight_fg = folium.FeatureGroup(name=f'Top 15 Denied Spotlight ({STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})', show=False)
     for rank, (_, row) in enumerate(top15.iterrows(), 1):
         # 150m radius circle
         folium.Circle(
@@ -3070,7 +3078,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
     top10_crashes = crash_agg.head(10)
 
     crash_top_fg = folium.FeatureGroup(
-        name=f'Top 10 Crash Intersections (2020\u20132025)', show=False)
+        name=f'Top 10 Crash Intersections ({STUDY_START_YEAR}\u2013{LAST_COMPLETE_YEAR})', show=False)
     for rank, (_, cr) in enumerate(top10_crashes.iterrows(), 1):
         popup_html = (
             f"<div style=\"{_popup_style}\">"
@@ -3255,7 +3263,7 @@ def _draw_proximity_panel(df, title_prefix, filename, chart_label):
     ax.set_xticks(x)
     ax.set_xticklabels(metric_labels, fontsize=10)
     ax.set_ylabel('Median Count within 150m', fontweight='bold')
-    ax.set_title(f'Crash Proximity: Denied vs. Approved {title_prefix}\n(n={len(denied)+len(approved):,}, Median Crash Metrics, 2020–2025)',
+    ax.set_title(f'Crash Proximity: Denied vs. Approved {title_prefix}\n(n={len(denied)+len(approved):,}, Median Crash Metrics, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})',
                  fontweight='bold', fontsize=12)
     ax.legend(loc='upper right')
     ax.xaxis.grid(False)
@@ -3276,7 +3284,7 @@ def _draw_proximity_panel(df, title_prefix, filename, chart_label):
 
     fig.text(0.01, -0.02,
              'Source: NYC Open Data — 150m radius (~1.5 blocks, Vision Zero standard)\n'
-             'Crash data: Queens injury crashes [2020–2025], Motor Vehicle Collisions [h9gi-nx95]',
+             f'Crash data: Queens injury crashes [{STUDY_START_YEAR}–{LAST_COMPLETE_YEAR}], Motor Vehicle Collisions [h9gi-nx95]',
              ha='left', fontsize=9, style='italic', color='#333333')
 
     plt.tight_layout()
@@ -3394,7 +3402,7 @@ def chart_09b_top_denied_by_crashes(signal_prox):
     ax.set_yticks(y)
     ax.set_yticklabels(top15_rev['label'], fontsize=9)
     ax.set_xlabel('Crashes within 150m', fontweight='bold')
-    ax.set_title(f'Top 15 Denied Signal Study Intersections by Nearby Crash Count\n(150m Radius, n={n_unique:,} unique denied intersections, 2020–2025)',
+    ax.set_title(f'Top 15 Denied Signal Study Intersections by Nearby Crash Count\n(150m Radius, n={n_unique:,} unique denied intersections, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})',
                  fontweight='bold', fontsize=12)
     ax.yaxis.grid(False)
 
@@ -3441,7 +3449,7 @@ def chart_09c_top_denied_by_injuries(signal_prox):
     ax.set_yticks(y)
     ax.set_yticklabels(top15_inj_rev['label'], fontsize=9)
     ax.set_xlabel('Persons Injured within 150m', fontweight='bold')
-    ax.set_title(f'Top 15 Denied Signal Study Intersections by Nearby Injuries\n(150m Radius, n={n_unique:,} unique denied intersections, 2020–2025)',
+    ax.set_title(f'Top 15 Denied Signal Study Intersections by Nearby Injuries\n(150m Radius, n={n_unique:,} unique denied intersections, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})',
                  fontweight='bold', fontsize=12)
     ax.yaxis.grid(False)
     ax.legend(loc='lower right', fontsize=8, framealpha=0.9)
@@ -3467,7 +3475,7 @@ def chart_15_srts_funnel():
     feasible = cb5[cb5['segmentstatusdescription'] == 'Feasible'].copy()
 
     min_yr = int(feasible['requestdate'].dt.year.min())
-    max_yr = min(int(feasible['requestdate'].dt.year.max()), 2025)
+    max_yr = min(int(feasible['requestdate'].dt.year.max()), LAST_COMPLETE_YEAR)
 
     feasible['install_dt'] = pd.to_datetime(feasible['installationdate'], errors='coerce')
 
