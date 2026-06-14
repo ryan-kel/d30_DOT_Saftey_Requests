@@ -78,7 +78,18 @@ jobs:
 
       - name: Fetch fresh data from NYC Open Data
         if: steps.freshness.outputs.skip != 'true'
-        run: python scripts_fetch_data.py
+        run: |
+          for attempt in 1 2 3 4 5; do
+            echo "Fetch attempt ${attempt}/5"
+            if python scripts_fetch_data.py; then
+              exit 0
+            fi
+            if [ "$attempt" -eq 5 ]; then
+              echo "Fresh data fetch failed after ${attempt} attempts."
+              exit 1
+            fi
+            sleep 120
+          done
 
       - name: Generate charts (Part 1)
         if: steps.freshness.outputs.skip != 'true'

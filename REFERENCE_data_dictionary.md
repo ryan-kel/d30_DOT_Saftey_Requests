@@ -166,7 +166,7 @@ In 2017, Disability Rights Advocates filed a lawsuit against NYC requiring insta
 **Purpose**: All motor vehicle crashes reported by NYPD. Useful for correlating denied safety requests with actual crash locations.
 
 **File**: `data_raw/crashes_queens_2020plus.csv`
-**Records**: ~41,632 (Queens, 2020+, with injuries)
+**Records**: CB5-area bounding-box candidates, 2020+, with at least one injury or fatality. Downstream chart and map scripts apply the official CB5 polygon filter.
 
 ### Key Fields
 

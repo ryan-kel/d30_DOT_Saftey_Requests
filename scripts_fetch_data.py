@@ -18,6 +18,8 @@ Author: CB5 Safety Analysis Project
 import pandas as pd
 import requests
 import os
+import json
+import sys
 from datetime import datetime
 
 # === CONFIGURATION ===
@@ -25,6 +27,8 @@ DATA_DIR = "data_raw"
 OUTPUT_DIR = "output"
 os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+CB5_BOUNDARY_PATH = f"{DATA_DIR}/cb5_boundary.geojson"
 
 # NYC Open Data Socrata API endpoints
 DATASETS = {
@@ -89,9 +93,49 @@ def fetch_dataset(endpoint, limit=None, where=None, select=None):
         response = requests.get(base_url, params=params, timeout=120)
         response.raise_for_status()
         return pd.DataFrame(response.json())
+    except requests.HTTPError as e:
+        status = response.status_code
+        request_id = response.headers.get("X-Socrata-RequestId", "n/a")
+        if status == 503 and "Site Currently Unavailable" in response.text[:500]:
+            print(
+                f"  ERROR fetching {endpoint}: NYC Open Data/Socrata returned "
+                f"'Site Currently Unavailable' (HTTP 503, request id {request_id})"
+            )
+        else:
+            print(f"  ERROR fetching {endpoint}: HTTP {status} ({e}, request id {request_id})")
     except Exception as e:
         print(f"  ERROR fetching {endpoint}: {e}")
         return pd.DataFrame()
+    return pd.DataFrame()
+
+
+def _iter_coordinate_pairs(coords):
+    """Yield lon/lat pairs from GeoJSON coordinate arrays."""
+    if not coords:
+        return
+    first = coords[0]
+    if isinstance(first, (int, float)):
+        yield coords
+        return
+    for child in coords:
+        yield from _iter_coordinate_pairs(child)
+
+
+def cb5_boundary_bbox():
+    """Return the CB5 boundary bounding box as min_lon, min_lat, max_lon, max_lat."""
+    with open(CB5_BOUNDARY_PATH) as f:
+        geojson = json.load(f)
+
+    lons, lats = [], []
+    for feature in geojson.get("features", []):
+        for lon, lat, *_ in _iter_coordinate_pairs(feature.get("geometry", {}).get("coordinates", [])):
+            lons.append(float(lon))
+            lats.append(float(lat))
+
+    if not lons or not lats:
+        raise ValueError(f"No coordinates found in {CB5_BOUNDARY_PATH}")
+
+    return min(lons), min(lats), max(lons), max(lats)
 
 
 def explore_dataframe(df, name, show_samples=3):
@@ -140,6 +184,15 @@ def main():
     print("="*70)
 
     all_data = {}
+    fetch_failures = []
+    optional_fetch_failures = []
+
+    def note_fetch_failure(label, required=True):
+        if required:
+            fetch_failures.append(label)
+        else:
+            optional_fetch_failures.append(label)
+        print(f"  No fresh data returned for {label}; existing local CSV, if any, was left unchanged.")
 
     # =========================================================================
     # 1. SIGNAL STUDIES - Most important for denial analysis
@@ -176,6 +229,8 @@ def main():
             for rtype, count in df_studies['requesttype'].value_counts().items():
                 pct = (count / len(df_studies)) * 100
                 print(f"    {rtype:<45} {count:>6,} ({pct:>5.1f}%)")
+    else:
+        note_fetch_failure(DATASETS['signal_studies']['name'])
 
     # =========================================================================
     # 2. SPEED REDUCER TRACKING SYSTEM (SRTS)
@@ -204,6 +259,8 @@ def main():
                 for status, count in cb5_srts['segmentstatusdescription'].value_counts().items():
                     pct = (count / len(cb5_srts)) * 100
                     print(f"    {status:<45} {count:>5,} ({pct:>5.1f}%)")
+    else:
+        note_fetch_failure(DATASETS['srts']['name'])
 
     # =========================================================================
     # 3. ACCESSIBLE PEDESTRIAN SIGNALS - INSTALLED
@@ -233,6 +290,8 @@ def main():
             if 'borocd' in df_aps.columns:
                 cb5_aps = df_aps[df_aps['borocd'] == '405']
                 print(f"[CB5 APS Installed]: {len(cb5_aps):,} signals")
+    else:
+        note_fetch_failure(DATASETS['aps_installed']['name'])
 
     # =========================================================================
     # 4. MOTOR VEHICLE CRASHES
@@ -243,11 +302,21 @@ def main():
     print("#"*70)
     print(f"\nDocumentation: {DATASETS['crashes']['doc_url']}")
 
-    # Only fetch recent Queens crashes to keep manageable
-    print("\nFetching Queens crashes (2020+, with injuries)...")
+    # Fetch by CB5 bounding box, then downstream chart/map scripts apply the exact CB5
+    # polygon filter. Do not pre-filter to borough='QUEENS': some in-polygon crash rows
+    # have a blank borough field. Include fatal-only crashes as well as injury crashes.
+    min_lon, min_lat, max_lon, max_lat = cb5_boundary_bbox()
+    crash_where = (
+        "crash_date >= '2020-01-01' "
+        "AND latitude IS NOT NULL AND longitude IS NOT NULL "
+        "AND (number_of_persons_injured > 0 OR number_of_persons_killed > 0) "
+        f"AND latitude between {min_lat} and {max_lat} "
+        f"AND longitude between {min_lon} and {max_lon}"
+    )
+    print("\nFetching CB5-area crash candidates (2020+, injury or fatal)...")
     df_crashes = fetch_dataset(
         DATASETS['crashes']['endpoint'],
-        where="borough='QUEENS' AND crash_date >= '2020-01-01' AND number_of_persons_injured > 0",
+        where=crash_where,
         limit=50000
     )
 
@@ -255,7 +324,9 @@ def main():
         df_crashes.to_csv(f"{DATA_DIR}/crashes_queens_2020plus.csv", index=False)
         print(f"  Saved to {DATA_DIR}/crashes_queens_2020plus.csv")
 
-        all_data['crashes'] = explore_dataframe(df_crashes, "Motor Vehicle Crashes (Queens 2020+)")
+        all_data['crashes'] = explore_dataframe(df_crashes, "Motor Vehicle Crashes (CB5-area candidates 2020+)")
+    else:
+        note_fetch_failure(DATASETS['crashes']['name'])
 
     # =========================================================================
     # 5. 311 REQUESTS - Sample for DOT
@@ -280,6 +351,8 @@ def main():
         print(f"  Saved to {DATA_DIR}/311_cb5_dot_2020plus.csv")
 
         all_data['311'] = explore_dataframe(df_311, "311 Requests (CB5 DOT 2020+)")
+    else:
+        note_fetch_failure(DATASET_311['name'], required=False)
 
     # =========================================================================
     # SUMMARY
@@ -288,7 +361,7 @@ def main():
     print("DOWNLOAD SUMMARY")
     print("="*70)
     print(f"\nAll raw data saved to: {DATA_DIR}/")
-    print("\nFiles created:")
+    print("\nCurrent CSV files in data_raw:")
     for f in os.listdir(DATA_DIR):
         if f.endswith('.csv'):
             size = os.path.getsize(f"{DATA_DIR}/{f}") / (1024*1024)
@@ -304,6 +377,21 @@ def main():
     print(f"\n{DATASET_311['name']}:")
     print(f"  URL: {DATASET_311['doc_url']}")
     print(f"  Description: {DATASET_311['description']}")
+
+    if fetch_failures or optional_fetch_failures:
+        print("\n" + "="*70)
+        print("FETCH FAILURES")
+        print("="*70)
+        if fetch_failures:
+            print("The refresh did not complete. Existing CSV files were left in place for failed required datasets:")
+            for label in fetch_failures:
+                print(f"  - {label}")
+        if optional_fetch_failures:
+            print("Optional datasets did not refresh:")
+            for label in optional_fetch_failures:
+                print(f"  - {label}")
+    if fetch_failures:
+        sys.exit(1)
 
     return all_data
 

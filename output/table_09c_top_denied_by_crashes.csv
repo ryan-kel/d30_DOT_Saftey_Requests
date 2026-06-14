@@ -17,10 +17,10 @@ Rank,reference_id,location_name,dataset,request_type,request_year,Source File,la
 16,CQ24-2501B,Myrtle Avenue & St Nicholas Avenue,Signal Study,Traffic Signal,2024,data_cb5_signal_studies.csv,40.69984,-73.90868,37,40,11,0.0
 17,CQ22-1051B,64 Street & Myrtle Avenue,Signal Study,Leading Pedestrian Interval,2022,data_cb5_signal_studies.csv,40.700964,-73.89245299999999,37,44,11,0.0
 18,CQ20-0925B,Centre Street & Seneca Avenue,Signal Study,Traffic Signal,2020,data_cb5_signal_studies.csv,40.699585,-73.902245,35,51,8,0.0
-19,CQ20-1559B,Borden Avenue & Grand Avenue,Signal Study,Traffic Signal,2020,data_cb5_signal_studies.csv,40.725635,-73.895856,34,43,6,0.0
-20,CQ22-3501,60 Avenue & 69 Street,Signal Study,Traffic Signal,2022,data_cb5_signal_studies.csv,40.72143,-73.892746,34,41,1,0.0
+19,CQ22-3501,60 Avenue & 69 Street,Signal Study,Traffic Signal,2022,data_cb5_signal_studies.csv,40.72143,-73.892746,34,41,1,0.0
+20,CQ20-1559B,Borden Avenue & Grand Avenue,Signal Study,Traffic Signal,2020,data_cb5_signal_studies.csv,40.725635,-73.895856,34,43,6,0.0
 21,CQ24-0295B,Eliot Avenue & Fresh Pond Road,Signal Study,Leading Pedestrian Interval,2024,data_cb5_signal_studies.csv,40.714622,-73.90117,33,42,7,1.0
 22,CQ20-2507B,Union Turnpike & Woodhaven Boulevard,Signal Study,Leading Pedestrian Interval,2020,data_cb5_signal_studies.csv,40.70559,-73.85823,33,44,3,0.0
 23,CQ22-2347B,Fresh Pond Road & Palmetto Street,Signal Study,Traffic Signal,2022,data_cb5_signal_studies.csv,40.7084,-73.89801,31,40,4,0.0
 24,CQ24-0508B,81 Road & Woodhaven Boulevard,Signal Study,Left Turn Arrow/Signal,2024,data_cb5_signal_studies.csv,40.70456,-73.856735,31,42,0,0.0
-25,CQ22-0469B,70 Street & Cooper Avenue,Signal Study,Leading Pedestrian Interval,2022,data_cb5_signal_studies.csv,40.70171,-73.88091,29,35,11,0.0
+25,CQ20-2012B,80 Street & Metropolitan Avenue,Signal Study,Left Turn Arrow/Signal,2020,data_cb5_signal_studies.csv,40.713287,-73.87163,29,32,5,0.0

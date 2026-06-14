@@ -61,7 +61,7 @@ jupyter notebook analysis_notebook.ipynb
   2. **Polygon boundary filter** (shapely point-in-polygon against official CB5 GeoJSON) — **sole geographic authority**
 
   **WARNING:** `cb=405` alone is insufficient — ~26 records pass the cb filter but fall outside the actual CB5 polygon. In `generate_maps.py`, use `_load_cb5_srts_full()` which applies both layers automatically. **Never load SRTS data directly from CSV with only `cb=405`.** The polygon is the sole geographic authority — no street-name heuristics.
-- **Crashes**: No community board field — uses polygon filter exclusively
+- **Crashes**: Fetched as CB5-area bounding-box candidates with at least one injury or fatality, including rows with blank borough fields. No community board field exists, so final membership uses the polygon filter exclusively.
 - See `REFERENCE_cb5_boundaries.md` for boundary filtering rules
 
 ### Coordinate Filtering Rule

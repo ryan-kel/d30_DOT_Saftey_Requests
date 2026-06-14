@@ -754,13 +754,25 @@ def _save_yoy_tables(yoy, prefix):
     cb5_srts = yoy['cb5_srts']
     cw_srts = yoy['cw_srts']
 
+    def _finalize_yoy_table(table, source):
+        table = table.copy()
+        rate_cols = [col for col in table.columns if 'Rate' in col]
+        count_cols = [col for col in table.columns if col not in rate_cols]
+        for col in rate_cols:
+            table[col] = table[col].round(1)
+        for col in count_cols:
+            table[col] = table[col].round().astype('Int64')
+        table['Source Dataset'] = source
+        table.index = table.index.astype(int)
+        table.index.name = 'Year'
+        return table
+
     sig_table = pd.merge(
         cb5_sig[['total', 'resolved', 'denied', 'denial_rate']].rename(columns={'total': 'CB5 Total', 'resolved': 'CB5 Resolved', 'denied': 'CB5 Denied', 'denial_rate': 'CB5 Denial Rate (%)'}),
         cw_sig[['total', 'resolved', 'denied', 'denial_rate']].rename(columns={'total': 'CW Total', 'resolved': 'CW Resolved', 'denied': 'CW Denied', 'denial_rate': 'CW Denial Rate (%)'}),
         left_index=True, right_index=True, how='outer'
     )
-    sig_table['Source Dataset'] = 'Signal Studies [w76s-c5u4]'
-    sig_table.index.name = 'Year'
+    sig_table = _finalize_yoy_table(sig_table, 'Signal Studies [w76s-c5u4]')
     sig_table.to_csv(f'{OUTPUT_DIR}/{prefix}_signal.csv')
 
     srts_table = pd.merge(
@@ -768,8 +780,7 @@ def _save_yoy_tables(yoy, prefix):
         cw_srts[['total', 'denied', 'denial_rate']].rename(columns={'total': 'CW Total', 'denied': 'CW Denied', 'denial_rate': 'CW Denial Rate (%)'}),
         left_index=True, right_index=True, how='outer'
     )
-    srts_table['Source Dataset'] = 'Speed Reducer Tracking System [9n6h-pt9g]'
-    srts_table.index.name = 'Year'
+    srts_table = _finalize_yoy_table(srts_table, 'Speed Reducer Tracking System [9n6h-pt9g]')
     srts_table.to_csv(f'{OUTPUT_DIR}/{prefix}_srts.csv')
 
 
@@ -1141,15 +1152,20 @@ def _categorize_srts_denial(reason):
 def chart_05a_queens_cb_denial_rates(data):
     """Chart 05a: Speed Bump Denial Rates by Queens Community Board."""
     srts_resolved = data['srts_resolved']
+    cb5_srts = data['cb5_srts']
 
     srts_recent = srts_resolved[srts_resolved['year'].between(STUDY_START_YEAR, LAST_COMPLETE_YEAR)]
     queens_srts = srts_recent[srts_recent['borough'] == 'Queens'].copy()
     queens_srts['cb_num'] = pd.to_numeric(queens_srts['cb'], errors='coerce')
+    cb5_recent = cb5_srts[cb5_srts['year'].between(STUDY_START_YEAR, LAST_COMPLETE_YEAR)]
 
     cb_stats = queens_srts.groupby('cb_num').agg({
         'projectcode': 'count',
         'segmentstatusdescription': lambda x: (x == 'Not Feasible').sum()
     }).rename(columns={'projectcode': 'total', 'segmentstatusdescription': 'denied'})
+    # Replace CB5's cb-code row with the project-standard polygon-filtered CB5 universe.
+    cb_stats.loc[405, 'total'] = len(cb5_recent)
+    cb_stats.loc[405, 'denied'] = (cb5_recent['segmentstatusdescription'] == 'Not Feasible').sum()
     cb_stats['denial_rate'] = cb_stats['denied'] / cb_stats['total'] * 100
     cb_stats = cb_stats[cb_stats['total'] >= 50]
     cb_stats = cb_stats.sort_values('denial_rate', ascending=True)
@@ -1177,7 +1193,7 @@ def chart_05a_queens_cb_denial_rates(data):
     ax.set_xlim(0, 112)
     ax.yaxis.grid(False)
 
-    fig.text(0.01, -0.02, 'Source: NYC Open Data — Speed Reducer Tracking System [9n6h-pt9g]',
+    fig.text(0.01, -0.02, 'Source: NYC Open Data — Speed Reducer Tracking System [9n6h-pt9g] | CB5 uses polygon filter; other Queens CBs use SRTS cb field',
              ha='left', fontsize=9, style='italic', color='#333333')
 
     plt.tight_layout()
@@ -1186,8 +1202,16 @@ def chart_05a_queens_cb_denial_rates(data):
     plt.close()
 
     cb_table = cb_stats[['total', 'denied', 'denial_rate']].copy()
+    cb_table['Geography Method'] = [
+        'CB5 polygon filter' if int(cb) == 405 else 'SRTS cb field'
+        for cb in cb_table.index
+    ]
     cb_table.index = [f'CB{int(cb)-400}' for cb in cb_table.index]
-    cb_table.columns = ['Total', 'Denied', 'Denial Rate (%)']
+    cb_table = cb_table.rename(columns={
+        'total': 'Total',
+        'denied': 'Denied',
+        'denial_rate': 'Denial Rate (%)',
+    })
     cb_table['Denial Rate (%)'] = cb_table['Denial Rate (%)'].round(1)
     cb_table = cb_table.sort_values('Denial Rate (%)', ascending=False)
     cb_table['Source Dataset'] = 'Speed Reducer Tracking System [9n6h-pt9g]'
@@ -1334,6 +1358,8 @@ def chart_05z_speed_bump_full(data):
         'projectcode': 'count',
         'segmentstatusdescription': lambda x: (x == 'Not Feasible').sum()
     }).rename(columns={'projectcode': 'total', 'segmentstatusdescription': 'denied'})
+    cb_stats.loc[405, 'total'] = len(cb5_capped)
+    cb_stats.loc[405, 'denied'] = (cb5_capped['segmentstatusdescription'] == 'Not Feasible').sum()
     cb_stats['denial_rate'] = cb_stats['denied'] / cb_stats['total'] * 100
     cb_stats = cb_stats[cb_stats['total'] >= 50]
     cb_stats = cb_stats.sort_values('denial_rate', ascending=True)
@@ -1409,7 +1435,7 @@ def chart_05z_speed_bump_full(data):
     axes[2].xaxis.set_minor_locator(MultipleLocator(1))
 
     fig.suptitle(f'Speed Bump (SRTS) Analysis, QCB5, {q_min_yr}–{LAST_COMPLETE_YEAR}', fontweight='bold', fontsize=14, y=1.02)
-    fig.text(0.01, -0.02, 'Source: NYC Open Data — Speed Reducer Tracking System [9n6h-pt9g]',
+    fig.text(0.01, -0.02, 'Source: NYC Open Data — Speed Reducer Tracking System [9n6h-pt9g] | CB5 uses polygon filter; other Queens CBs use SRTS cb field',
              ha='left', fontsize=9, style='italic', color='#333333')
 
     plt.tight_layout()
@@ -1419,6 +1445,8 @@ def chart_05z_speed_bump_full(data):
 
     table_05za = cb_stats.reset_index()
     table_05za.columns = ['Community Board', 'Total', 'Denied', 'Denial Rate (%)']
+    table_05za['Geography Method'] = table_05za['Community Board'].apply(
+        lambda x: 'CB5 polygon filter' if int(x) == 405 else 'SRTS cb field')
     table_05za['Community Board'] = table_05za['Community Board'].apply(lambda x: f'CB{int(x)-400}')
     table_05za['Denial Rate (%)'] = table_05za['Denial Rate (%)'].round(1)
     table_05za['Source Dataset'] = 'Speed Reducer Tracking System [9n6h-pt9g]'

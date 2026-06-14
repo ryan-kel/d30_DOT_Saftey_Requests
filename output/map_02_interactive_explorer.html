@@ -196,7 +196,7 @@ html, body { margin:0; padding:0; height:100%; font-family:var(--font); }
   <div class="panel">
     <div class="panel-header">
       <h1 id="title-main">Safety Request Outcomes: QCB5</h1>
-      <div class="subtitle" id="title-sub">Signal Studies &amp; Speed Bumps vs. Injury Crashes (2020&ndash;2025)</div>
+      <div class="subtitle" id="title-sub">Signal Studies &amp; Speed Bumps vs. Injury and Fatal Crashes (2020&ndash;2025)</div>
     </div>
 
     <div class="panel-section" style="position:relative;">
@@ -214,17 +214,11 @@ html, body { margin:0; padding:0; height:100%; font-family:var(--font); }
       <div class="year-filter">
         <label>From</label>
         <select id="year-start">
-          <option value="2020">2020</option>
-          <option value="2021">2021</option><option value="2022">2022</option>
-          <option value="2023">2023</option><option value="2024">2024</option>
-          <option value="2025" selected>2025</option>
+          <option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025" selected>2025</option>
         </select>
         <label>To</label>
         <select id="year-end">
-          <option value="2020">2020</option><option value="2021">2021</option>
-          <option value="2022">2022</option><option value="2023">2023</option>
-          <option value="2024">2024</option>
-          <option value="2025" selected>2025</option>
+          <option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025" selected>2025</option>
         </select>
         <button class="btn-apply" id="year-apply">Apply</button>
         <button class="btn-reset" id="year-reset">Reset</button>
@@ -239,8 +233,8 @@ html, body { margin:0; padding:0; height:100%; font-family:var(--font); }
       <label class="layer-toggle"><input type="checkbox" data-layer="approvedSrts" checked> Approved Speed Bumps <span class="layer-count" id="count-approvedSrts"></span></label>
       <label class="layer-toggle"><input type="checkbox" data-layer="aps"> APS Installed <span class="layer-count" id="count-aps"></span></label>
       <hr class="layer-separator">
-      <label class="layer-toggle"><input type="checkbox" data-layer="crashDots" checked> Injury Crashes <span class="layer-count" id="count-crashDots"></span></label>
-      <label class="layer-toggle"><input type="checkbox" data-layer="crashClustered"> Injury Crashes (clustered) <span class="layer-count" id="count-crashClustered"></span></label>
+      <label class="layer-toggle"><input type="checkbox" data-layer="crashDots" checked> Injury and Fatal Crashes <span class="layer-count" id="count-crashDots"></span></label>
+      <label class="layer-toggle"><input type="checkbox" data-layer="crashClustered"> Injury and Fatal Crashes (clustered) <span class="layer-count" id="count-crashClustered"></span></label>
       <hr class="layer-separator">
       <label class="layer-toggle"><input type="checkbox" data-layer="top15"> Top 15 Denied Spotlight</label>
       <label class="layer-toggle"><input type="checkbox" data-layer="top10crashes"> Top 10 Crash Intersections</label>
@@ -252,8 +246,8 @@ html, body { margin:0; padding:0; height:100%; font-family:var(--font); }
       <span class="legend-item" data-layers="Denied Signal,Denied Speed"><span class="legend-dot" style="background:#B44040;"></span>Denied request</span>
       <span class="legend-item" data-layers="Approved Signal,Approved Speed"><span class="legend-dot" style="background:#4A7C59;"></span>Approved request</span>
       <span class="legend-item" data-layers="APS Installed"><span class="legend-dot" style="background:#7B68AE;"></span>APS installed</span>
-      <span class="legend-item" data-layers="Injury Crashes"><span class="legend-dot" style="background:#888;"></span>Injury crash (dot = 1)</span>
-      <span class="legend-item" data-layers="Injury Crashes"><span class="legend-dot" style="background:#1a1a1a;"></span>Fatal crash</span>
+      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" style="background:#888;"></span>Injury or fatal crash (dot = 1)</span>
+      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" style="background:#1a1a1a;"></span>Fatal crash</span>
       <span class="legend-item" data-layers="Top 10 Crash"><span class="legend-spotlight" style="border:1.5px dashed #2C5F8B;"><span class="inner" style="background:#2C5F8B;"></span></span>Top 10 crash intersection</span>
       <span class="legend-item" data-layers="Top 15 Denied"><span class="legend-spotlight" style="border:1.5px dashed #B44040;"><span class="inner" style="background:#B44040;"></span></span>Top 15 denied spotlight</span>
       <span class="legend-item" data-layers="DOT Effectiveness"><span class="legend-spotlight" style="border:1.5px dashed #2d7d46;"><span class="inner" style="background:#2d7d46;"></span></span>Installed, decreased</span>
@@ -644,8 +638,8 @@ layerGroups.top10crashes = buildTop10CrashLayer(crashRecs);
 
 // Layer display names (used for title logic)
 var layerNames = {
-  crashDots: 'Injury Crashes',
-  crashClustered: 'Injury Crashes',
+  crashDots: 'Injury and Fatal Crashes',
+  crashClustered: 'Injury and Fatal Crashes',
   deniedSignals: 'Denied Signal Studies',
   approvedSignals: 'Approved Signal Studies',
   deniedSrts: 'Denied Speed Bumps',
@@ -812,12 +806,12 @@ function updateTitle() {
   } else if ((isLayerActive('Denied Signal')||isLayerActive('Approved Signal'))
     && (isLayerActive('Denied Speed')||isLayerActive('Approved Speed'))) {
     titleEl.textContent = 'Safety Request Outcomes: QCB5';
-    subEl.textContent = 'Signal Studies & Speed Bumps vs. Injury Crashes ('+yr+')';
+    subEl.textContent = 'Signal Studies & Speed Bumps vs. Injury and Fatal Crashes ('+yr+')';
   } else if (isLayerActive('Denied Signal')||isLayerActive('Approved Signal')) {
     titleEl.textContent = 'Signal Study Outcomes: QCB5';
     subEl.textContent = 'Traffic Signal & Stop Sign Requests vs. Crash Data ('+yr+')';
   } else if (isLayerActive('Denied Speed')||isLayerActive('Approved Speed')) {
-    titleEl.textContent = 'Speed Bump Requests & Injury Crashes';
+    titleEl.textContent = 'Speed Bump Requests vs. Injury and Fatal Crashes';
     subEl.textContent = 'SRTS Program, QCB5 ('+yr+')';
   } else {
     titleEl.textContent = 'Safety Infrastructure Data: QCB5';

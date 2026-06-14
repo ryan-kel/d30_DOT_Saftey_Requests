@@ -138,7 +138,7 @@ def _add_dynamic_title(m):
         padding:8px 20px;border:1px solid #666;
         font-family:'Times New Roman',Georgia,serif;text-align:center;">
         <div id="map-dynamic-title" style="font-size:15px;font-weight:bold;">Safety Request Outcomes: QCB5 (Queens Community Board 5)</div>
-        <div id="map-dynamic-subtitle" style="font-size:11px;color:#555;margin-top:2px;">Signal Studies &amp; Speed Bumps vs. Injury Crashes (2020\u20132025)</div>
+        <div id="map-dynamic-subtitle" style="font-size:11px;color:#555;margin-top:2px;">Signal Studies &amp; Speed Bumps vs. Injury and Fatal Crashes (2020\u20132025)</div>
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -179,12 +179,12 @@ def _add_dynamic_title(m):
                 subtitleEl.textContent = '150m Analysis Radius, QCB5';
             } else if (signals && srts) {
                 titleEl.textContent = 'Safety Request Outcomes: QCB5';
-                subtitleEl.textContent = 'Signal Studies & Speed Bumps vs. Injury Crashes (2020\u20132025)';
+                subtitleEl.textContent = 'Signal Studies & Speed Bumps vs. Injury and Fatal Crashes (2020\u20132025)';
             } else if (signals) {
                 titleEl.textContent = 'Signal Study Outcomes: QCB5';
                 subtitleEl.textContent = 'Traffic Signal & Stop Sign Requests vs. Crash Data';
             } else if (srts) {
-                titleEl.textContent = 'Speed Bump Requests & Injury Crashes';
+                titleEl.textContent = 'Speed Bump Requests vs. Injury and Fatal Crashes';
                 subtitleEl.textContent = 'SRTS Program, QCB5';
             } else {
                 titleEl.textContent = 'Safety Infrastructure Data: QCB5';
@@ -1754,7 +1754,7 @@ html, body {{ margin:0; padding:0; height:100%; font-family:var(--font); }}
   <div class="panel">
     <div class="panel-header">
       <h1 id="title-main">Safety Request Outcomes: QCB5</h1>
-      <div class="subtitle" id="title-sub">Signal Studies &amp; Speed Bumps vs. Injury Crashes ({STUDY_START_YEAR}&ndash;{LAST_COMPLETE_YEAR})</div>
+      <div class="subtitle" id="title-sub">Signal Studies &amp; Speed Bumps vs. Injury and Fatal Crashes ({STUDY_START_YEAR}&ndash;{LAST_COMPLETE_YEAR})</div>
     </div>
 
     <div class="panel-section" style="position:relative;">
@@ -1791,8 +1791,8 @@ html, body {{ margin:0; padding:0; height:100%; font-family:var(--font); }}
       <label class="layer-toggle"><input type="checkbox" data-layer="approvedSrts" checked> Approved Speed Bumps <span class="layer-count" id="count-approvedSrts"></span></label>
       <label class="layer-toggle"><input type="checkbox" data-layer="aps"> APS Installed <span class="layer-count" id="count-aps"></span></label>
       <hr class="layer-separator">
-      <label class="layer-toggle"><input type="checkbox" data-layer="crashDots" checked> Injury Crashes <span class="layer-count" id="count-crashDots"></span></label>
-      <label class="layer-toggle"><input type="checkbox" data-layer="crashClustered"> Injury Crashes (clustered) <span class="layer-count" id="count-crashClustered"></span></label>
+      <label class="layer-toggle"><input type="checkbox" data-layer="crashDots" checked> Injury and Fatal Crashes <span class="layer-count" id="count-crashDots"></span></label>
+      <label class="layer-toggle"><input type="checkbox" data-layer="crashClustered"> Injury and Fatal Crashes (clustered) <span class="layer-count" id="count-crashClustered"></span></label>
       <hr class="layer-separator">
       <label class="layer-toggle"><input type="checkbox" data-layer="top15"> Top 15 Denied Spotlight</label>
       <label class="layer-toggle"><input type="checkbox" data-layer="top10crashes"> Top 10 Crash Intersections</label>
@@ -1804,8 +1804,8 @@ html, body {{ margin:0; padding:0; height:100%; font-family:var(--font); }}
       <span class="legend-item" data-layers="Denied Signal,Denied Speed"><span class="legend-dot" style="background:#B44040;"></span>Denied request</span>
       <span class="legend-item" data-layers="Approved Signal,Approved Speed"><span class="legend-dot" style="background:#4A7C59;"></span>Approved request</span>
       <span class="legend-item" data-layers="APS Installed"><span class="legend-dot" style="background:#7B68AE;"></span>APS installed</span>
-      <span class="legend-item" data-layers="Injury Crashes"><span class="legend-dot" style="background:#888;"></span>Injury crash (dot = 1)</span>
-      <span class="legend-item" data-layers="Injury Crashes"><span class="legend-dot" style="background:#1a1a1a;"></span>Fatal crash</span>
+      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" style="background:#888;"></span>Injury or fatal crash (dot = 1)</span>
+      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" style="background:#1a1a1a;"></span>Fatal crash</span>
       <span class="legend-item" data-layers="Top 10 Crash"><span class="legend-spotlight" style="border:1.5px dashed #2C5F8B;"><span class="inner" style="background:#2C5F8B;"></span></span>Top 10 crash intersection</span>
       <span class="legend-item" data-layers="Top 15 Denied"><span class="legend-spotlight" style="border:1.5px dashed #B44040;"><span class="inner" style="background:#B44040;"></span></span>Top 15 denied spotlight</span>
       <span class="legend-item" data-layers="DOT Effectiveness"><span class="legend-spotlight" style="border:1.5px dashed #2d7d46;"><span class="inner" style="background:#2d7d46;"></span></span>Installed, decreased</span>
@@ -2196,8 +2196,8 @@ layerGroups.top10crashes = buildTop10CrashLayer(crashRecs);
 
 // Layer display names (used for title logic)
 var layerNames = {{
-  crashDots: 'Injury Crashes',
-  crashClustered: 'Injury Crashes',
+  crashDots: 'Injury and Fatal Crashes',
+  crashClustered: 'Injury and Fatal Crashes',
   deniedSignals: 'Denied Signal Studies',
   approvedSignals: 'Approved Signal Studies',
   deniedSrts: 'Denied Speed Bumps',
@@ -2364,12 +2364,12 @@ function updateTitle() {{
   }} else if ((isLayerActive('Denied Signal')||isLayerActive('Approved Signal'))
     && (isLayerActive('Denied Speed')||isLayerActive('Approved Speed'))) {{
     titleEl.textContent = 'Safety Request Outcomes: QCB5';
-    subEl.textContent = 'Signal Studies & Speed Bumps vs. Injury Crashes ('+yr+')';
+    subEl.textContent = 'Signal Studies & Speed Bumps vs. Injury and Fatal Crashes ('+yr+')';
   }} else if (isLayerActive('Denied Signal')||isLayerActive('Approved Signal')) {{
     titleEl.textContent = 'Signal Study Outcomes: QCB5';
     subEl.textContent = 'Traffic Signal & Stop Sign Requests vs. Crash Data ('+yr+')';
   }} else if (isLayerActive('Denied Speed')||isLayerActive('Approved Speed')) {{
-    titleEl.textContent = 'Speed Bump Requests & Injury Crashes';
+    titleEl.textContent = 'Speed Bump Requests vs. Injury and Fatal Crashes';
     subEl.textContent = 'SRTS Program, QCB5 ('+yr+')';
   }} else {{
     titleEl.textContent = 'Safety Infrastructure Data: QCB5';
@@ -2586,7 +2586,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
     # --- Layer 1: Crash Dot Density (replaces heatmap) ---
     crash_with_coords = cb5_crashes[cb5_crashes['latitude'].notna()].copy()
     crash_dots = folium.FeatureGroup(
-        name=f'Injury Crashes (n={len(crash_with_coords):,}, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})', show=True)
+        name=f'Injury and Fatal Crashes (n={len(crash_with_coords):,}, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})', show=True)
     # Jitter stacked dots so crashes at the same intersection spread apart
     # ~5m offset (0.00005°) — enough to unstick dots, imperceptible geographically
     rng = np.random.RandomState(42)
@@ -2669,7 +2669,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
 
     # --- Clustered crash layer (off by default, for analysis) ---
     crash_clustered = folium.FeatureGroup(
-        name=f'Injury Crashes \u2014 Clustered (n={len(crash_with_coords):,})', show=False)
+        name=f'Injury and Fatal Crashes \u2014 Clustered (n={len(crash_with_coords):,})', show=False)
     _cluster_icon_fn = """
     function(cluster) {
         var count = cluster.getChildCount();
@@ -3125,8 +3125,8 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         (COLORS['denied'], 'Denied request', 'Denied Signal,Denied Speed'),
         (COLORS['approved'], 'Approved request', 'Approved Signal,Approved Speed'),
         ('#7B68AE', 'APS installed', 'APS Installed'),
-        ('#888888', 'Injury crash (dot = 1 crash)', 'Injury Crashes'),
-        ('#1a1a1a', 'Fatal crash', 'Injury Crashes'),
+        ('#888888', 'Injury or fatal crash (dot = 1 crash)', 'Injury and Fatal Crashes'),
+        ('#1a1a1a', 'Fatal crash', 'Injury and Fatal Crashes'),
         (COLORS['primary'], 'Top 10 crash intersection', 'Top 10 Crash', 'spotlight'),
         (COLORS['denied'], 'Top 15 denied spotlight', 'Top 15 Denied', 'spotlight'),
     ]
@@ -3284,7 +3284,7 @@ def _draw_proximity_panel(df, title_prefix, filename, chart_label):
 
     fig.text(0.01, -0.02,
              'Source: NYC Open Data — 150m radius (~1.5 blocks, Vision Zero standard)\n'
-             f'Crash data: Queens injury crashes [{STUDY_START_YEAR}–{LAST_COMPLETE_YEAR}], Motor Vehicle Collisions [h9gi-nx95]',
+             f'Crash data: injury and fatal crashes [{STUDY_START_YEAR}–{LAST_COMPLETE_YEAR}], Motor Vehicle Collisions [h9gi-nx95]',
              ha='left', fontsize=9, style='italic', color='#333333')
 
     plt.tight_layout()
