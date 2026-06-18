@@ -82,14 +82,14 @@ def _strip_trailing_whitespace(path):
     with open(path, 'w', encoding='utf-8') as f:
         f.writelines(line.rstrip() + '\n' for line in lines)
 
-# Color scheme — muted academic tones for print readability
+# Color scheme — EA house palette (IBX choropleth + tokens.css)
 COLORS = {
     'primary': '#2C5F8B',
     'citywide': '#B8860B',
-    'denied': '#B44040',
-    'approved': '#4A7C59',
-    'crash': '#996633',
-    'crash_alt': '#CC9966',
+    'denied': '#9e3a30',
+    'approved': '#6b8f5e',
+    'crash': '#54809f',
+    'crash_alt': '#9bb0c2',
 }
 
 # Muted heatmap gradient — warm parchment tones for print
@@ -1667,10 +1667,12 @@ def _build_interactive_html(map_data_json_str):
   --navy: #2C5F8B;
   --navy-dark: #1B3F5E;
   --gold: #B8860B;
-  --red: #B44040;
-  --green: #4A7C59;
-  --crash: #996633;
-  --aps: #7B68AE;
+  --red: #9e3a30;
+  --green: #6b8f5e;
+  --crash: #54809f;
+  --aps: #2C5F8B;
+  --worsened: #c06e45;
+  --neutral: #9bb0c2;
   --text: #2a2a2a;
   --text-light: #555;
   --bg: #fafafa;
@@ -1838,8 +1840,55 @@ body.embedded .sources-wrap {{ display: none; }}
   border-radius: 4px !important; box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
 }}
 .leaflet-popup-tip-container {{ display: none; }}
-.leaflet-popup-content {{ margin: 10px 14px; font-size: 12px; line-height: 1.5; }}
-.leaflet-popup-content b {{ font-size: 13px; }}
+.leaflet-popup-content {{ margin: 12px 14px !important; }}
+.ea-popup {{ font-size: 12px; line-height: 1.5; color: var(--text); }}
+.popup-title {{ color: var(--navy); font-weight: 600; font-size: 13px; margin-bottom: 2px; }}
+.popup-ref {{ font-size: 10px; color: #999; margin-bottom: 4px; }}
+.popup-detail {{ font-size: 11px; color: var(--text-light); line-height: 1.5; }}
+.popup-detail.spaced {{ margin-top: 4px; }}
+.popup-stats {{ margin-top: 6px; border-top: 1px solid #eee; padding-top: 6px; }}
+.popup-stats .stat-row {{ display: flex; justify-content: space-between; padding: 2px 0; font-size: 11px; border-bottom: 1px solid #f5f5f5; }}
+.popup-stats .stat-row:last-child {{ border-bottom: none; }}
+.popup-stats .label {{ color: var(--text-light); }}
+.popup-stats .value {{ font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text); }}
+.popup-blocklabel {{
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--navy); margin-bottom: 3px;
+}}
+.popup-note {{ font-size: 9.5px; color: #999; font-style: italic; margin-top: 5px; line-height: 1.4; }}
+.outcome-badge {{
+  display: inline-block; font-family: Helvetica, Arial, sans-serif;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; padding: 1px 6px; border-radius: 3px;
+}}
+.outcome-denied {{ background: rgba(158,58,48,0.12); color: var(--red); }}
+.outcome-approved {{ background: rgba(107,143,94,0.14); color: var(--green); }}
+.sev-fatal {{ color: var(--navy-dark); font-weight: 700; }}
+.sev-injury {{ color: var(--worsened); font-weight: 600; }}
+.legend-dot[data-color="#9e3a30"] {{ background: #9e3a30; }}
+.legend-dot[data-color="#6b8f5e"] {{ background: #6b8f5e; }}
+.legend-dot[data-color="#2C5F8B"] {{ background: #2C5F8B; }}
+.legend-dot[data-color="#9bb0c2"] {{ background: #9bb0c2; }}
+.legend-dot[data-color="#1B3F5E"] {{ background: #1B3F5E; }}
+.spot-rank {{
+  font-family: Helvetica, Arial, sans-serif; font-size: 9px; font-weight: 700;
+  color: #fff; background: var(--navy-dark); width: 16px; height: 16px;
+  border-radius: 50%; text-align: center; line-height: 16px;
+  border: 1.5px solid #fff; box-shadow: 0 0 0 1px var(--navy);
+  pointer-events: none;
+}}
+.ea-cluster {{
+  background: var(--navy-dark); color: #fff; font-family: Helvetica, Arial, sans-serif;
+  font-size: 11px; font-weight: 700; text-align: center; border-radius: 50%;
+  border: 2px solid var(--gold); box-shadow: 0 1px 4px rgba(27,63,94,0.22);
+}}
+.leaflet-tooltip {{
+  font-family: Georgia, serif !important; font-size: 10px !important;
+  border-radius: 3px !important; padding: 4px 7px !important;
+  border: 1px solid var(--card-border) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important;
+}}
 .leaflet-overlay-pane path[stroke-dasharray] {{ pointer-events: none !important; }}
 
 @media (max-width: 768px) {{
@@ -1906,15 +1955,15 @@ body.embedded .sources-wrap {{ display: none; }}
 
     <div class="panel-section" id="legend-section">
       <h2>Legend</h2>
-      <span class="legend-item" data-layers="Denied Signal,Denied Speed"><span class="legend-dot" style="background:#B44040;"></span>Denied request</span>
-      <span class="legend-item" data-layers="Approved Signal,Approved Speed"><span class="legend-dot" style="background:#4A7C59;"></span>Approved request</span>
-      <span class="legend-item" data-layers="APS Installed"><span class="legend-dot" style="background:#7B68AE;"></span>APS installed</span>
-      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" style="background:#888;"></span>Injury or fatal crash (dot = 1)</span>
-      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" style="background:#1a1a1a;"></span>Fatal crash</span>
+      <span class="legend-item" data-layers="Denied Signal,Denied Speed"><span class="legend-dot" data-color="#9e3a30"></span>Denied request</span>
+      <span class="legend-item" data-layers="Approved Signal,Approved Speed"><span class="legend-dot" data-color="#6b8f5e"></span>Approved request</span>
+      <span class="legend-item" data-layers="APS Installed"><span class="legend-dot" data-color="#2C5F8B"></span>APS installed</span>
+      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" data-color="#9bb0c2"></span>Injury crash</span>
+      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" data-color="#1B3F5E"></span>Fatal crash</span>
       <span class="legend-item" data-layers="Top 10 Crash"><span class="legend-spotlight" style="border:1.5px dashed #2C5F8B;"><span class="inner" style="background:#2C5F8B;"></span></span>Top 10 crash intersection</span>
-      <span class="legend-item" data-layers="Top 15 Denied"><span class="legend-spotlight" style="border:1.5px dashed #B44040;"><span class="inner" style="background:#B44040;"></span></span>Top 15 denied spotlight</span>
-      <span class="legend-item" data-layers="DOT Effectiveness"><span class="legend-spotlight" style="border:1.5px dashed #2d7d46;"><span class="inner" style="background:#2d7d46;"></span></span>Installed, decreased</span>
-      <span class="legend-item" data-layers="DOT Effectiveness"><span class="legend-spotlight" style="border:1.5px dashed #cc8400;"><span class="inner" style="background:#cc8400;"></span></span>Installed, increased</span>
+      <span class="legend-item" data-layers="Top 15 Denied"><span class="legend-spotlight" style="border:1.5px dashed #9e3a30;"><span class="inner" style="background:#9e3a30;"></span></span>Top 15 denied spotlight</span>
+      <span class="legend-item" data-layers="DOT Effectiveness"><span class="legend-spotlight" style="border:1.5px dashed #6b8f5e;"><span class="inner" style="background:#6b8f5e;"></span></span>Installed, decreased</span>
+      <span class="legend-item" data-layers="DOT Effectiveness"><span class="legend-spotlight" style="border:1.5px dashed #c06e45;"><span class="inner" style="background:#c06e45;"></span></span>Installed, increased</span>
     </div>
 
     <div class="panel-section">
@@ -1940,27 +1989,45 @@ body.embedded .sources-wrap {{ display: none; }}
 
 var DATA = {map_data_json_str};
 
-var COLORS = {{denied:'#B44040',approved:'#4A7C59',crash:'#996633',primary:'#2C5F8B',aps:'#7B68AE'}};
-var popupStyle = "font-family:Georgia,'Times New Roman',serif;font-size:12px;line-height:1.5;";
-var hr = "<hr style='border:0;border-top:1px solid #eee;margin:4px 0;'>";
+var COLORS = {{
+  denied:'#9e3a30', approved:'#6b8f5e', crash:'#54809f',
+  primary:'#2C5F8B', aps:'#2C5F8B', gold:'#B8860B',
+  crashInjury:'#9bb0c2', crashFatal:'#1B3F5E', crashProp:'#d3dce3',
+  improved:'#6b8f5e', worsened:'#c06e45', neutral:'#9bb0c2'
+}};
+
+function popupWrap(body) {{ return '<div class="ea-popup">'+body+'</div>'; }}
+function popupTitle(t) {{ return '<div class="popup-title">'+t+'</div>'; }}
+function popupRef(t) {{ return '<div class="popup-ref">'+t+'</div>'; }}
+function popupDetail(t, spaced) {{ return '<div class="popup-detail'+(spaced?' spaced':'')+'">'+t+'</div>'; }}
+function popupBlock(label, rows) {{ return '<div class="popup-stats"><div class="popup-blocklabel">'+label+'</div>'+rows+'</div>'; }}
+function popupRow(label, value) {{
+  return '<div class="stat-row"><span class="label">'+label+'</span><span class="value">'+value+'</span></div>';
+}}
+function outcomeBadge(outcome) {{
+  var cls = outcome==='denied' ? 'outcome-denied' : 'outcome-approved';
+  var text = outcome==='denied' ? 'Denied' : 'Approved';
+  return '<span class="outcome-badge '+cls+'">'+text+'</span>';
+}}
+function requestMarkerStyle(fillColor) {{
+  return {{radius:5, color:'#fff', weight:1.5, fillColor:fillColor, fillOpacity:0.9}};
+}}
 
 // Current year range
 var yearStart = {LAST_COMPLETE_YEAR}, yearEnd = {LAST_COMPLETE_YEAR};
 
 // Map
 var map = L.map('map', {{center:[40.714,-73.889], zoom:14, zoomControl:false}});
-L.control.zoom({{position:'bottomright'}}).addTo(map);
-L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_nolabels/{{z}}/{{x}}/{{y}}{{r}}.png', {{
-  attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19
-}}).addTo(map);
-L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_only_labels/{{z}}/{{x}}/{{y}}{{r}}.png', {{
-  maxZoom:19, opacity:0.55, pane:'overlayPane'
+L.control.zoom({{position:'bottomleft'}}).addTo(map);
+L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+  attribution:'&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap',
+  maxZoom:19
 }}).addTo(map);
 
 // CB5 boundary
 if (DATA.boundary && DATA.boundary.features) {{
   L.geoJSON(DATA.boundary, {{
-    style: {{color:'#555',weight:2,opacity:0.6,fillColor:'#555',fillOpacity:0.02,dashArray:'6 3',interactive:false}}
+    style: {{color:'#B8860B',weight:2,opacity:0.8,fillColor:'#2C5F8B',fillOpacity:0.04,dashArray:'5 4',interactive:false}}
   }}).addTo(map);
 }}
 
@@ -1995,26 +2062,33 @@ var layerGroups = {{}};
 
 function crashPopup(r) {{
   var loc = (r.on && r.off) ? r.on+' & '+r.off : (r.on || r.off || 'Location on map');
-  var sev = r.k>0?'<span style="color:#B44040;font-weight:bold;">FATAL</span>'
-           :r.inj>0?'<span style="color:#cc8400;font-weight:bold;">INJURY</span>':'Property damage';
-  return '<div style="'+popupStyle+'"><b>'+loc+'</b><br>'+r.dt+' at '+r.tm+'<br>Severity: '+sev
-    +hr+'Pedestrians: '+r.pinj+' injured, '+r.pk+' killed<br>Cyclists: '+r.cinj+' injured, '
-    +r.ck+' killed<br>Motorists: '+r.minj+' injured, '+r.mk+' killed'
-    +hr+'Factor: '+(r.fac||'N/A')+'<br>Vehicle: '+(r.veh||'N/A')
-    +'<br><span style="color:#666;font-size:10px;">Collision ID: '+r.cid+'</span></div>';
+  var sev = r.k>0 ? '<span class="sev-fatal">Fatal</span>'
+           : r.inj>0 ? '<span class="sev-injury">Injury</span>' : 'Property damage';
+  return popupWrap(
+    popupTitle(loc)
+    + popupDetail(r.dt+' at '+r.tm+' &middot; '+sev)
+    + popupBlock('Casualties',
+      popupRow('Pedestrians', r.pinj+' injured, '+r.pk+' killed')
+      + popupRow('Cyclists', r.cinj+' injured, '+r.ck+' killed')
+      + popupRow('Motorists', r.minj+' injured, '+r.mk+' killed'))
+    + popupBlock('Report',
+      popupRow('Factor', r.fac||'N/A')
+      + popupRow('Vehicle', r.veh||'N/A'))
+    + '<div class="popup-note">Collision ID: '+r.cid+'</div>'
+  );
 }}
 
 function buildCrashDots(records) {{
   var fg = L.featureGroup();
   records.forEach(function(r) {{
-    var rad, color, opacity;
-    if (r.k>0) {{ rad=3.5; color='#1a1a1a'; opacity=0.8; }}
-    else if (r.inj>0) {{ rad=1.8; color='#888'; opacity=0.35; }}
-    else {{ rad=1.2; color='#aaa'; opacity=0.2; }}
+    var rad, fillColor, opacity, weight;
+    if (r.k>0) {{ rad=4; fillColor=COLORS.crashFatal; opacity=0.92; weight=1.2; }}
+    else if (r.inj>0) {{ rad=2.5; fillColor=COLORS.crashInjury; opacity=0.55; weight=1; }}
+    else {{ rad=1.5; fillColor=COLORS.crashProp; opacity=0.35; weight=0.5; }}
     var sev = r.k>0?'Fatal':(r.inj>0?r.inj+' injured':'Crash');
     var loc = (r.on&&r.off)?r.on+' & '+r.off:(r.on||r.off||'');
-    L.circleMarker([r.jlat, r.jlon], {{radius:rad,color:color,fillColor:color,
-      fillOpacity:opacity,weight:0.3}})
+    L.circleMarker([r.jlat, r.jlon], {{radius:rad,color:'#fff',fillColor:fillColor,
+      fillOpacity:opacity,weight:weight||1}})
       .bindPopup(crashPopup(r),{{maxWidth:320}})
       .bindTooltip(loc+' — '+sev+', '+r.dt)
       .addTo(fg);
@@ -2030,19 +2104,18 @@ function buildCrashClustered(records) {{
     iconCreateFunction:function(cl) {{
       var c=cl.getChildCount(), sz=c<10?26:c<50?32:38;
       return L.divIcon({{
-        html:'<div style="background:rgba(44,95,139,0.82);color:white;font-weight:bold;'
-          +'font-family:Georgia,serif;font-size:11px;text-align:center;line-height:'
-          +sz+'px;border-radius:50%;border:2px solid rgba(184,134,11,0.6);">'+c+'</div>',
+        html:'<div class="ea-cluster" style="width:'+sz+'px;height:'+sz+'px;line-height:'+sz+'px;">'+c+'</div>',
         className:'',iconSize:L.point(sz,sz)
       }});
     }}
   }});
   records.forEach(function(r) {{
-    var d = r.k>0?6:r.inj>0?5:4;
-    var color = r.k>0?'#1a1a1a':r.inj>0?'#888':'#aaa';
-    var opacity = r.k>0?0.8:r.inj>0?0.35:0.2;
-    var icon = L.divIcon({{html:'<div style="width:'+d+'px;height:'+d+'px;background:'+color
-      +';border-radius:50%;opacity:'+opacity+';"></div>',className:'',iconSize:L.point(d,d),
+    var d = r.k>0?7:r.inj>0?6:5;
+    var fill = r.k>0?COLORS.crashFatal:(r.inj>0?COLORS.crashInjury:COLORS.crashProp);
+    var opacity = r.k>0?0.92:r.inj>0?0.6:0.35;
+    var icon = L.divIcon({{html:'<div style="width:'+d+'px;height:'+d+'px;background:'+fill
+      +';border:1.5px solid #fff;border-radius:50%;opacity:'+opacity
+      +';box-shadow:0 0 0 1px rgba(44,95,139,0.25);"></div>',className:'',iconSize:L.point(d,d),
       iconAnchor:L.point(d/2,d/2)}});
     var sev = r.k>0?'Fatal':(r.inj>0?r.inj+' injured':'Crash');
     var loc = (r.on&&r.off)?r.on+' & '+r.off:(r.on||r.off||'');
@@ -2056,19 +2129,25 @@ function buildCrashClustered(records) {{
 
 function signalPopup(r) {{
   var loc = r.main+' & '+r.cross;
-  var oc = r.outcome==='denied'?'DENIED':'APPROVED';
-  var ocColor = r.outcome==='denied'?COLORS.denied:COLORS.approved;
   var extras = '';
-  if (r.school) extras+='School: '+r.school+'<br>';
-  if (r.vz) extras+='Vision Zero priority: Yes<br>';
-  if (r.findings) extras+='Findings: '+r.findings+'<br>';
-  return '<div style="'+popupStyle+'"><b>'+loc+'</b><br>'
-    +'<span style="color:#666;font-size:10px;">'+r.ref+'</span><br>'
-    +'Type: '+r.type+'<br>'
-    +'Outcome: <span style="color:'+ocColor+';font-weight:bold;">'+oc+'</span>'
-    +hr+'Requested: '+r.reqDt+'<br>Status date: '+r.statusDt+'<br>Status: '+r.status
-    +hr+extras+'<b>Within 150m ({STUDY_START_YEAR}\\u2013{LAST_COMPLETE_YEAR}):</b><br>'
-    +'Crashes: '+r.cr+'<br>Injuries: '+r.inj+'<br>Ped. injuries: '+r.pinj+'<br>Fatalities: '+r.fat+'</div>';
+  if (r.school) extras += popupRow('School', r.school);
+  if (r.vz) extras += popupRow('Vision Zero priority', 'Yes');
+  if (r.findings) extras += popupRow('Findings', r.findings);
+  return popupWrap(
+    popupTitle(loc)
+    + popupRef(r.ref)
+    + popupDetail(r.type+' &middot; '+outcomeBadge(r.outcome))
+    + popupBlock('Request',
+      popupRow('Requested', r.reqDt)
+      + popupRow('Status date', r.statusDt)
+      + popupRow('Status', r.status)
+      + extras)
+    + popupBlock('Within 150m',
+      popupRow('Crashes', r.cr)
+      + popupRow('Injuries', r.inj)
+      + popupRow('Ped. injuries', r.pinj)
+      + popupRow('Fatalities', r.fat))
+  );
 }}
 
 function buildSignalLayer(records, outcome) {{
@@ -2076,38 +2155,43 @@ function buildSignalLayer(records, outcome) {{
   var fillColor = outcome==='denied'?COLORS.denied:COLORS.approved;
   records.forEach(function(r) {{
     var loc = r.main+' & '+r.cross;
-    L.circleMarker([r.lat,r.lon],{{radius:5,color:'#333',fillColor:fillColor,
-      fillOpacity:0.75,weight:1}})
+    L.circleMarker([r.lat,r.lon], requestMarkerStyle(fillColor))
       .bindPopup(signalPopup(r),{{maxWidth:340}})
-      .bindTooltip(loc+' — '+r.type+' ('+(outcome==='denied'?'DENIED':'APPROVED')+')')
+      .bindTooltip(loc+' — '+r.type+' ('+(outcome==='denied'?'Denied':'Approved')+')')
       .addTo(fg);
   }});
   return fg;
 }}
 
 function srtsPopup(r) {{
-  var oc = r.outcome==='denied'?'DENIED':'APPROVED';
-  var ocColor = r.outcome==='denied'?COLORS.denied:COLORS.approved;
   var extras = '';
-  if (r.denial) extras+='Denial reason: '+r.denial+'<br>';
-  if (r.installDt) extras+='Installed: '+r.installDt+'<br>';
-  if (r.dir) extras+='Traffic: '+r.dir+'<br>';
-  return '<div style="'+popupStyle+'"><b>'+r.on+'</b> ('+r.from+' to '+r.to+')<br>'
-    +'<span style="color:#666;font-size:10px;">'+r.code+'</span><br>'
-    +'Outcome: <span style="color:'+ocColor+';font-weight:bold;">'+oc+'</span>'
-    +hr+'Requested: '+r.reqDt+'<br>Decision date: '+r.closedDt+'<br>Project status: '+r.projStatus
-    +hr+extras+'<b>Within 150m ({STUDY_START_YEAR}\\u2013{LAST_COMPLETE_YEAR}):</b><br>'
-    +'Crashes: '+r.cr+'<br>Injuries: '+r.inj+'<br>Ped. injuries: '+r.pinj+'<br>Fatalities: '+r.fat+'</div>';
+  if (r.denial) extras += popupRow('Denial reason', r.denial);
+  if (r.installDt) extras += popupRow('Installed', r.installDt);
+  if (r.dir) extras += popupRow('Traffic', r.dir);
+  return popupWrap(
+    popupTitle(r.on)
+    + popupRef(r.code+' &middot; '+r.from+' to '+r.to)
+    + popupDetail(outcomeBadge(r.outcome))
+    + popupBlock('Request',
+      popupRow('Requested', r.reqDt)
+      + popupRow('Decision date', r.closedDt)
+      + popupRow('Project status', r.projStatus)
+      + extras)
+    + popupBlock('Within 150m',
+      popupRow('Crashes', r.cr)
+      + popupRow('Injuries', r.inj)
+      + popupRow('Ped. injuries', r.pinj)
+      + popupRow('Fatalities', r.fat))
+  );
 }}
 
 function buildSrtsLayer(records, outcome) {{
   var fg = L.featureGroup();
   var fillColor = outcome==='denied'?COLORS.denied:COLORS.approved;
   records.forEach(function(r) {{
-    L.circleMarker([r.lat,r.lon],{{radius:5,color:'#333',fillColor:fillColor,
-      fillOpacity:0.75,weight:1}})
+    L.circleMarker([r.lat,r.lon], requestMarkerStyle(fillColor))
       .bindPopup(srtsPopup(r),{{maxWidth:340}})
-      .bindTooltip(r.on+' ('+r.from+' to '+r.to+') — '+(outcome==='denied'?'DENIED':'APPROVED'))
+      .bindTooltip(r.on+' ('+r.from+' to '+r.to+') — '+(outcome==='denied'?'Denied':'Approved'))
       .addTo(fg);
   }});
   return fg;
@@ -2116,16 +2200,17 @@ function buildSrtsLayer(records, outcome) {{
 function buildApsLayer(records) {{
   var fg = L.featureGroup();
   records.forEach(function(r) {{
-    var popup = '<div style="'+popupStyle+'"><b>'+r.loc+'</b><br>'
-      +'<span style="color:#7B68AE;font-weight:bold;">APS INSTALLED</span>'
-      +hr+'Installed: '+r.dt+'<br>Neighborhood: '+r.nta
-      +hr+'<span style="color:#666;font-size:10px;">Source: APS Installed Locations [de3m-c5p4]<br>'
-      +'Installed APS inventory.<br>'
-      +'Excluded from discretionary denial-rate analysis.</span></div>';
-    L.circleMarker([r.lat,r.lon],{{radius:5,color:'#333',fillColor:'#7B68AE',
-      fillOpacity:0.75,weight:1}})
+    var popup = popupWrap(
+      popupTitle(r.loc)
+      + popupDetail('<span class="outcome-badge" style="background:rgba(44,95,139,0.12);color:#2C5F8B;">APS installed</span>')
+      + popupBlock('Installation',
+        popupRow('Date', r.dt)
+        + popupRow('Neighborhood', r.nta))
+      + '<div class="popup-note">Court-mandated APS inventory [de3m-c5p4]. Excluded from discretionary denial-rate analysis.</div>'
+    );
+    L.circleMarker([r.lat,r.lon], requestMarkerStyle(COLORS.aps))
       .bindPopup(popup,{{maxWidth:300}})
-      .bindTooltip(r.loc+' — APS Installed '+r.dt)
+      .bindTooltip(r.loc+' — APS installed '+r.dt)
       .addTo(fg);
   }});
   return fg;
@@ -2150,23 +2235,25 @@ function buildEffectivenessLayer() {{
     var instYear = ba.installDt ? parseInt(ba.installDt.split(', ').pop()) : 0;
     if (instYear < yearStart || instYear > yearEnd) return;
     var fillColor, outline, label;
-    if (ba.chg<0) {{ fillColor='#2d7d46'; outline='#1a5c2e'; label=Math.abs(Math.round(ba.pct))+'% fewer crashes'; }}
-    else if (ba.chg===0) {{ fillColor='#777'; outline='#555'; label='No change'; }}
-    else {{ fillColor='#cc8400'; outline='#996300'; label=Math.round(ba.pct)+'% more crashes'; }}
+    if (ba.chg<0) {{ fillColor=COLORS.improved; outline='#4d6b45'; label=Math.abs(Math.round(ba.pct))+'% fewer crashes'; }}
+    else if (ba.chg===0) {{ fillColor=COLORS.neutral; outline='#6f8dab'; label='No change'; }}
+    else {{ fillColor=COLORS.worsened; outline='#8f4f2a'; label=Math.round(ba.pct)+'% more crashes'; }}
     var injChg = ba.ai-ba.bi;
     var injPct = ba.bi>0?Math.round(injChg/ba.bi*100):0;
     var injLabel = injChg<0?Math.abs(injPct)+'% fewer':(injChg>0?injPct+'% more':'No change');
     var mr = Math.max(7, Math.min(14, 5+ba.bc));
-    var popup = '<div style="'+popupStyle+'"><b>'+ba.main+' & '+ba.cross+'</b><br>'
-      +'<span style="color:#666;font-size:10px;">'+ba.ref+'</span><br>'
-      +'Type: '+ba.type+'<br>Requested: '+ba.reqDt+'<br>Installed: '+ba.installDt
-      +hr+'<b>Before-After Analysis</b> ('+ba.wm+'-mo. windows, 150m):<br>'
-      +'Crashes: '+ba.bc+' &rarr; '+ba.ac+' (<b style="color:'+fillColor+';">'+label+'</b>)<br>'
-      +'Injuries: '+ba.bi+' &rarr; '+ba.ai+' ('+injLabel+')</div>';
+    var popup = popupWrap(
+      popupTitle(ba.main+' & '+ba.cross)
+      + popupRef(ba.ref)
+      + popupDetail(ba.type+' &middot; Installed '+ba.installDt)
+      + popupBlock('Before-after ('+ba.wm+'-mo. windows, 150m)',
+        popupRow('Crashes', ba.bc+' &rarr; '+ba.ac+' ('+label+')')
+        + popupRow('Injuries', ba.bi+' &rarr; '+ba.ai+' ('+injLabel+')'))
+    );
     L.circle([ba.lat,ba.lon],{{radius:150,color:fillColor,fillColor:fillColor,
-      fillOpacity:0.08,weight:1.5,dashArray:'5 3',interactive:false}}).addTo(fg);
-    L.circleMarker([ba.lat,ba.lon],{{radius:mr,color:outline,fillColor:fillColor,
-      fillOpacity:0.8,weight:2}})
+      fillOpacity:0.06,weight:1.5,dashArray:'4 4',interactive:false}}).addTo(fg);
+    L.circleMarker([ba.lat,ba.lon],{{radius:mr,color:'#fff',fillColor:fillColor,
+      fillOpacity:0.9,weight:2}})
       .bindPopup(popup,{{maxWidth:320}})
       .bindTooltip(ba.main+' & '+ba.cross+' — '+label)
       .addTo(fg);
@@ -2220,20 +2307,24 @@ function buildTop15Layer(crashes, deniedSigs, deniedSrts) {{
   selected.forEach(function(r, idx) {{
     var rank = idx+1;
     L.circle([r.lat,r.lon],{{radius:150,color:COLORS.denied,fillColor:COLORS.denied,
-      fillOpacity:0.08,weight:1.5,dashArray:'5 3',interactive:false}}).addTo(fg);
-    var popup = '<div style="'+popupStyle+'"><b>#'+rank+': '+r.name+'</b><br>'
-      +'Dataset: '+r.dataset+'<br>Request: '+r.type
-      +hr+'<b>Within 150m:</b><br>Crashes: '+r.cr+'<br>Injuries: '+r.inj
-      +'<br>Ped. injuries: '+r.pinj+'<br>Fatalities: '+r.fat+'</div>';
-    L.circleMarker([r.lat,r.lon],{{radius:9,color:'#333',fillColor:COLORS.denied,
-      fillOpacity:0.85,weight:2}})
+      fillOpacity:0.06,weight:1.5,dashArray:'4 4',interactive:false}}).addTo(fg);
+    var popup = popupWrap(
+      popupTitle('#'+rank+': '+r.name)
+      + popupDetail(r.dataset+' &middot; '+r.type)
+      + popupBlock('Within 150m',
+        popupRow('Crashes', r.cr)
+        + popupRow('Injuries', r.inj)
+        + popupRow('Ped. injuries', r.pinj)
+        + popupRow('Fatalities', r.fat))
+    );
+    L.circleMarker([r.lat,r.lon],{{radius:8,color:'#fff',fillColor:COLORS.denied,
+      fillOpacity:0.92,weight:2}})
       .bindPopup(popup,{{maxWidth:300}})
       .bindTooltip('#'+rank+': '+r.name+' ('+r.cr+' crashes)')
       .addTo(fg);
     L.marker([r.lat,r.lon],{{icon:L.divIcon({{
-      html:'<div style="font-family:Georgia,serif;font-size:10px;font-weight:bold;'
-        +'color:white;text-align:center;margin-top:-5px;pointer-events:none;">'+rank+'</div>',
-      className:'',iconSize:L.point(20,20),iconAnchor:L.point(10,10)}}),
+      html:'<div class="spot-rank">'+rank+'</div>',
+      className:'',iconSize:L.point(18,18),iconAnchor:L.point(9,9)}}),
       interactive:false}}).addTo(fg);
   }});
   return fg;
@@ -2259,19 +2350,24 @@ function buildTop10CrashLayer(crashes) {{
     var cr = byInt[name];
     var rank = idx+1;
     L.circle([cr.lat,cr.lon],{{radius:150,color:COLORS.primary,fillColor:COLORS.primary,
-      fillOpacity:0.08,weight:1.5,dashArray:'5 3',interactive:false}}).addTo(fg);
-    var popup = '<div style="'+popupStyle+'"><b>#'+rank+': '+name+'</b>'
-      +hr+'<b>Crashes:</b> '+cr.cr+'<br><b>Total injuries:</b> '+cr.inj
-      +'<br>Pedestrian: '+cr.pinj+'<br>Cyclist: '+cr.cinj+'<br><b>Fatalities:</b> '+cr.fat+'</div>';
-    L.circleMarker([cr.lat,cr.lon],{{radius:9,color:'#333',fillColor:COLORS.primary,
-      fillOpacity:0.85,weight:2}})
+      fillOpacity:0.06,weight:1.5,dashArray:'4 4',interactive:false}}).addTo(fg);
+    var popup = popupWrap(
+      popupTitle('#'+rank+': '+name)
+      + popupBlock('Crashes in range',
+        popupRow('Total crashes', cr.cr)
+        + popupRow('Injuries', cr.inj)
+        + popupRow('Pedestrian', cr.pinj)
+        + popupRow('Cyclist', cr.cinj)
+        + popupRow('Fatalities', cr.fat))
+    );
+    L.circleMarker([cr.lat,cr.lon],{{radius:8,color:'#fff',fillColor:COLORS.primary,
+      fillOpacity:0.92,weight:2}})
       .bindPopup(popup,{{maxWidth:300}})
       .bindTooltip('#'+rank+': '+name+' ('+cr.cr+' crashes)')
       .addTo(fg);
     L.marker([cr.lat,cr.lon],{{icon:L.divIcon({{
-      html:'<div style="font-family:Georgia,serif;font-size:10px;font-weight:bold;'
-        +'color:white;text-align:center;margin-top:-5px;pointer-events:none;">'+rank+'</div>',
-      className:'',iconSize:L.point(20,20),iconAnchor:L.point(10,10)}}),
+      html:'<div class="spot-rank">'+rank+'</div>',
+      className:'',iconSize:L.point(18,18),iconAnchor:L.point(9,9)}}),
       interactive:false}}).addTo(fg);
   }});
   return fg;
@@ -2486,23 +2582,25 @@ function doSearch(ref) {{
   ref = ref.trim().toUpperCase();
   var msg = document.getElementById('ref-search-msg');
   var found = fuzzyFind(ref);
-  if (!found) {{ msg.style.color='#B44040'; msg.textContent='Not found: '+ref; return; }}
+  if (!found) {{ msg.style.color=COLORS.denied; msg.textContent='Not found: '+ref; return; }}
   ref = found;
   var entry = SEARCH_INDEX[ref];
   document.getElementById('ref-search').value = ref;
-  msg.style.color='#4A7C59';
+  msg.style.color=COLORS.approved;
   msg.textContent = entry.label+' ('+entry.outcome+')';
   clearHighlight();
   map.setView([entry.lat, entry.lon], 17);
   highlightLayer = L.layerGroup();
   var ring = L.circleMarker([entry.lat, entry.lon], {{
-    radius:18, color:'#B8860B', weight:3, fill:false, opacity:0.9
+    radius:16, color:COLORS.gold, weight:2.5, fill:false, opacity:0.95
   }});
   ring.addTo(highlightLayer);
   L.popup({{offset:[0,-8]}}).setLatLng([entry.lat, entry.lon])
-    .setContent('<div style="font-family:Georgia,serif;font-size:12px;">'
-      +'<b>'+entry.label+'</b><br>'+ref+'<br>Type: '+(entry.type||'N/A')
-      +'<br>Outcome: <b>'+entry.outcome+'</b></div>')
+    .setContent(popupWrap(
+      popupTitle(entry.label)
+      + popupRef(ref)
+      + popupDetail((entry.type||'N/A')+' &middot; '+outcomeBadge(entry.outcome.toLowerCase()))
+    ))
     .addTo(highlightLayer);
   highlightLayer.addTo(map);
   var grow=true;
