@@ -22,6 +22,7 @@ import warnings
 import os
 import math
 import datetime
+import shutil
 
 warnings.filterwarnings('ignore')
 
@@ -36,8 +37,25 @@ STUDY_START_YEAR = 2020
 LAST_COMPLETE_YEAR = datetime.date.today().year - 1   # complete calendar years only; partial current year excluded
 
 GEOCODE_CACHE_PATH = f"{OUTPUT_DIR}/geocode_cache_signal_studies.csv"
+UNMATCHED_SIGNAL_GEOCODES_PATH = f"{OUTPUT_DIR}/data_unmatched_signal_geocodes.csv"
 CB5_BOUNDARY_PATH = f"{DATA_DIR}/cb5_boundary.geojson"
 CB5_BOUNDARY_URL = "https://raw.githubusercontent.com/nycehs/NYC_geography/master/CD.geo.json"
+
+GEOCODE_CACHE_COLUMNS = [
+    'referencenumber', 'mainstreet', 'crossstreet1', 'requesttype',
+    'statusdescription', 'outcome', 'year',
+    'daterequested', 'statusdate',
+    'latitude', 'longitude',
+    'geocode_tier', 'main_norm', 'cross_norm',
+]
+
+UNMATCHED_SIGNAL_GEOCODE_COLUMNS = [
+    'referencenumber', 'mainstreet', 'crossstreet1', 'requesttype',
+    'statusdescription', 'outcome', 'year',
+    'daterequested', 'statusdate',
+    'main_norm', 'cross_norm',
+    'geocode_status', 'review_note',
+]
 
 # Proximity analysis radius in meters
 PROXIMITY_RADIUS_M = 150
@@ -55,6 +73,14 @@ DATA_BUNDLE_VERSION = "1.0"
 # CB5 center for map defaults
 CB5_CENTER = [40.714, -73.889]
 CB5_ZOOM = 14
+
+
+def _strip_trailing_whitespace(path):
+    """Normalize generated text output so repository whitespace checks stay useful."""
+    with open(path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+    with open(path, 'w', encoding='utf-8') as f:
+        f.writelines(line.rstrip() + '\n' for line in lines)
 
 # Color scheme — muted academic tones for print readability
 COLORS = {
@@ -138,7 +164,7 @@ def _add_dynamic_title(m):
         padding:8px 20px;border:1px solid #666;
         font-family:'Times New Roman',Georgia,serif;text-align:center;">
         <div id="map-dynamic-title" style="font-size:15px;font-weight:bold;">Safety Request Outcomes: QCB5 (Queens Community Board 5)</div>
-        <div id="map-dynamic-subtitle" style="font-size:11px;color:#555;margin-top:2px;">Signal Studies &amp; Speed Bumps vs. Injury and Fatal Crashes (2020\u20132025)</div>
+        <div id="map-dynamic-subtitle" style="font-size:11px;color:#555;margin-top:2px;">Signal Studies and Speed Bumps with Injury and Fatal Crashes (2020\u20132025)</div>
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -179,12 +205,12 @@ def _add_dynamic_title(m):
                 subtitleEl.textContent = '150m Analysis Radius, QCB5';
             } else if (signals && srts) {
                 titleEl.textContent = 'Safety Request Outcomes: QCB5';
-                subtitleEl.textContent = 'Signal Studies & Speed Bumps vs. Injury and Fatal Crashes (2020\u20132025)';
+                subtitleEl.textContent = 'Signal Studies and Speed Bumps with Injury and Fatal Crashes (2020\u20132025)';
             } else if (signals) {
                 titleEl.textContent = 'Signal Study Outcomes: QCB5';
-                subtitleEl.textContent = 'Traffic Signal & Stop Sign Requests vs. Crash Data';
+                subtitleEl.textContent = 'Traffic Signal and Stop Sign Requests with Crash Data';
             } else if (srts) {
-                titleEl.textContent = 'Speed Bump Requests vs. Injury and Fatal Crashes';
+                titleEl.textContent = 'Speed Bump Requests with Injury and Fatal Crashes';
                 subtitleEl.textContent = 'SRTS Program, QCB5';
             } else {
                 titleEl.textContent = 'Safety Infrastructure Data: QCB5';
@@ -461,6 +487,65 @@ def _normalize_street_name(name):
     return s
 
 
+def _sync_geocode_cache_with_current_records(cache, cb5_no_aps):
+    """Align cached signal geocodes to the current resolved non-APS records."""
+    current = cb5_no_aps.copy()
+    cache = cache.copy()
+
+    if 'main_norm' not in current.columns:
+        current['main_norm'] = current['mainstreet'].apply(_normalize_street_name)
+    if 'cross_norm' not in current.columns:
+        current['cross_norm'] = current['crossstreet1'].apply(_normalize_street_name)
+
+    for col in GEOCODE_CACHE_COLUMNS:
+        if col not in current.columns:
+            current[col] = np.nan
+        if col not in cache.columns:
+            cache[col] = np.nan
+
+    current['_cache_occurrence'] = current.groupby('referencenumber', dropna=False).cumcount()
+    cache['_cache_occurrence'] = cache.groupby('referencenumber', dropna=False).cumcount()
+
+    cached_coords = cache[
+        ['referencenumber', '_cache_occurrence', 'latitude', 'longitude', 'geocode_tier']
+    ].copy()
+
+    synced = current.drop(columns=['latitude', 'longitude', 'geocode_tier']).merge(
+        cached_coords,
+        on=['referencenumber', '_cache_occurrence'],
+        how='left',
+        sort=False,
+    )
+    synced['geocode_tier'] = synced['geocode_tier'].fillna('')
+
+    return synced[GEOCODE_CACHE_COLUMNS].copy()
+
+
+def _write_unmatched_signal_geocode_report(cache, path=UNMATCHED_SIGNAL_GEOCODES_PATH):
+    """Write unresolved signal-study geocodes that need manual review."""
+    unmatched = cache[cache['latitude'].isna() | cache['longitude'].isna()].copy()
+    for column in ['main_norm', 'cross_norm']:
+        source = 'mainstreet' if column == 'main_norm' else 'crossstreet1'
+        if column not in unmatched.columns:
+            unmatched[column] = unmatched[source].apply(_normalize_street_name)
+        else:
+            missing_norm = unmatched[column].isna() | (unmatched[column].astype(str).str.strip() == '')
+            unmatched.loc[missing_norm, column] = unmatched.loc[missing_norm, source].apply(_normalize_street_name)
+
+    report = unmatched.copy().reset_index(drop=True)
+    report['geocode_status'] = 'unmatched'
+    report['review_note'] = (
+        'No in-polygon local match from crash intersection, SRTS endpoint, '
+        'street-line intersection, or manual override tiers.'
+    )
+    for column in UNMATCHED_SIGNAL_GEOCODE_COLUMNS:
+        if column not in report.columns:
+            report[column] = ''
+    report = report[UNMATCHED_SIGNAL_GEOCODE_COLUMNS]
+    report.to_csv(path, index=False)
+    return report
+
+
 def _load_cb5_polygon():
     """Load the CB5 boundary as a shapely polygon for point-in-polygon tests.
 
@@ -626,33 +711,42 @@ def _build_crash_location_lookup(crashes):
     return lookup
 
 
-def _build_srts_location_lookup(srts):
-    """Build (street1, street2) -> (lat, lon) lookup from SRTS data."""
+def _build_srts_location_lookup(srts, polygon=None):
+    """Build (street1, street2) -> (lat, lon) lookup from SRTS segment endpoints."""
     df = srts[
         srts['fromlatitude'].notna() &
-        srts['fromlongitude'].notna()
+        srts['fromlongitude'].notna() &
+        srts['tolatitude'].notna() &
+        srts['tolongitude'].notna()
     ].copy()
 
     df['fromlatitude'] = pd.to_numeric(df['fromlatitude'], errors='coerce')
     df['fromlongitude'] = pd.to_numeric(df['fromlongitude'], errors='coerce')
-    df = df[df['fromlatitude'].notna() & df['fromlongitude'].notna()]
+    df['tolatitude'] = pd.to_numeric(df['tolatitude'], errors='coerce')
+    df['tolongitude'] = pd.to_numeric(df['tolongitude'], errors='coerce')
+    df = df[
+        df['fromlatitude'].notna() & df['fromlongitude'].notna() &
+        df['tolatitude'].notna() & df['tolongitude'].notna()
+    ]
 
     results = {}
+
+    def add_candidate(street_a, street_b, lat, lon):
+        if not street_a or not street_b:
+            return
+        if polygon is not None and not polygon.covers(Point(float(lon), float(lat))):
+            return
+        key = tuple(sorted([street_a, street_b]))
+        if key not in results:
+            results[key] = (lat, lon)
+
     for _, row in df.iterrows():
         main = _normalize_street_name(row.get('onstreet', ''))
         from_st = _normalize_street_name(row.get('fromstreet', ''))
         to_st = _normalize_street_name(row.get('tostreet', ''))
-        lat = row['fromlatitude']
-        lon = row['fromlongitude']
 
-        if main and from_st:
-            key = tuple(sorted([main, from_st]))
-            if key not in results:
-                results[key] = (lat, lon)
-        if main and to_st:
-            key = tuple(sorted([main, to_st]))
-            if key not in results:
-                results[key] = (lat, lon)
+        add_candidate(main, from_st, row['fromlatitude'], row['fromlongitude'])
+        add_candidate(main, to_st, row['tolatitude'], row['tolongitude'])
     return results
 
 
@@ -726,6 +820,10 @@ def geocode_signal_studies(data):
     if os.path.exists(GEOCODE_CACHE_PATH):
         print("  Loading geocode cache...")
         cache = pd.read_csv(GEOCODE_CACHE_PATH)
+        n_cache_before = len(cache)
+        cache = _sync_geocode_cache_with_current_records(cache, cb5_no_aps)
+        if len(cache) != n_cache_before:
+            print(f"  Synced geocode cache to current records: {n_cache_before} -> {len(cache)}")
         # Re-filter cached results against polygon (cache may predate polygon fix)
         has_coords = cache['latitude'].notna() & cache['longitude'].notna()
         if has_coords.any():
@@ -754,7 +852,7 @@ def geocode_signal_studies(data):
                 cache['main_norm'] = cache['mainstreet'].apply(_normalize_street_name)
                 cache['cross_norm'] = cache['crossstreet1'].apply(_normalize_street_name)
             crash_lookup = _build_crash_location_lookup(data['crashes'])
-            srts_lookup = _build_srts_location_lookup(data['srts'])
+            srts_lookup = _build_srts_location_lookup(data['srts'], cb5_poly)
             crash_keys = {}
             for idx, row in crash_lookup.iterrows():
                 key = tuple(sorted([row['street_a'], row['street_b']]))
@@ -806,8 +904,10 @@ def geocode_signal_studies(data):
                 print(f"  Override applied: {ref} → ({lat}, {lon})")
 
         cache.to_csv(GEOCODE_CACHE_PATH, index=False)
+        unmatched = _write_unmatched_signal_geocode_report(cache)
         geocoded = cache['latitude'].notna().sum()
         print(f"  Cache: {len(cache)} records, {geocoded} geocoded ({geocoded/len(cache)*100:.0f}%)")
+        print(f"  Unmatched signal geocodes: {len(unmatched)} records -> {UNMATCHED_SIGNAL_GEOCODES_PATH}")
         return cache
 
     print("  Geocoding signal study intersections...")
@@ -822,7 +922,7 @@ def geocode_signal_studies(data):
     print(f"    Crash lookup: {len(crash_lookup)} unique intersection pairs")
 
     print("    Building SRTS location lookup...")
-    srts_lookup = _build_srts_location_lookup(data['srts'])
+    srts_lookup = _build_srts_location_lookup(data['srts'], cb5_poly)
     print(f"    SRTS lookup: {len(srts_lookup)} unique intersection pairs")
 
     # Results arrays
@@ -917,14 +1017,11 @@ def geocode_signal_studies(data):
     cb5_no_aps['geocode_tier'] = geo_tier
 
     # Save cache
-    cache_cols = ['referencenumber', 'mainstreet', 'crossstreet1', 'requesttype',
-                  'statusdescription', 'outcome', 'year',
-                  'daterequested', 'statusdate',
-                  'latitude', 'longitude',
-                  'geocode_tier', 'main_norm', 'cross_norm']
-    cache_df = cb5_no_aps[[c for c in cache_cols if c in cb5_no_aps.columns]].copy()
+    cache_df = cb5_no_aps[[c for c in GEOCODE_CACHE_COLUMNS if c in cb5_no_aps.columns]].copy()
     cache_df.to_csv(GEOCODE_CACHE_PATH, index=False)
+    unmatched = _write_unmatched_signal_geocode_report(cache_df)
     print(f"    Cache saved to {GEOCODE_CACHE_PATH}")
+    print(f"    Unmatched signal geocodes: {len(unmatched)} records -> {UNMATCHED_SIGNAL_GEOCODES_PATH}")
 
     return cache_df
 
@@ -1020,8 +1117,10 @@ def _mann_whitney_u(x, y):
     ranks = np.empty_like(order, dtype=float)
     ranks[order] = np.arange(1, len(combined) + 1, dtype=float)
 
-    # Handle ties: average ranks for tied values
+    # Handle ties: average ranks for tied values and apply the standard
+    # tie correction to the normal-approximation variance.
     sorted_combined = combined[order]
+    tie_sum = 0
     i = 0
     while i < len(sorted_combined):
         j = i + 1
@@ -1031,27 +1130,24 @@ def _mann_whitney_u(x, y):
             avg_rank = np.mean(ranks[order[i:j]])
             for k in range(i, j):
                 ranks[order[k]] = avg_rank
+            tie_count = j - i
+            tie_sum += tie_count**3 - tie_count
         i = j
 
     R1 = ranks[:n1].sum()
     U1 = R1 - n1 * (n1 + 1) / 2
 
     # Normal approximation for p-value
+    n = n1 + n2
     mu = n1 * n2 / 2
-    sigma = math.sqrt(n1 * n2 * (n1 + n2 + 1) / 12)
+    tie_correction = tie_sum / (n * (n - 1)) if n > 1 else 0
+    variance = n1 * n2 * ((n + 1) - tie_correction) / 12
+    sigma = math.sqrt(variance) if variance > 0 else 0
     if sigma == 0:
         return U1, 1.0
 
     z = (U1 - mu) / sigma
-    # Two-sided p-value via normal CDF approximation (Abramowitz & Stegun)
-    az = abs(z)
-    # Simple CDF approximation
-    t = 1.0 / (1.0 + 0.2316419 * az)
-    d = 0.3989422804014327  # 1/sqrt(2*pi)
-    p_one = d * math.exp(-0.5 * az * az) * (
-        t * (0.319381530 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))))
-    )
-    p_two = 2 * p_one
+    p_two = math.erfc(abs(z) / math.sqrt(2))
 
     return U1, min(p_two, 1.0)
 
@@ -1523,7 +1619,7 @@ def map_interactive_explorer(signal_prox, srts_prox, cb5_crashes, data,
     """Generate a lightweight interactive Leaflet map with year filtering and stats panel.
 
     NOT folium — vanilla Leaflet + MarkerCluster from CDN.
-    Data embedded inline as JSON. ~1-1.5MB vs 14MB folium map.
+    Data embedded inline as JSON. About 1-1.5MB compared with a 14MB Folium map.
     Output: output/map_02_interactive_explorer.html
     """
     print("  Generating interactive explorer map...")
@@ -1538,6 +1634,7 @@ def map_interactive_explorer(signal_prox, srts_prox, cb5_crashes, data,
     out_path = f'{OUTPUT_DIR}/map_02_interactive_explorer.html'
     with open(out_path, 'w') as f:
         f.write(html)
+    _strip_trailing_whitespace(out_path)
 
     size_kb = os.path.getsize(out_path) / 1024
     print(f"    Interactive explorer map saved ({size_kb:.0f} KB)")
@@ -1546,8 +1643,8 @@ def map_interactive_explorer(signal_prox, srts_prox, cb5_crashes, data,
 def _build_interactive_html(map_data_json_str):
     """Build the complete HTML for the interactive explorer map.
 
-    Uses a 360px left sidebar panel (matching parking/citibike maps)
-    with custom layer checkboxes instead of Leaflet's floating control.
+    Map-first layout with IBX-style collapsible controls rail (~232px).
+    Orientation lives on the site page; panel is filters, layers, legend, stats.
     """
 
     # Year dropdown options span the study window; default selected = last complete year.
@@ -1574,191 +1671,199 @@ def _build_interactive_html(map_data_json_str):
   --green: #4A7C59;
   --crash: #996633;
   --aps: #7B68AE;
-  --border: #e0e0e0;
-  --font: Georgia, 'Times New Roman', serif;
+  --text: #2a2a2a;
+  --text-light: #555;
+  --bg: #fafafa;
+  --card-bg: #fff;
+  --card-border: #e0e0e0;
+  --panel-w: 232px;
 }}
-html, body {{ margin:0; padding:0; height:100%; font-family:var(--font); }}
-
-/* Panel + Map layout */
-.map-and-panel {{ display:flex; height:100vh; width:100%; }}
-
-.panel {{
-  width:360px; min-width:360px; height:100%;
-  overflow-y:auto; background:#fff;
-  border-right:1px solid var(--border);
-  display:flex; flex-direction:column;
+* {{ margin: 0; padding: 0; box-sizing: border-box; }}
+body {{ font-family: Georgia, 'Times New Roman', serif; background: var(--bg); color: var(--text); }}
+#map {{
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;
+  transition: left 0.2s ease, bottom 0.2s ease;
 }}
+body.panel-open #map {{ left: var(--panel-w); }}
 
-.panel-header {{
-  background:var(--navy-dark); color:#fff;
-  padding:18px 20px 14px; text-align:center;
+#panel {{
+  position: absolute; top: 0; left: 0; bottom: 0; width: var(--panel-w);
+  background: var(--card-bg); border-right: 1px solid var(--card-border);
+  z-index: 1000; font-size: 11px; line-height: 1.45;
+  display: flex; flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }}
-.panel-header h1 {{ font-size:1.15rem; font-weight:700; letter-spacing:0.3px; margin-bottom:2px; }}
-.panel-header .subtitle {{ font-size:0.82rem; opacity:0.75; font-style:italic; }}
-
-.panel-section {{
-  padding:14px 20px;
-  border-bottom:1px solid var(--border);
-}}
-
-.section-title {{
-  font-size:0.72rem; font-weight:600; text-transform:uppercase;
-  letter-spacing:1px; color:var(--navy);
-  margin-bottom:10px; padding-bottom:4px;
-  border-bottom:1px solid var(--gold);
+body.panel-open #panel {{
+  transform: translateX(0);
+  box-shadow: 2px 0 12px rgba(27, 63, 94, 0.1);
 }}
 
-/* Year filter bar (citibike pattern) */
+#rail-btn {{
+  position: absolute; top: 12px; left: 0; z-index: 1001;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  font-family: Helvetica, Arial, sans-serif; font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 9px 5px; background: var(--navy-dark); color: #fff;
+  border: none; cursor: pointer; border-radius: 0 3px 3px 0;
+  box-shadow: 1px 0 4px rgba(0, 0, 0, 0.12);
+}}
+#rail-btn:hover {{ background: var(--navy); }}
+body.panel-open #rail-btn {{ display: none; }}
+
+.panel-head {{
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 7px 8px; background: var(--navy-dark); color: #fff; flex-shrink: 0;
+}}
+.panel-title {{
+  font-family: Helvetica, Arial, sans-serif; font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600;
+}}
+.panel-collapse {{
+  display: flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; padding: 0; border: none; border-radius: 3px;
+  background: rgba(255, 255, 255, 0.14); color: #fff; cursor: pointer;
+  font-size: 11px; line-height: 1;
+}}
+.panel-collapse:hover {{ background: rgba(255, 255, 255, 0.26); }}
+
+.panel-scroll {{ flex: 1; overflow-y: auto; overflow-x: hidden; }}
+
+.panel-section {{ padding: 8px 9px 9px; border-bottom: 1px solid #ececec; }}
+.panel-section:last-child {{ border-bottom: none; }}
+.panel-section h2 {{
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.09em;
+  color: var(--navy); font-weight: 700; margin-bottom: 5px;
+}}
+body.embedded #year-filter-section {{ display: none; }}
+
 .year-filter {{
-  display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;
-  padding:0.6rem 0.8rem; background:#f5f5f5;
-  border:1px solid var(--border); border-radius:6px;
-  font-size:0.9rem; margin-bottom:0.25rem;
+  display: flex; align-items: center; gap: 4px; flex-wrap: wrap;
+  padding: 5px 6px; background: #f5f5f5;
+  border: 1px solid var(--card-border); border-radius: 4px;
 }}
-.year-filter label {{ font-weight:600; color:var(--navy); font-size:0.85rem; }}
+.year-filter label {{
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 600; color: var(--navy); font-size: 9px;
+}}
 .year-filter select {{
-  font-family:var(--font); font-size:0.85rem;
-  padding:4px 8px; border:1px solid var(--border);
-  border-radius:4px; background:#fff;
+  font-family: inherit; font-size: 10px;
+  padding: 2px 4px; border: 1px solid var(--card-border);
+  border-radius: 3px; background: #fff;
 }}
-.year-filter select:focus {{ outline:none; border-color:var(--navy); }}
+.year-filter select:focus {{ outline: none; border-color: var(--navy); }}
 .year-filter .btn-apply {{
-  font-family:var(--font); font-size:0.8rem;
-  padding:4px 14px; border:1px solid var(--navy);
-  background:var(--navy); color:#fff; border-radius:4px;
-  cursor:pointer; font-weight:600;
+  font-family: Helvetica, Arial, sans-serif; font-size: 9px;
+  padding: 3px 8px; border: 1px solid var(--navy);
+  background: var(--navy); color: #fff; border-radius: 3px;
+  cursor: pointer; font-weight: 600;
 }}
-.year-filter .btn-apply:hover {{ opacity:0.9; }}
+.year-filter .btn-apply:hover {{ opacity: 0.9; }}
 .year-filter .btn-reset {{
-  font-family:var(--font); font-size:0.8rem;
-  padding:4px 14px; border:1px solid var(--navy);
-  background:none; border-radius:4px; cursor:pointer;
-  color:var(--navy); font-weight:600;
+  font-family: Helvetica, Arial, sans-serif; font-size: 9px;
+  padding: 3px 8px; border: 1px solid var(--navy);
+  background: none; border-radius: 3px; cursor: pointer;
+  color: var(--navy); font-weight: 600;
 }}
-.year-filter .btn-reset:hover {{ background:var(--navy); color:#fff; }}
+.year-filter .btn-reset:hover {{ background: var(--navy); color: #fff; }}
 
-/* Layer toggles */
 .layer-toggle {{
-  display:flex; align-items:center; gap:6px;
-  margin:4px 0; font-size:0.82rem; color:#2a2a2a; cursor:pointer;
+  display: flex; align-items: flex-start; gap: 5px;
+  margin: 2px 0; font-size: 10.5px; line-height: 1.35; cursor: pointer;
 }}
-.layer-toggle input {{ margin:0; cursor:pointer; accent-color:var(--navy); }}
-.layer-count {{ color:#888; font-size:0.75rem; font-variant-numeric:tabular-nums; }}
-.layer-separator {{
-  border:none; border-top:1px solid #f0f0f0;
-  margin:6px 0;
-}}
+.layer-toggle input {{ accent-color: var(--navy); margin-top: 2px; flex-shrink: 0; }}
+.layer-count {{ color: #999; font-size: 9px; font-variant-numeric: tabular-nums; }}
+.layer-separator {{ border: none; border-top: 1px solid #f0f0f0; margin: 5px 0; }}
 
-/* Legend */
-.legend-item {{ display:block; margin:3px 0; font-size:0.78rem; color:#2a2a2a; }}
+.legend-item {{ display: flex; align-items: center; gap: 6px; margin: 1px 0; font-size: 10px; }}
 .legend-dot {{
-  display:inline-block; width:10px; height:10px;
-  border:1px solid #999; border-radius:50%;
-  margin-right:6px; vertical-align:middle;
+  width: 10px; height: 10px; border: 1px solid #999; border-radius: 50%; flex-shrink: 0;
 }}
 .legend-spotlight {{
-  display:inline-block; width:14px; height:14px; border-radius:50%;
-  margin-right:5px; vertical-align:middle; position:relative;
+  width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; position: relative;
 }}
 .legend-spotlight .inner {{
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  width:5px; height:5px; border-radius:50%;
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 5px; height: 5px; border-radius: 50%;
 }}
 
-/* Stats */
-.stat-group {{ margin-bottom:8px; }}
+.stat-group {{ margin-bottom: 6px; }}
 .stat-group .stat-title {{
-  font-weight:600; font-size:0.78rem; color:var(--navy-dark);
-  margin-bottom:2px;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 700; font-size: 9px; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--navy-dark); margin-bottom: 2px;
 }}
 .stat-row {{
-  display:flex; justify-content:space-between; align-items:baseline;
-  padding:2px 0; font-size:0.78rem;
-  border-bottom:1px solid #f0f0f0;
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 2px 0; font-size: 10.5px; border-bottom: 1px solid #f0f0f0;
 }}
-.stat-row:last-child {{ border-bottom:none; }}
-.stat-denied {{ color:var(--red); font-weight:600; }}
-.stat-approved {{ color:var(--green); font-weight:600; }}
-.stat-crash {{ color:var(--crash); font-weight:600; }}
-.stat-aps {{ color:var(--aps); font-weight:600; }}
-.stat-value {{ font-weight:600; font-variant-numeric:tabular-nums; }}
+.stat-row:last-child {{ border-bottom: none; }}
+.stat-denied {{ color: var(--red); font-weight: 600; }}
+.stat-approved {{ color: var(--green); font-weight: 600; }}
+.stat-crash {{ color: var(--crash); font-weight: 600; }}
+.stat-aps {{ color: var(--aps); font-weight: 600; }}
+.stat-value {{ font-weight: 600; font-variant-numeric: tabular-nums; }}
 
-/* Search */
-.search-input-row {{ display:flex; gap:4px; }}
+.search-input-row {{ display: flex; gap: 3px; }}
 #ref-search {{
-  flex:1; padding:5px 8px; font-family:var(--font);
-  font-size:0.82rem; border:1px solid var(--border); border-radius:3px;
+  flex: 1; padding: 4px 6px; font-family: inherit;
+  font-size: 10px; border: 1px solid var(--card-border); border-radius: 3px;
 }}
-#ref-search:focus {{ outline:none; border-color:var(--navy); }}
+#ref-search:focus {{ outline: none; border-color: var(--navy); }}
 #ref-search-btn {{
-  padding:5px 10px; font-family:var(--font); font-size:0.82rem;
-  cursor:pointer; border:1px solid var(--border); background:#fff;
-  border-radius:3px; color:var(--navy); font-weight:600;
+  padding: 4px 7px; font-family: Helvetica, Arial, sans-serif; font-size: 9px;
+  cursor: pointer; border: 1px solid var(--card-border); background: #fff;
+  border-radius: 3px; color: var(--navy); font-weight: 600;
 }}
-#ref-search-btn:hover {{ background:var(--navy); color:#fff; }}
-#ref-search-msg {{ font-size:0.75rem; margin-top:4px; color:#888; }}
+#ref-search-btn:hover {{ background: var(--navy); color: #fff; }}
+#ref-search-msg {{ font-size: 9px; margin-top: 3px; color: #888; }}
 #ref-search-dropdown {{
-  display:none; position:absolute; background:#fff; border:1px solid var(--border);
-  max-height:180px; overflow-y:auto; width:calc(100% - 40px);
-  font-size:0.78rem; z-index:1002; box-shadow:0 2px 6px rgba(0,0,0,0.1);
-  border-radius:3px;
+  display: none; position: absolute; background: #fff; border: 1px solid var(--card-border);
+  max-height: 160px; overflow-y: auto; width: calc(100% - 18px);
+  font-size: 10px; z-index: 1002; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border-radius: 3px;
 }}
-.dropdown-item {{
-  padding:5px 10px; cursor:pointer;
-  border-bottom:1px solid #f0f0f0;
-}}
-.dropdown-item:hover {{ background:rgba(44,95,139,0.04); }}
+.dropdown-item {{ padding: 4px 8px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }}
+.dropdown-item:hover {{ background: rgba(44,95,139,0.04); }}
 
-/* Source citation */
-.source-cite {{
-  font-size:0.75rem; color:#888; font-style:italic;
-  padding:10px 20px; border-top:1px solid var(--border);
-  margin-top:auto;
-}}
-.source-cite a {{
-  color:var(--navy); text-decoration:none;
-  border-bottom:1px dotted var(--gold);
-}}
+.sources-wrap {{ padding: 8px 9px 10px; border-top: 1px solid #ececec; }}
+body.embedded .sources-wrap {{ display: none; }}
+.source-cite {{ font-size: 10px; color: #999; line-height: 1.6; margin: 0 0 6px; }}
+.source-cite a {{ color: var(--navy); text-decoration: none; border-bottom: 1px dotted var(--gold); }}
+.source-cite a:hover {{ color: var(--navy-dark); }}
 
-/* Map container */
-.map-wrapper {{ flex:1; min-width:0; position:relative; }}
-#map {{ width:100%; height:100%; }}
-
-/* Leaflet overrides */
 .leaflet-popup-content-wrapper {{
-  font-family:var(--font); font-size:0.82rem;
-  border-radius:4px; box-shadow:0 2px 8px rgba(0,0,0,0.15);
+  font-family: Georgia, 'Times New Roman', serif !important; font-size: 12px !important;
+  border-radius: 4px !important; box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
 }}
-.leaflet-popup-tip-container {{ display:none; }}
-.leaflet-popup-content {{ margin:10px 14px; font-size:12px; line-height:1.5; }}
-.leaflet-popup-content b {{ font-size:13px; }}
+.leaflet-popup-tip-container {{ display: none; }}
+.leaflet-popup-content {{ margin: 10px 14px; font-size: 12px; line-height: 1.5; }}
+.leaflet-popup-content b {{ font-size: 13px; }}
+.leaflet-overlay-pane path[stroke-dasharray] {{ pointer-events: none !important; }}
 
-/* Spotlight radius circles */
-.leaflet-overlay-pane path[stroke-dasharray] {{ pointer-events:none !important; }}
-
-/* Responsive */
 @media (max-width: 768px) {{
-  .map-and-panel {{ flex-direction:column-reverse; }}
-  .panel {{
-    width:100%; min-width:unset; height:auto;
-    max-height:45vh; border-right:none;
-    border-top:1px solid var(--border);
+  body.panel-open #map {{ left: 0; bottom: 50%; }}
+  #panel {{
+    top: 50%; left: 0; width: 100%;
+    transform: translateY(100%);
   }}
-  .map-wrapper {{ height:55vh; }}
+  body.panel-open #panel {{ transform: translateY(0); }}
 }}
 </style>
 </head>
-<body>
+<body class="panel-open">
 
-<div class="map-and-panel">
-  <div class="panel">
-    <div class="panel-header">
-      <h1 id="title-main">Safety Request Outcomes: QCB5</h1>
-      <div class="subtitle" id="title-sub">Signal Studies &amp; Speed Bumps vs. Injury and Fatal Crashes ({STUDY_START_YEAR}&ndash;{LAST_COMPLETE_YEAR})</div>
-    </div>
-
-    <div class="panel-section" style="position:relative;">
-      <div class="section-title">Search</div>
+<div id="map"></div>
+<button type="button" id="rail-btn" aria-expanded="true" aria-controls="panel">Controls</button>
+<div id="panel" role="region" aria-label="Map controls">
+  <div class="panel-head">
+    <span class="panel-title">Map controls</span>
+    <button type="button" class="panel-collapse" id="panel-close" aria-label="Collapse controls"><span aria-hidden="true">&#9664;</span></button>
+  </div>
+  <div class="panel-scroll">
+    <div class="panel-section" id="search-section" style="position:relative;">
+      <h2>Search</h2>
       <div class="search-input-row">
         <input id="ref-search" type="text" placeholder="Reference # (e.g. CQ21-0722)" autocomplete="off">
         <button id="ref-search-btn">Go</button>
@@ -1767,8 +1872,8 @@ html, body {{ margin:0; padding:0; height:100%; font-family:var(--font); }}
       <div id="ref-search-dropdown"></div>
     </div>
 
-    <div class="panel-section">
-      <div class="section-title">Year Range</div>
+    <div class="panel-section" id="year-filter-section">
+      <h2>Year range</h2>
       <div class="year-filter">
         <label>From</label>
         <select id="year-start">
@@ -1784,7 +1889,7 @@ html, body {{ margin:0; padding:0; height:100%; font-family:var(--font); }}
     </div>
 
     <div class="panel-section">
-      <div class="section-title">Layers</div>
+      <h2>Layers</h2>
       <label class="layer-toggle"><input type="checkbox" data-layer="deniedSignals" checked> Denied Signals <span class="layer-count" id="count-deniedSignals"></span></label>
       <label class="layer-toggle"><input type="checkbox" data-layer="approvedSignals" checked> Approved Signals <span class="layer-count" id="count-approvedSignals"></span></label>
       <label class="layer-toggle"><input type="checkbox" data-layer="deniedSrts" checked> Denied Speed Bumps <span class="layer-count" id="count-deniedSrts"></span></label>
@@ -1800,7 +1905,7 @@ html, body {{ margin:0; padding:0; height:100%; font-family:var(--font); }}
     </div>
 
     <div class="panel-section" id="legend-section">
-      <div class="section-title">Legend</div>
+      <h2>Legend</h2>
       <span class="legend-item" data-layers="Denied Signal,Denied Speed"><span class="legend-dot" style="background:#B44040;"></span>Denied request</span>
       <span class="legend-item" data-layers="Approved Signal,Approved Speed"><span class="legend-dot" style="background:#4A7C59;"></span>Approved request</span>
       <span class="legend-item" data-layers="APS Installed"><span class="legend-dot" style="background:#7B68AE;"></span>APS installed</span>
@@ -1813,19 +1918,17 @@ html, body {{ margin:0; padding:0; height:100%; font-family:var(--font); }}
     </div>
 
     <div class="panel-section">
-      <div class="section-title" id="stats-title">Statistics ({STUDY_START_YEAR}&#8211;{LAST_COMPLETE_YEAR})</div>
+      <h2 id="stats-title">Statistics ({STUDY_START_YEAR}&#8211;{LAST_COMPLETE_YEAR})</h2>
       <div id="stats-body"></div>
     </div>
 
-    <div class="source-cite">
-      Sources: <a href="https://data.cityofnewyork.us/Transportation/DOT-Signal-Studies/w76s-c5u4" target="_blank" rel="noopener">DOT Signal Studies</a> &middot;
-      <a href="https://data.cityofnewyork.us/Transportation/DOT-SRTS/9n6h-pt9g" target="_blank" rel="noopener">DOT SRTS</a> &middot;
-      <a href="https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95" target="_blank" rel="noopener">Motor Vehicle Crashes</a>
+    <div class="sources-wrap">
+      <p class="source-cite">Sources:
+      <a href="https://data.cityofnewyork.us/Transportation/Traffic-Signal-and-All-Way-Stop-Study-Requests/w76s-c5u4" target="_blank" rel="noopener noreferrer">DOT Signal Studies</a> &middot;
+      <a href="https://data.cityofnewyork.us/Transportation/Speed-Reducer-Tracking-System-SRTS-/9n6h-pt9g" target="_blank" rel="noopener noreferrer">DOT SRTS</a> &middot;
+      <a href="https://data.cityofnewyork.us/Transportation/Accessible-Pedestrian-Signal-Locations/de3m-c5p4" target="_blank" rel="noopener noreferrer">APS Installed Locations</a> &middot;
+      <a href="https://data.cityofnewyork.us/Public-Safety/Motor-Vehicle-Collisions-Crashes/h9gi-nx95" target="_blank" rel="noopener noreferrer">Motor Vehicle Crashes</a></p>
     </div>
-  </div>
-
-  <div class="map-wrapper">
-    <div id="map"></div>
   </div>
 </div>
 
@@ -2017,8 +2120,8 @@ function buildApsLayer(records) {{
       +'<span style="color:#7B68AE;font-weight:bold;">APS INSTALLED</span>'
       +hr+'Installed: '+r.dt+'<br>Neighborhood: '+r.nta
       +hr+'<span style="color:#666;font-size:10px;">Source: APS Installed Locations [de3m-c5p4]<br>'
-      +'Court-mandated (federal ADA lawsuit).<br>'
-      +'Excluded from merit-based approval rate analysis.</span></div>';
+      +'Installed APS inventory.<br>'
+      +'Excluded from discretionary denial-rate analysis.</span></div>';
     L.circleMarker([r.lat,r.lon],{{radius:5,color:'#333',fillColor:'#7B68AE',
       fillOpacity:0.75,weight:1}})
       .bindPopup(popup,{{maxWidth:300}})
@@ -2241,7 +2344,6 @@ document.querySelectorAll('.layer-toggle input[data-layer]').forEach(function(cb
     }} else {{
       map.removeLayer(layerGroups[key]);
     }}
-    updateTitle();
     updateLegend();
   }});
 }});
@@ -2297,7 +2399,6 @@ function rebuildYearLayers() {{
 
   updateLayerCounts();
   updateStats();
-  updateTitle();
   updateLegend();
   notifyParentYear();
 }}
@@ -2340,7 +2441,7 @@ function updateStats() {{
 }}
 updateStats();
 
-// === Dynamic title ===
+// === Legend visibility ===
 function isLayerActive(prefix) {{
   for (var k in layerNames) {{
     if (layerNames[k].indexOf(prefix)===0 && map.hasLayer(layerGroups[k])) return true;
@@ -2348,48 +2449,17 @@ function isLayerActive(prefix) {{
   return false;
 }}
 
-function updateTitle() {{
-  var titleEl = document.getElementById('title-main');
-  var subEl = document.getElementById('title-sub');
-  var yr = yearRange;
-  if (isLayerActive('DOT Effectiveness')) {{
-    titleEl.textContent = 'DOT Effectiveness: Crash Outcomes After Installation';
-    subEl.textContent = 'Before-After Analysis, Confirmed Installations, QCB5';
-  }} else if (isLayerActive('Top 10 Crash')) {{
-    titleEl.textContent = 'Top 10 Crash Intersections: QCB5';
-    subEl.textContent = 'Highest Crash-Frequency Intersections ({STUDY_START_YEAR}\\u2013{LAST_COMPLETE_YEAR})';
-  }} else if (isLayerActive('Top 15 Denied')) {{
-    titleEl.textContent = 'Top 15 Denied Locations by Nearby Crash Count';
-    subEl.textContent = '150m Analysis Radius, QCB5';
-  }} else if ((isLayerActive('Denied Signal')||isLayerActive('Approved Signal'))
-    && (isLayerActive('Denied Speed')||isLayerActive('Approved Speed'))) {{
-    titleEl.textContent = 'Safety Request Outcomes: QCB5';
-    subEl.textContent = 'Signal Studies & Speed Bumps vs. Injury and Fatal Crashes ('+yr+')';
-  }} else if (isLayerActive('Denied Signal')||isLayerActive('Approved Signal')) {{
-    titleEl.textContent = 'Signal Study Outcomes: QCB5';
-    subEl.textContent = 'Traffic Signal & Stop Sign Requests vs. Crash Data ('+yr+')';
-  }} else if (isLayerActive('Denied Speed')||isLayerActive('Approved Speed')) {{
-    titleEl.textContent = 'Speed Bump Requests vs. Injury and Fatal Crashes';
-    subEl.textContent = 'SRTS Program, QCB5 ('+yr+')';
-  }} else {{
-    titleEl.textContent = 'Safety Infrastructure Data: QCB5';
-    subEl.textContent = 'Use layer controls to explore';
-  }}
-}}
-
-// === Legend visibility ===
 function updateLegend() {{
   var anyVisible = false;
   document.querySelectorAll('.legend-item').forEach(function(el) {{
     var prefixes = el.getAttribute('data-layers').split(',');
     var show = prefixes.some(function(p) {{ return isLayerActive(p.trim()); }});
-    el.style.display = show?'block':'none';
+    el.style.display = show?'flex':'none';
     if (show) anyVisible = true;
   }});
   document.getElementById('legend-section').style.display = anyVisible?'':'none';
 }}
 
-updateTitle();
 updateLegend();
 
 // === Search ===
@@ -2487,11 +2557,18 @@ window.addEventListener('message', function(ev) {{
   rebuildYearLayers();
 }});
 
-// If embedded in iframe, hide the in-map year filter (page controls it)
-if (window !== window.top) {{
-  var yf = document.querySelector('.panel-section:nth-child(2)');
-  if (yf) yf.style.display = 'none';
+// Collapsed controls rail + embedded mode
+var isEmbedded = window.parent !== window;
+if (isEmbedded) document.body.classList.add('embedded');
+
+function setPanelOpen(open) {{
+  document.body.classList.toggle('panel-open', open);
+  document.getElementById('rail-btn').setAttribute('aria-expanded', open ? 'true' : 'false');
+  window.setTimeout(function() {{ map.invalidateSize(); }}, 220);
 }}
+document.getElementById('rail-btn').addEventListener('click', function() {{ setPanelOpen(true); }});
+document.getElementById('panel-close').addEventListener('click', function() {{ setPanelOpen(false); }});
+window.setTimeout(function() {{ map.invalidateSize(); }}, 280);
 
 window.setYearRange = function(s, e) {{
   if (isNaN(s) || isNaN(e) || s < {STUDY_START_YEAR} || e > {LAST_COMPLETE_YEAR} || s > e) return;
@@ -2868,7 +2945,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
             'type': 'Speed Bump', 'outcome': 'approved'})
     approved_srts.add_to(m)
 
-    # --- Layer 6: APS Installed (de3m-c5p4 — court-mandated, separate from merit-based) ---
+    # --- Layer 6: APS Installed (de3m-c5p4; separate inventory layer) ---
     _aps_path = f'{DATA_DIR}/aps_installed_citywide.csv'
     if os.path.exists(_aps_path):
         aps_installed = pd.read_csv(_aps_path)
@@ -2906,8 +2983,8 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
                 f"{_hr}"
                 f"<span style='color:#666;font-size:10px;'>"
                 f"Source: APS Installed Locations [de3m-c5p4]<br>"
-                f"Court-mandated (federal ADA lawsuit).<br>"
-                f"Excluded from merit-based approval rate analysis.</span>"
+                f"Installed APS inventory.<br>"
+                f"Excluded from discretionary denial-rate analysis.</span>"
                 f"</div>"
             )
             folium.CircleMarker(
@@ -3146,7 +3223,9 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
     # --- Layer control ---
     folium.LayerControl(collapsed=False).add_to(m)
 
-    m.save(f'{OUTPUT_DIR}/map_01_crash_denial_overlay.html')
+    map_path = f'{OUTPUT_DIR}/map_01_crash_denial_overlay.html'
+    m.save(map_path)
+    _strip_trailing_whitespace(map_path)
     print("    Consolidated map saved to map_01_crash_denial_overlay.html")
 
     # --- Export layer data as CSV spreadsheets ---
@@ -3230,7 +3309,7 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
 # ============================================================
 
 def _draw_proximity_panel(df, title_prefix, filename, chart_label):
-    """Draw a single-panel crash proximity chart (denied vs approved)."""
+    """Draw a single-panel crash proximity chart for denied and approved records."""
     metrics = ['crashes_150m', 'injuries_150m', 'ped_injuries_150m']
     metric_labels = ['Crashes', 'Injuries', 'Ped. Injuries']
 
@@ -3263,7 +3342,7 @@ def _draw_proximity_panel(df, title_prefix, filename, chart_label):
     ax.set_xticks(x)
     ax.set_xticklabels(metric_labels, fontsize=10)
     ax.set_ylabel('Median Count within 150m', fontweight='bold')
-    ax.set_title(f'Crash Proximity: Denied vs. Approved {title_prefix}\n(n={len(denied)+len(approved):,}, Median Crash Metrics, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})',
+    ax.set_title(f'Crash Proximity: Denied and Approved {title_prefix}\n(n={len(denied)+len(approved):,}, Median Crash Metrics, {STUDY_START_YEAR}–{LAST_COMPLETE_YEAR})',
                  fontweight='bold', fontsize=12)
     ax.legend(loc='upper right')
     ax.xaxis.grid(False)
@@ -3469,7 +3548,7 @@ def chart_15_srts_funnel():
     """Chart 15: SRTS Approval Funnel — what happens after DOT approves a speed bump."""
     print("  Generating Chart 15: SRTS Approval Funnel...")
 
-    # Full CB5 pipeline: cb=405 + cross-street exclusion + polygon filter
+    # Full CB5 pipeline: cb=405 + polygon filter
     cb5 = _load_cb5_srts_full()
     cb5['requestdate'] = pd.to_datetime(cb5['requestdate'], errors='coerce')
     feasible = cb5[cb5['segmentstatusdescription'] == 'Feasible'].copy()
@@ -3619,7 +3698,7 @@ def save_data_tables(signal_prox, srts_prox):
     table_09 = table_09.rename(columns={'source_file': 'Source File'})
     table_09.to_csv(f'{OUTPUT_DIR}/table_09_crash_proximity_by_location.csv', index=False)
 
-    # Table 09b: Aggregate comparison — denied vs approved
+    # Table 09b: Aggregate comparison — denied and approved
     rows = []
     for dataset_label, df in [('Signal Studies', signal_prox), ('SRTS', srts_prox)]:
         for outcome in ['denied', 'approved']:
@@ -3695,16 +3774,22 @@ def generate_data_bundle():
     """Create a versioned ZIP of all charts, CSVs, map, and methodology."""
     import zipfile
     import glob as _glob
+    from scripts_build_manifest import write_manifest
     version = DATA_BUNDLE_VERSION
     bundle_path = os.path.join(OUTPUT_DIR, f'data_bundle_v{version}.zip')
+    root_bundle_path = f'data_bundle_v{version}.zip'
+    write_manifest()
     patterns = ['chart_*.png', 'table_*.csv', 'map_01_*.html',
-                'map_layer_*.csv', 'METHODOLOGY.md']
+                'map_layer_*.csv', 'data_*.csv', 'geocode_cache_*.csv',
+                'METHODOLOGY.md', 'source_manifest.json']
     with zipfile.ZipFile(bundle_path, 'w', zipfile.ZIP_DEFLATED) as zf:
         for pattern in patterns:
             for f in sorted(_glob.glob(os.path.join(OUTPUT_DIR, pattern))):
                 zf.write(f, os.path.basename(f))
+    shutil.copyfile(bundle_path, root_bundle_path)
     n_files = sum(1 for _ in zipfile.ZipFile(bundle_path).namelist())
     print(f"  Data bundle saved: {bundle_path} ({n_files} files)")
+    print(f"  Data bundle mirrored: {root_bundle_path}")
 
 
 # ============================================================
