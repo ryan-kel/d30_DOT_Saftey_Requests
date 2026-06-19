@@ -121,7 +121,13 @@ body.embedded #year-filter-section { display: none; }
 }
 .layer-toggle input { accent-color: var(--navy); margin-top: 2px; flex-shrink: 0; }
 .layer-count { color: #999; font-size: 9px; font-variant-numeric: tabular-nums; }
-.layer-separator { border: none; border-top: 1px solid #f0f0f0; margin: 5px 0; }
+.layer-grouplabel {
+  font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--navy-dark); margin: 5px 0 2px; padding-top: 5px; border-top: 1px solid #ececec;
+}
+.layer-grouplabel:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.panel-section-compact { padding-bottom: 7px; }
+.panel-section-compact h2 { margin-bottom: 4px; }
 
 .legend-item { display: flex; align-items: center; gap: 6px; margin: 1px 0; font-size: 10px; }
 .legend-dot {
@@ -134,23 +140,6 @@ body.embedded #year-filter-section { display: none; }
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   width: 5px; height: 5px; border-radius: 50%;
 }
-
-.stat-group { margin-bottom: 6px; }
-.stat-group .stat-title {
-  font-family: Helvetica, Arial, sans-serif;
-  font-weight: 700; font-size: 9px; text-transform: uppercase;
-  letter-spacing: 0.06em; color: var(--navy-dark); margin-bottom: 2px;
-}
-.stat-row {
-  display: flex; justify-content: space-between; align-items: baseline;
-  padding: 2px 0; font-size: 10.5px; border-bottom: 1px solid #f0f0f0;
-}
-.stat-row:last-child { border-bottom: none; }
-.stat-denied { color: var(--red); font-weight: 600; }
-.stat-approved { color: var(--green); font-weight: 600; }
-.stat-crash { color: var(--crash); font-weight: 600; }
-.stat-aps { color: var(--aps); font-weight: 600; }
-.stat-value { font-weight: 600; font-variant-numeric: tabular-nums; }
 
 .search-input-row { display: flex; gap: 3px; }
 #ref-search {
@@ -256,10 +245,10 @@ body.embedded .sources-wrap { display: none; }
     <button type="button" class="panel-collapse" id="panel-close" aria-label="Collapse controls"><span aria-hidden="true">&#9664;</span></button>
   </div>
   <div class="panel-scroll">
-    <div class="panel-section" id="search-section" style="position:relative;">
-      <h2>Search</h2>
+    <div class="panel-section panel-section-compact" id="search-section" style="position:relative;">
+      <h2>Reference</h2>
       <div class="search-input-row">
-        <input id="ref-search" type="text" placeholder="Reference # (e.g. CQ21-0722)" autocomplete="off">
+        <input id="ref-search" type="text" placeholder="CQ21-0722" autocomplete="off">
         <button id="ref-search-btn">Go</button>
       </div>
       <div id="ref-search-msg"></div>
@@ -284,36 +273,34 @@ body.embedded .sources-wrap { display: none; }
 
     <div class="panel-section">
       <h2>Layers</h2>
-      <label class="layer-toggle"><input type="checkbox" data-layer="deniedSignals" checked> Denied Signals <span class="layer-count" id="count-deniedSignals"></span></label>
-      <label class="layer-toggle"><input type="checkbox" data-layer="approvedSignals" checked> Approved Signals <span class="layer-count" id="count-approvedSignals"></span></label>
-      <label class="layer-toggle"><input type="checkbox" data-layer="deniedSrts" checked> Denied Speed Bumps <span class="layer-count" id="count-deniedSrts"></span></label>
-      <label class="layer-toggle"><input type="checkbox" data-layer="approvedSrts" checked> Approved Speed Bumps <span class="layer-count" id="count-approvedSrts"></span></label>
-      <label class="layer-toggle"><input type="checkbox" data-layer="aps"> APS Installed <span class="layer-count" id="count-aps"></span></label>
-      <hr class="layer-separator">
-      <label class="layer-toggle"><input type="checkbox" data-layer="crashDots" checked> Injury and Fatal Crashes <span class="layer-count" id="count-crashDots"></span></label>
-      <label class="layer-toggle"><input type="checkbox" data-layer="crashClustered"> Injury and Fatal Crashes (clustered) <span class="layer-count" id="count-crashClustered"></span></label>
-      <hr class="layer-separator">
-      <label class="layer-toggle"><input type="checkbox" data-layer="top15"> Top 15 Denied Spotlight</label>
-      <label class="layer-toggle"><input type="checkbox" data-layer="top10crashes"> Top 10 Crash Intersections</label>
-      <label class="layer-toggle"><input type="checkbox" data-layer="effectiveness"> DOT Effectiveness <span class="layer-count" id="count-effectiveness"></span></label>
+      <div class="layer-grouplabel">Signal studies</div>
+      <label class="layer-toggle"><input type="checkbox" data-layer="deniedSignals" checked> Denied <span class="layer-count" id="count-deniedSignals"></span></label>
+      <label class="layer-toggle"><input type="checkbox" data-layer="approvedSignals" checked> Approved <span class="layer-count" id="count-approvedSignals"></span></label>
+      <div class="layer-grouplabel">Speed bumps</div>
+      <label class="layer-toggle"><input type="checkbox" data-layer="deniedSrts" checked> Denied <span class="layer-count" id="count-deniedSrts"></span></label>
+      <label class="layer-toggle"><input type="checkbox" data-layer="approvedSrts" checked> Approved <span class="layer-count" id="count-approvedSrts"></span></label>
+      <div class="layer-grouplabel">Other</div>
+      <label class="layer-toggle"><input type="checkbox" data-layer="aps"> APS installed <span class="layer-count" id="count-aps"></span></label>
+      <div class="layer-grouplabel">Crashes</div>
+      <label class="layer-toggle"><input type="checkbox" data-layer="crashDots" checked> Dots <span class="layer-count" id="count-crashDots"></span></label>
+      <label class="layer-toggle"><input type="checkbox" data-layer="crashClustered"> Clustered <span class="layer-count" id="count-crashClustered"></span></label>
+      <div class="layer-grouplabel">Analysis</div>
+      <label class="layer-toggle"><input type="checkbox" data-layer="top15"> Top 15 denied</label>
+      <label class="layer-toggle"><input type="checkbox" data-layer="top10crashes"> Top 10 crashes</label>
+      <label class="layer-toggle"><input type="checkbox" data-layer="effectiveness"> DOT effectiveness <span class="layer-count" id="count-effectiveness"></span></label>
     </div>
 
     <div class="panel-section" id="legend-section">
       <h2>Legend</h2>
-      <span class="legend-item" data-layers="Denied Signal,Denied Speed"><span class="legend-dot" data-color="#9e3a30"></span>Denied request</span>
-      <span class="legend-item" data-layers="Approved Signal,Approved Speed"><span class="legend-dot" data-color="#6b8f5e"></span>Approved request</span>
-      <span class="legend-item" data-layers="APS Installed"><span class="legend-dot" data-color="#2C5F8B"></span>APS installed</span>
-      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" data-color="#9bb0c2"></span>Injury crash</span>
-      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" data-color="#1B3F5E"></span>Fatal crash</span>
-      <span class="legend-item" data-layers="Top 10 Crash"><span class="legend-spotlight" style="border:1.5px dashed #2C5F8B;"><span class="inner" style="background:#2C5F8B;"></span></span>Top 10 crash intersection</span>
-      <span class="legend-item" data-layers="Top 15 Denied"><span class="legend-spotlight" style="border:1.5px dashed #9e3a30;"><span class="inner" style="background:#9e3a30;"></span></span>Top 15 denied spotlight</span>
-      <span class="legend-item" data-layers="DOT Effectiveness"><span class="legend-spotlight" style="border:1.5px dashed #6b8f5e;"><span class="inner" style="background:#6b8f5e;"></span></span>Installed, decreased</span>
-      <span class="legend-item" data-layers="DOT Effectiveness"><span class="legend-spotlight" style="border:1.5px dashed #c06e45;"><span class="inner" style="background:#c06e45;"></span></span>Installed, increased</span>
-    </div>
-
-    <div class="panel-section">
-      <h2 id="stats-title">Statistics (2020&#8211;2025)</h2>
-      <div id="stats-body"></div>
+      <span class="legend-item" data-layers="Denied Signal,Denied Speed"><span class="legend-dot" data-color="#9e3a30"></span>Denied</span>
+      <span class="legend-item" data-layers="Approved Signal,Approved Speed"><span class="legend-dot" data-color="#6b8f5e"></span>Approved</span>
+      <span class="legend-item" data-layers="APS Installed"><span class="legend-dot" data-color="#2C5F8B"></span>APS</span>
+      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" data-color="#9bb0c2"></span>Injury</span>
+      <span class="legend-item" data-layers="Injury and Fatal Crashes"><span class="legend-dot" data-color="#1B3F5E"></span>Fatal</span>
+      <span class="legend-item" data-layers="Top 10 Crash"><span class="legend-spotlight" style="border:1.5px dashed #2C5F8B;"><span class="inner" style="background:#2C5F8B;"></span></span>Top 10 crashes</span>
+      <span class="legend-item" data-layers="Top 15 Denied"><span class="legend-spotlight" style="border:1.5px dashed #9e3a30;"><span class="inner" style="background:#9e3a30;"></span></span>Top 15 denied</span>
+      <span class="legend-item" data-layers="DOT Effectiveness"><span class="legend-spotlight" style="border:1.5px dashed #6b8f5e;"><span class="inner" style="background:#6b8f5e;"></span></span>Decreased</span>
+      <span class="legend-item" data-layers="DOT Effectiveness"><span class="legend-spotlight" style="border:1.5px dashed #c06e45;"><span class="inner" style="background:#c06e45;"></span></span>Increased</span>
     </div>
 
     <div class="sources-wrap">
@@ -839,7 +826,6 @@ function rebuildYearLayers() {
   }
 
   updateLayerCounts();
-  updateStats();
   updateLegend();
   notifyParentYear();
 }
@@ -852,35 +838,6 @@ document.getElementById('year-apply').addEventListener('click', function() {
 document.getElementById('year-reset').addEventListener('click', function() {
   selStart.value = '2020'; selEnd.value = '2025'; rebuildYearLayers();
 });
-
-// === Stats panel ===
-function updateStats() {
-  document.getElementById('stats-title').textContent = 'Statistics ('+yearRange+')';
-  var html = '';
-  html += '<div class="stat-group"><div class="stat-title">Signal Studies</div>';
-  html += '<div class="stat-row"><span>Denied</span><span class="stat-denied">'+denSigRecs.length+'</span></div>';
-  html += '<div class="stat-row"><span>Approved</span><span class="stat-approved">'+appSigRecs.length+'</span></div>';
-  var sigTotal = denSigRecs.length+appSigRecs.length;
-  var sigRate = sigTotal>0?(appSigRecs.length/sigTotal*100).toFixed(1):'0.0';
-  html += '<div class="stat-row"><span>Approval rate</span><span class="stat-value">'+sigRate+'%</span></div></div>';
-  html += '<div class="stat-group"><div class="stat-title">Speed Bumps</div>';
-  html += '<div class="stat-row"><span>Denied</span><span class="stat-denied">'+denSrtsRecs.length+'</span></div>';
-  html += '<div class="stat-row"><span>Approved</span><span class="stat-approved">'+appSrtsRecs.length+'</span></div>';
-  var srtsTotal = denSrtsRecs.length+appSrtsRecs.length;
-  var srtsRate = srtsTotal>0?(appSrtsRecs.length/srtsTotal*100).toFixed(1):'0.0';
-  html += '<div class="stat-row"><span>Approval rate</span><span class="stat-value">'+srtsRate+'%</span></div></div>';
-  var totInj=0, totPedInj=0, totFat=0;
-  crashRecs.forEach(function(r){ totInj+=r.inj; totPedInj+=r.pinj; totFat+=r.k; });
-  html += '<div class="stat-group"><div class="stat-title">Crashes</div>';
-  html += '<div class="stat-row"><span>Total</span><span class="stat-crash">'+crashRecs.length.toLocaleString()+'</span></div>';
-  html += '<div class="stat-row"><span>Injuries</span><span>'+totInj.toLocaleString()+'</span></div>';
-  html += '<div class="stat-row"><span>Ped. injuries</span><span>'+totPedInj.toLocaleString()+'</span></div>';
-  html += '<div class="stat-row"><span>Fatalities</span><span>'+totFat.toLocaleString()+'</span></div></div>';
-  html += '<div class="stat-group"><div class="stat-title">APS Installed</div>';
-  html += '<div class="stat-row"><span>Count</span><span class="stat-aps">'+apsRecs.length+'</span></div></div>';
-  document.getElementById('stats-body').innerHTML = html;
-}
-updateStats();
 
 // === Legend visibility ===
 function isLayerActive(prefix) {
