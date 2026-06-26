@@ -2,20 +2,25 @@
 
 ## Queens Community Board 5 — DOT Safety Infrastructure Request Analysis
 
-**Analysis period: 2020–2025** | **Data fetched: 2026-02-11** | **Geography: QCB5 (Queens CD5)**
+**Analysis period: 2020–2025** | **Current committed raw snapshot: 2026-05-26** | **Geography: QCB5 (Queens CD5)**
+
+> **Publication readiness note:** Generated CSV tables and map layer exports in `output/` are the source of truth for current counts. This narrative has been aligned to the current committed outputs covered by local validation, but publication still requires human review of the curated Signal Studies subset, the `CQ25-0457B` raw-snapshot mismatch, the duplicate `CQ21-0749` rows, and the 11 unmatched signal-study geocodes.
 
 ---
 
 ## 1. Data Sources
 
-All data was fetched from the NYC Open Data Socrata API on **2026-02-11** using `scripts_fetch_data.py`.
+The current committed raw CSV snapshot was produced in May 2026 using `scripts_fetch_data.py`. Re-fetching live NYC Open Data sources can change counts because source records continue to be updated.
 
 | Dataset | Endpoint ID | File | Records | Date Range |
 |---------|-------------|------|---------|------------|
-| Signal Studies | `[w76s-c5u4]` | `signal_studies_citywide.csv` | 74,485 | 1996–2026 |
-| Speed Reducer Tracking System | `[9n6h-pt9g]` | `srts_citywide.csv` | 58,198 | 1990–2026 |
-| Motor Vehicle Collisions | `[h9gi-nx95]` | `crashes_queens_2020plus.csv` | 41,632 | 2020–2026 |
-| CB5 Signal Studies | Derived | `data_cb5_signal_studies.csv` | 499 | 2020–2025 |
+| Signal Studies | `[w76s-c5u4]` | `data_raw/signal_studies_citywide.csv` | 75,339 | 1996–2026 |
+| Speed Reducer Tracking System | `[9n6h-pt9g]` | `data_raw/srts_citywide.csv` | 59,169 | 1990–2026 |
+| Motor Vehicle Collisions | `[h9gi-nx95]` | `data_raw/crashes_queens_2020plus.csv` | 43,394 | 2020–2026 |
+| APS Installed Locations | `[de3m-c5p4]` | `data_raw/aps_installed_citywide.csv` | 4,166 | current installed inventory |
+| CB5 Signal Studies | Derived | `output/data_cb5_signal_studies.csv` | 499 | 2020–2025 |
+
+`output/data_cb5_signal_studies.csv` is a curated input rather than a file regenerated from raw source data. The current row-level provenance scaffold (`output/data_cb5_signal_studies_provenance.csv`) checks each curated row against the committed citywide Signal Studies snapshot by `id` and `referencenumber`: 495 rows match once, 3 curated rows for `CQ21-0749` match duplicate raw rows, and 1 curated row (`CQ25-0457B`) is not present in the committed raw snapshot. All 499 rows remain marked as needing human review; the scaffold does not by itself validate CB5 inclusion.
 
 ### 1.1 Analysis Time Window
 
@@ -24,11 +29,11 @@ All data was fetched from the NYC Open Data Socrata API on **2026-02-11** using 
 **Rationale:**
 - CB5 signal study data begins in January 2020 — there is no pre-2020 CB5 data in the Signal Studies dataset. Using 2020–2025 ensures apples-to-apples comparison between CB5 and citywide baselines.
 - Data from early 2026 exists in some datasets but is excluded. 2026 is incomplete, and including a partial year would distort year-over-year trends and annualized rates.
-- All dynamic year computations in code are hard-capped at 2025: `min(computed_year, 2025)`.
+- Current committed outputs use 2020–2025. The scripts compute the end year dynamically as the last complete calendar year (`date.today().year - 1`), so outputs will extend after a future data refresh unless an explicit analysis end year is added.
 
 **Z-series charts** provide full historical context using each dataset's complete available range, capped at 2025. These are labeled with actual year ranges (e.g., "1999–2025"), never "Full History" or "All Years."
 
-**Policy significance:** The 2020–2025 window captures the post-Vision Zero era of NYC traffic policy, a period when DOT's evaluation criteria and staffing were relatively stable. Earlier data reflects fundamentally different policy environments and is provided as z-series context only.
+**Interpretation note:** The 2020–2025 window keeps CB5 and comparison records on the same period and avoids mixing current outputs with older records that may reflect different data coverage or policy context. Earlier records are provided as z-series context only.
 
 ---
 
@@ -46,7 +51,7 @@ Signal study records are classified into three outcomes based on the `statusdesc
 
 Only **resolved** records (denied + approved) are used for denial rate calculations.
 
-**Policy note:** The classification "Engineering Study Completed (Signals Engineering)" without approval language is treated as a denial because it represents the conclusion of DOT's evaluation process without the issuance of approval. DOT does not use an explicit "denied" status for signal studies — the absence of approval *is* the denial.
+**Classification note:** For this analysis, "Engineering Study Completed (Signals Engineering)" without approval language is classified as denied because it records a completed study with no approval status. This is an analytic classification, not a direct DOT status label.
 
 ### 2.2 Speed Bumps (SRTS)
 
@@ -65,11 +70,11 @@ Only resolved records are included. SRTS outcomes are binary — DOT engineering
 
 ### 3.1 Accessible Pedestrian Signals (APS)
 
-APS requests are **excluded from all denial rate calculations**. APS installations are mandated by a federal lawsuit settlement and do not undergo the same merit-based engineering review as standard signal study requests. Including them would artificially deflate denial rates by mixing court-ordered installations with discretionary evaluations.
+APS requests are **excluded from all denial rate calculations**. APS installations are tracked in a separate installed-inventory dataset (`de3m-c5p4`) that reflects placements under the federal remedial order in *American Council of the Blind of New York, Inc. v. The City of New York* (March 2022). APS request and status records are not comparable to discretionary signal, stop-sign, LPI, left-turn, or speed-bump evaluations in this analysis. Including APS would mix a court-ordered accessibility program with discretionary safety-request outcomes.
 
 APS requests ARE included in volume/count charts (Charts 01, 01b) where they are visually distinguished with gray hatching and a legend note explaining the exclusion.
 
-**Policy significance:** The APS exclusion is critical to the integrity of this analysis. If APS were included, CB5's apparent denial rate would drop significantly, masking the reality that discretionary safety requests face near-universal denial.
+**Interpretation note:** Excluding APS keeps the denominator aligned to discretionary traffic-control and speed-reducer requests. The current generated outputs already report high denial rates for those non-APS request types, so APS should be shown as a separate inventory/count layer rather than folded into denial-rate calculations.
 
 ### 3.2 Borough Normalization
 
@@ -79,7 +84,7 @@ The `borough` field contains inconsistent values including codes ("QK", "MB", "9
 
 For the interactive map and proximity analysis (Part 2), SRTS data is filtered to **2020–2025** to match the crash data and signal study windows. This excluded 1,528 pre-2020 SRTS records.
 
-Chart 15 examines SRTS installation history using the full date range. It loads SRTS data via the shared `_load_cb5_srts_full()` helper, which applies the CB5 filtering pipeline (cb=405 + polygon filter) before any chart-specific year logic. Chart 01d (denied vs approved counts) uses 2020–2025 for both signal studies and speed bumps.
+Chart 15 examines SRTS installation history using the full date range. It loads SRTS data via the shared `_load_cb5_srts_full()` helper, which applies the CB5 filtering pipeline (cb=405 + polygon filter) before any chart-specific year logic. Chart 01d (denied and approved counts) uses 2020–2025 for both signal studies and speed bumps.
 
 **Rationale:** Crash data is only available from 2020 onward. Plotting a speed bump request denied in 2005 against crash data from 2020–2025 would create a misleading temporal mismatch. All data on the map shares the same 2020–2025 window.
 
@@ -91,19 +96,19 @@ All three datasets use geography-based filtering to ensure consistent CB5 bounda
 
 ### 4.1 Signal Studies
 
-CB5 is identified by filtering Queens borough records to streets within CB5 geographic boundaries. A pre-filtered file (`data_cb5_signal_studies.csv`) containing 499 records is a curated input — not auto-generated by the pipeline — because signal studies lack a community board field. CB5 membership was determined by street-name matching against known CB5 boundary streets. See `REFERENCE_cb5_boundaries.md` for boundary filtering rules used to exclude misattributed records north of the LIE.
+Signal Studies lack source coordinates and a community-board field, so the pipeline does not currently regenerate the CB5 subset from raw data. Instead it consumes a pre-filtered curated file (`output/data_cb5_signal_studies.csv`) containing 499 records. The provenance scaffold verifies whether each curated row can be traced to the committed citywide raw snapshot, but the row-level inclusion/exclusion rationale still requires human review before publication. See `REFERENCE_cb5_boundaries.md` for boundary filtering rules used by geography-enabled datasets and for known CB5 boundary pitfalls.
 
 ### 4.2 Speed Bumps (SRTS)
 
 CB5 is identified by `cb = '405'` (borough code 4 for Queens + district 05) **plus** a mandatory polygon boundary filter:
 
-1. **Polygon boundary filter**: All records with coordinates are tested against the official CB5 community district polygon (`data_raw/cb5_boundary.geojson`). The polygon is the **sole geographic authority** — no street-name heuristics. Impact: ~26 records excluded that pass `cb=405` but fall outside the actual CB5 polygon.
+1. **Polygon boundary filter**: All records with coordinates are tested against the official CB5 community district polygon (`data_raw/cb5_boundary.geojson`). The polygon is the **sole geographic authority** — no street-name heuristics. Impact: 27 resolved records excluded that pass `cb=405` but fall outside the actual CB5 polygon.
 
-**CRITICAL:** Both layers (cb=405 + polygon filter) must be applied together. The `cb=405` field alone includes ~26 records outside the actual CB5 polygon. In `generate_maps.py`, the shared `_load_cb5_srts_full()` helper centralizes this pipeline so all SRTS charts use identical filtering. In `generate_charts.py`, the `prepare_data()` function applies the same two-layer pipeline.
+**CRITICAL:** Both layers (cb=405 + polygon filter) must be applied together. The `cb=405` field alone includes 27 resolved records outside the actual CB5 polygon. In `generate_maps.py`, the shared `_load_cb5_srts_full()` helper centralizes this pipeline so all SRTS charts use identical filtering. In `generate_charts.py`, the `prepare_data()` function applies the same two-layer pipeline.
 
 *Note: A cross-street exclusion filter was previously applied but was removed in Feb 2026 after audit revealed it wrongly excluded 67 valid records inside the CB5 polygon (Maspeth area: 52 Ave, 53 Ave, Calamus Ave, Maurice Ave). Boundary streets are partly inside the polygon and must not be excluded by name.*
 
-**Final count (all years):** ~1,962 resolved SRTS records retained. **After 2020–2025 filter (map pipeline):** 431 records.
+**Current count (all years):** 2,015 resolved `cb=405` SRTS records -> 1,988 retained after polygon filtering, with 27 excluded. **After 2020–2025 filter (map pipeline):** 436 records.
 
 ### 4.3 Motor Vehicle Crashes
 
@@ -135,7 +140,7 @@ This chart establishes that Queens — and CB5 specifically — is an active req
 
 Chart 01b (`chart_01b_requests_by_year.png`) tracks request volume trends over time in a two-panel layout for 2020–2025. The left panel is a line chart comparing Queens (navy blue) to citywide (goldenrod) trends; both show a peak in 2022 followed by decline. The right panel uses stacked bars to show the request type composition per year, with colors drawn from the project palette (navy for Traffic Signal, goldenrod for All-Way Stop, green for LPI, red for Left Turn, gray for APS).
 
-The 2022 peak and subsequent decline may reflect community discouragement after sustained high denial rates — a "why bother?" effect. The type composition shift toward a growing APS share reflects the federal mandate, not community choice. A z-series companion (Chart 01bz) provides the full history from 1996–2025 as a line chart.
+The 2022 peak and subsequent decline could reflect several factors, including demand, outreach, reporting practices, or discouragement after sustained high denial rates; this analysis does not identify a cause. The type composition shift toward a growing APS share is treated separately from discretionary request outcomes. A z-series companion (Chart 01bz) provides the full history from 1996–2025 as a line chart.
 
 ### Chart 01c: QCB5 Requests by Type
 
@@ -143,59 +148,59 @@ Chart 01c (`chart_01c_cb5_requests_by_type.png`) breaks down QCB5's signal study
 
 ### Chart 01d: QCB5 DOT Request Outcomes — Denied and Approved
 
-Chart 01d (`chart_01d_denied_vs_approved.png`) presents the aggregate outcome counts for QCB5 safety requests in a two-panel layout, both covering 2020–2025. The left panel shows Signal Studies (excluding APS) with denied and approved counts labeled on red and green bars, plus an annotation box with the approval rate. The right panel shows Speed Bumps with the same layout — "Not Feasible" mapped to Denied and "Feasible" mapped to Approved. An accompanying data table (`table_01d_denied_vs_approved.csv`) provides the exact counts and rates.
+Chart 01d (`chart_01d_denied_vs_approved.png`) presents the aggregate outcome counts for QCB5 safety requests in a two-panel layout, both covering 2020–2025. The left panel shows Signal Studies (excluding APS) with denied and approved counts labeled on red and green bars, plus an annotation box with the approval rate. The right panel shows Speed Bumps with the same layout — "Not Feasible" mapped to Denied and "Feasible" mapped to Approved. The current generated table (`table_01d_denied_vs_approved.csv`) reports 390 denied and 42 approved signal studies excluding APS, and 430 denied and 6 approved speed bump requests. The map/proximity subset is smaller for signal studies because only geocoded rows enter the map and proximity analysis.
 
-This is the only chart that presents the raw headline numbers — the total count of denied versus approved requests for each infrastructure type. While other charts show denial *rates* by borough (Chart 02), by request type (Chart 04), or over time (Chart 03), this chart provides the blunt summary: how many times the community asked and was told no versus yes. The disparity between the denied and approved bars is immediately visible and requires no statistical interpretation.
+This is the only chart that presents the raw headline numbers: denied and approved requests for each infrastructure type. While other charts show denial *rates* by borough (Chart 02), by request type (Chart 04), or over time (Chart 03), this chart shows the underlying numerator and denominator used for the headline outcome comparison. The disparity between denied and approved counts is descriptive and should be read alongside the sample sizes.
 
 ### Chart 02: Denial Rates by Borough
 
-Chart 02 (`chart_02_denial_rates_by_borough.png`) displays signal study denial rates across all five boroughs as a horizontal bar chart (n=15,724 resolved records, excluding APS, 2020–2025). Queens is highlighted in dark navy, and a goldenrod dashed line marks the citywide average. Manhattan leads at 94.8%, while Queens (88.7%) sits at the citywide average of 88.4%. Every borough exceeds 78%, with even the lowest (Bronx, 78.2%) denying more than three-quarters of requests.
+Chart 02 (`chart_02_denial_rates_by_borough.png`) displays signal study denial rates across all five boroughs as a horizontal bar chart (n=16,356 resolved records, excluding APS, 2020–2025). Queens is highlighted in dark navy, and a goldenrod dashed line marks the citywide average. Manhattan leads at 94.9%, while Queens is 88.9% compared with a citywide average of 88.6%. Every borough exceeds 78%, with the lowest (Bronx, 78.5%) denying more than three-quarters of requests.
 
-The denial rate is not a local anomaly — it is a **systemic citywide pattern**. This reframes the conversation from "why is CB5 being singled out" to "why does DOT deny nearly everything everywhere."
+The denial rate is not a local anomaly in this snapshot: every borough has a high denial rate, and Queens is close to the citywide average. This supports comparing CB5 with citywide practices rather than treating CB5 as an isolated case.
 
 ### Chart 03: Year-over-Year Trends
 
-Chart 03 (`chart_03_year_over_year_trends.png`) uses a 2×2 grid to track QCB5 trends across 2020–2025. Signal Studies occupy the top row and Speed Bumps the bottom row, with Volume on the left and Denial Rate on the right. A goldenrod dashed line on the denial rate panels provides the citywide comparison baseline. Signal study denial rates fluctuate between 79% and 100%, while speed bump denial rates have steadily climbed to 100% by 2025. The citywide trend mirrors CB5.
+Charts 03a-03d (`chart_03a_signal_volume.png`, `chart_03b_signal_denial_rates.png`, `chart_03c_srts_volume.png`, and `chart_03d_srts_denial_rates.png`) track QCB5 trends across 2020-2025. Signal Studies and Speed Bumps each have separate request-volume and denial-rate charts. The denial-rate charts include a goldenrod dashed citywide comparison line. Signal study denial rates fluctuate between 79% and 100%, while speed bump denial rates have steadily climbed to 100% by 2025. The citywide trend mirrors CB5.
 
-The convergence toward 100% denial for speed bumps is the most alarming trend in this analysis. When a program reaches 100% denial, it has effectively ceased to function as a public service — it accepts requests but approves none. This suggests the evaluation criteria may have become functionally prohibitive. A z-series companion (Chart 03z) provides the full history: signal studies from 2020 (CB5 data start) and SRTS from 1999–2025.
+The convergence toward 100% denial for speed bumps is a major trend in the current outputs. In years with no approvals, the request process is still accepting applications but not producing feasible outcomes in the observed CB5 records. This suggests the evaluation criteria should be reviewed against community safety concerns and documented crash exposure. A z-series companion (Chart 03z) provides the full history: signal studies from 2020 (CB5 data start) and SRTS from 1999–2025.
 
 ### Chart 04: Denial Rates by Request Type
 
-Chart 04 (`chart_04_denial_rates_by_request_type.png`) compares QCB5 and citywide denial rates across five request types using a grouped bar chart (navy for QCB5, goldenrod for citywide), with individual sample sizes shown per type on the x-axis labels. The data covers resolved records excluding APS for 2020–2025. Left Turn Arrow/Signal and Leading Pedestrian Interval are denied at 100% for both CB5 and citywide. Traffic Signal and All-Way Stop denials hover between 85% and 91%. Speed bumps are denied at 99% in CB5 versus 95% citywide. Filtering to 2020–2025 was critical for this chart — the original all-time comparison used 1996–2025 citywide data against 2020–2025 CB5 data, creating an apples-to-oranges distortion.
+Chart 04 (`chart_04_denial_rates_by_request_type.png`) compares QCB5 and citywide denial rates across five request types using a grouped bar chart (navy for QCB5, goldenrod for citywide), with individual sample sizes shown per type on the x-axis labels. The data covers resolved records excluding APS for 2020–2025. Left Turn Arrow/Signal and Leading Pedestrian Interval are denied at 100% for both CB5 and citywide. Traffic Signal and All-Way Stop denials hover between 85% and 91%. Speed bumps are denied at 99% in CB5 and 95% citywide. Filtering to 2020–2025 was critical for this chart — the original all-time comparison used 1996–2025 citywide data against 2020–2025 CB5 data, creating an apples-to-oranges distortion.
 
-The 100% denial rate for certain request types means DOT's engineering criteria have become **unfulfillable** in practice. A Left Turn Arrow request in Queens from 2020–2025 has zero historical precedent for approval. Communities are being invited to make requests that the system cannot grant.
+The 100% denial rate for certain request types means there are no approvals for those categories in the current 2020–2025 resolved snapshot. That pattern should be interpreted with the sample sizes and analysis window shown on the chart, and it warrants review of whether the request process gives applicants realistic guidance about likely outcomes.
 
 ### Chart 05: Speed Bump (SRTS) Analysis
 
-Chart 05 (`chart_05_speed_bump_analysis.png`) provides a three-panel deep dive into QCB5 speed bump outcomes for 2020–2025. The left panel compares CB5's denial rate against other Queens community boards, where CB5 ranks near the top. The middle panel breaks down CB5 denial reasons, revealing that "Speed < 30 mph" accounts for 84% of all denials. The right panel tracks this dominant reason over time as a stacked bar: the "Speed < 30 mph" share grew from 70% in 2020 to 94% in 2025, increasingly crowding out all other denial reasons.
+Charts 05a-05c (`chart_05a_queens_cb_denial_rates.png`, `chart_05b_denial_reasons.png`, and `chart_05c_denial_reasons_by_year.png`) provide the QCB5 speed bump outcome deep dive for 2020-2025. Chart 05a compares CB5's denial rate against other Queens community boards, where CB5 ranks near the top. Chart 05b breaks down CB5 denial reasons, showing that "Speed < 30 mph" accounts for 84% of all denials. Chart 05c tracks this dominant reason over time as a stacked bar: the "Speed < 30 mph" share grew from 70% in 2020 to 94% in 2025, increasingly crowding out all other denial reasons.
 
-This chart reveals that a **single technical criterion** — the 85th-percentile radar speed measurement — drives nearly all speed bump denials. The criterion asks whether most cars are already traveling under 30 mph. If so, DOT denies the request. But communities requesting speed bumps are not asking "are most drivers speeding?" — they are asking "is this street dangerous?" These are fundamentally different questions. A street with an 85th-percentile speed of 28 mph can still have frequent crashes, pedestrian conflicts, and a lived experience of danger. A z-series companion (Chart 05z) provides the full SRTS history from 1999–2025 with minimum-n thresholds.
+This chart shows that one recorded denial reason, "Speed < 30 mph," accounts for most QCB5 speed-bump denials in 2020–2025. That reason appears to reflect an 85th-percentile speed threshold, while community safety concerns may also involve crashes, pedestrian conflicts, and street design. A z-series companion (Chart 05z) provides the full SRTS history from 1999–2025 with minimum-n thresholds.
 
 ### Chart 06: Most Denied Intersections
 
 Chart 06 (`chart_06_most_denied_intersections.png`) ranks the top 10 QCB5 intersections by denial count for 2020–2025. Administrative duplicates sharing a DOT external reference number are collapsed to one record per unique reference before counting; this de-duplication removed 7 records (most notably, Metropolitan Ave & Flushing Ave dropped from 7 apparent denials to 3 genuine denials). After de-duplication, Woodhaven Blvd & Eliot Ave and Metropolitan Ave & Forest Ave lead with 5 separate denials each.
 
-Repeated denials at the same intersection represent **persistent community demand meeting persistent institutional refusal**. When a community submits 5 separate requests for a traffic signal at the same dangerous intersection and DOT denies all 5, the question becomes whether the engineering criteria are measuring the right things.
+Repeated denials at the same intersection indicate persistent request activity with repeated denied outcomes. Where those locations also have high crash exposure, the results raise a concrete review question: whether the engineering criteria and documented safety risk are aligned.
 
 ### Chart 07: Most Denied Streets for Speed Bumps
 
-Chart 07 (`chart_07_most_denied_streets_speed_bumps.png`) ranks the top 10 QCB5 streets by speed bump denial count (n=425 denials, 2020–2025). Otto Road, Myrtle Avenue, and Woodward Avenue are tied at 14 denials each, with a more even distribution than signal study denials.
+Chart 07 (`chart_07_most_denied_streets_speed_bumps.png`) ranks the top 10 QCB5 streets by speed bump denial count (n=430 denials, 2020–2025). Otto Road, Myrtle Avenue, and Woodward Avenue are tied at 14 denials each, with a more even distribution than signal study denials.
 
-These are streets where multiple consecutive blocks were requested and denied. Because speed bump requests are per-block segments, 14 denials on one street means the community requested protection across a long corridor and was denied for every segment.
+These are streets where multiple blocks were requested and denied. Because speed bump requests are per-block segments, repeated denials on one street indicate corridor-level demand with no feasible outcomes in the current resolved records.
 
 ### Chart 08: QCB5 Crash Hotspots
 
-Chart 08 (`chart_08_crash_hotspots_cb5.png`) examines QCB5 crash hotspots across n=3,213 injury crashes from 2020–2025 in a dual-panel layout. The left panel, "Top 10 Streets by Crash Count," ranks streets by number of crash incidents as horizontal bars, where each bar represents a unique collision event. The right panel, "Top 10 Streets by Persons Injured," uses stacked horizontal bars to rank streets by total persons injured, broken into three segments: Pedestrians (red, `#B44040`) as the most policy-relevant category, Cyclists (goldenrod, `#B8860B`), and Motorists (tan, `#CC9966`).
+Charts 08a and 08b (`chart_08a_crash_count.png` and `chart_08b_crash_injuries.png`) examine QCB5 crash hotspots across n=3,213 injury crashes from 2020-2025. Chart 08a, "Top 10 Streets by Crash Count," ranks streets by number of crash incidents as horizontal bars, where each bar represents a unique collision event. Chart 08b, "Top 10 Streets by Persons Injured," uses stacked horizontal bars to rank streets by total persons injured, broken into three segments: Pedestrians (red, `#B44040`) as the most policy-relevant category, Cyclists (goldenrod, `#B8860B`), and Motorists (tan, `#CC9966`).
 
-The two panels differ because a single crash can injure multiple people. Metropolitan Avenue, for example, has 165 crashes but 216 persons injured (approximately 1.3 per crash). The stacked breakdown reveals that pedestrians bear a disproportionate share of injuries on the most dangerous corridors. NYC crash data contains inconsistent naming ("METROPOLITAN AVENUE" vs. "METROPOLITAN AVE" with trailing spaces), so a normalization function standardizes street names before grouping.
+The two panels differ because a single crash can injure multiple people. Metropolitan Avenue, for example, has 165 crashes but 216 persons injured (approximately 1.3 per crash). The stacked breakdown reveals that pedestrians bear a disproportionate share of injuries on the most dangerous corridors. NYC crash data contains inconsistent naming ("METROPOLITAN AVENUE" and "METROPOLITAN AVE" with trailing spaces), so a normalization function standardizes street names before grouping.
 
-This chart establishes the **crash baseline** — where people are actually getting hurt, and who is getting hurt. The pedestrian injury breakdown directly ties to the infrastructure being denied: traffic signals, stop signs, and speed bumps primarily protect pedestrians. When compared to Charts 06 and 07 (where DOT is denying requests), overlaps between crash hotspots and denial hotspots become the central finding of this analysis.
+This chart establishes the **crash baseline**: where injury crashes are recorded and which road users are injured. The pedestrian injury breakdown is relevant to the safety infrastructure analyzed here, but the chart is descriptive; overlaps between crash hotspots and denial hotspots identify locations for closer review rather than proving why individual decisions were made.
 
 ### Chart 12: Request Type Mix
 
-Chart 12 (`chart_12_request_types_distribution.png`) compares the percentage distribution of request types between QCB5 (n=875) and citywide (n=30,920) using a grouped bar chart. All records are resolved and exclude APS, covering 2020–2025. CB5 and citywide have nearly identical speed bump shares (49.8% vs. 49.6%). CB5 has slightly fewer Traffic Signal requests (20.8% vs. 28.3%) and slightly more All-Way Stop (18.7% vs. 15.5%) and LPI (6.4% vs. 2.8%) requests.
+Chart 12 (`chart_12_request_types_distribution.png`) compares the percentage distribution of request types between QCB5 (n=875) and citywide (n=30,920) using a grouped bar chart. All records are resolved and exclude APS, covering 2020–2025. CB5 and citywide have nearly identical speed bump shares (49.8% in CB5, 49.6% citywide). CB5 has slightly fewer Traffic Signal requests (20.8% in CB5, 28.3% citywide) and slightly more All-Way Stop (18.7% in CB5, 15.5% citywide) and LPI (6.4% in CB5, 2.8% citywide) requests.
 
-CB5 is not an outlier in what it asks for — the mix of requests closely mirrors citywide patterns. This undermines any argument that CB5's high denial rates are driven by "unreasonable" request patterns.
+CB5 is not an outlier in what it asks for in this resolved non-APS snapshot: the mix of requests closely mirrors citywide patterns. This does not support a simple explanation that CB5's high denial rates are caused by an unusual request mix.
 
 ---
 
@@ -209,15 +214,16 @@ Signal study records have street names but no coordinates. A three-tier local ge
 
 | Tier | Method | Coverage |
 |------|--------|----------|
-| 1 | **Crash data matching** — Match `(mainstreet, crossstreet1)` to Queens crash `(on_street_name, off_street_name)` using median lat/lon of all crashes at that intersection | 60% (266) |
-| 2 | **SRTS data matching** — Match to SRTS `(onstreet, fromstreet/tostreet)` coordinates | 27% (120) |
-| 3 | **Street-line intersection** — Linear regression through known points for each street, then geometric intersection | 7% (33) |
-| — | **Unmatched** | 5% (23) |
-| **Total** | | **95% geocoded (419/442)** |
+| 1 | **Crash data matching** — Match `(mainstreet, crossstreet1)` to Queens crash `(on_street_name, off_street_name)` using median lat/lon of all crashes at that intersection | 61% (262) |
+| 2 | **SRTS data matching** — Match to SRTS `(onstreet, fromstreet/tostreet)` endpoint coordinates, using the matching segment endpoint | 28% (119) |
+| 3 | **Street-line intersection** — Linear regression through known points for each street, then geometric intersection | 9% (39) |
+| Manual | **Reviewed local override** | <1% (1) |
+| — | **Unmatched** | 3% (11) |
+| **Total** | | **97% geocoded (421/432 current resolved non-APS rows)** |
 
 Street name normalization (uppercase, abbreviation expansion, whitespace collapse) is applied before all matching. Both orderings of street pairs are tried. Tier 3 results are validated against CB5 polygon bounds.
 
-Results are cached to `output/geocode_cache_signal_studies.csv`. Delete to force re-geocoding.
+Results are cached to `output/geocode_cache_signal_studies.csv`. The cache is synchronized to the current resolved non-APS signal-study universe before reuse, so newly added current rows remain explicit unmatched rows if local geocoding cannot locate them. Current unmatched rows are also exported to `output/data_unmatched_signal_geocodes.csv` for manual review; these rows do not appear in the signal-study map layers or proximity statistics until they receive an in-polygon coordinate. Delete the cache to force a full re-geocoding pass.
 
 ### 6.2 Proximity Analysis
 
@@ -225,19 +231,19 @@ For each safety request location, injury crashes within **150 meters** are count
 
 Four metrics are computed per location: `crashes_150m` (total injury crashes within 150m), `injuries_150m` (total persons injured), `ped_injuries_150m` (pedestrian injuries specifically), and `fatalities_150m` (fatalities). Distances are calculated using the Haversine formula (great-circle distance), vectorized for performance.
 
-The crash dataset contains only injury crashes (fetched with `number_of_persons_injured > 0`); zero-injury crashes are excluded. This strengthens the safety argument — we are specifically measuring whether people are getting hurt near denied request locations.
+The crash dataset contains injury or fatal crashes (fetched with `number_of_persons_injured > 0 OR number_of_persons_killed > 0`); zero-injury, non-fatal crashes are excluded. This means the proximity analysis measures locations where people were hurt or killed, not all reported collisions.
 
 ### 6.3 Statistical Testing
 
-Denied vs approved location crash distributions are compared using the **Mann-Whitney U test** (non-parametric, does not assume normal distribution). Implementation is manual (no scipy dependency) using a normal approximation for p-values.
+Denied and approved location crash distributions are compared using the **Mann-Whitney U test** (non-parametric, does not assume normal distribution). Implementation is manual (no scipy dependency) using a normal approximation for p-values with tied-rank variance correction.
 
 ### Chart 09: Crash Proximity Analysis
 
-Chart 09 (`chart_09_crash_proximity_analysis.png`) presents the central statistical test of this analysis. It displays grouped bars comparing denied (red) versus approved (green) locations on three metrics — median crashes, injuries, and pedestrian injuries within 150 meters — with the Mann-Whitney U test p-value annotated on each panel. The left panel covers Signal Studies (n=416, QCB5, 2020–2025) and the right panel covers Speed Bumps (n=431).
+Chart 09 (`chart_09_crash_proximity_analysis.png`) presents the central statistical test of this analysis. It displays grouped bars comparing denied (red) and approved (green) locations on three metrics — median crashes, injuries, and pedestrian injuries within 150 meters — with the Mann-Whitney U test p-value annotated on each panel. The current generated signal-study panel covers 421 geocoded Signal Study locations (379 denied, 42 approved), and the SRTS panel covers 436 Speed Bump locations (430 denied, 6 approved).
 
-For signal studies, denied locations have significantly more crashes than approved locations (median 11 vs. 8, p=0.002), a result that is statistically significant at the 1% level. Denied locations also show higher injuries (15 vs. 9) and pedestrian injuries (2 vs. 2). For SRTS, there is no significant difference (median 9 vs. 7, p=0.61), confirming that speed bump denials are driven by the radar speed criterion rather than crash history.
+For signal studies, denied locations have significantly more crashes than approved locations (median 12 for denied locations, 7.5 for approved locations, p=0.000689), a result that is statistically significant at the 1% level. Denied locations also show higher injuries (15 for denied locations, 8.5 for approved locations) and equal median pedestrian injuries (2 for both groups). For SRTS, there is no statistically significant difference (median 9 for denied locations, 7 for approved locations, p=0.628881); this is consistent with the documented role of the radar-speed criterion in speed bump decisions.
 
-This is the central statistical finding of the analysis. **DOT is systematically denying signal and stop sign requests at locations with MORE crashes than the locations it approves** — the opposite of what a safety-first evaluation should produce. The p=0.002 result means there is only a 0.2% probability this pattern is due to chance. The non-significant SRTS result is itself informative: it confirms that DOT's speed bump evaluation is decoupled from crash reality, using radar speed as the sole determinant and ignoring crash history entirely.
+This is the central statistical finding of the analysis. Within the geocoded signal-study subset, denied signal and stop sign locations have higher nearby injury-crash counts than approved locations (Mann-Whitney p=0.000689). This supports further review of whether approval criteria are prioritizing documented crash exposure. It does not by itself prove causation or show DOT intent, and p-values are not the probability that a result is "due to chance." The non-significant SRTS result is consistent with the documented role of radar speed in speed bump decisions, but it does not prove that crash history is ignored in every decision.
 
 ### Chart 09b: Top 15 Denied Locations in QCB5 by Nearby Crash/Injury Count
 
@@ -245,13 +251,13 @@ Chart 09b (`chart_09b_denied_locations_crash_ranking.png`) identifies the denied
 
 Three layers of de-duplication are applied before ranking. First, `_normalize_intersection()` sorts street names alphabetically so that "Cooper Ave & Cypress Ave" and "Cypress Ave & Cooper Ave" are treated as the same location. Second, a name-based groupby aggregates records sharing the same normalized intersection name, keeping the row with the highest crash count. Third, `_spatial_dedup(df, radius_m=150)` applies a greedy algorithm: locations are sorted by crashes descending, and any location within 150 meters (haversine distance) of an already-selected location is skipped. The 150-meter spatial dedup radius matches the analysis radius because two denied locations 100 meters apart would share most of the same crash pool, creating the appearance of distinct hotspots when the crash exposure is largely the same.
 
-The top denied location (Aubrey Ave & Metropolitan Ave) has 66 crashes and 101 injuries within 150 meters — more than many locations where DOT has approved infrastructure. These are specific, nameable locations where the community asked for safety infrastructure, DOT said no, and crashes continue to occur.
+The top denied location (Aubrey Ave & Metropolitan Ave) has 66 crashes and 101 injuries within 150 meters — more than many locations where DOT has approved infrastructure. These are specific, nameable locations with denied requests and documented nearby crash exposure.
 
 ### Chart 15: SRTS Approval Funnel
 
-Chart 15 (`chart_15_srts_funnel.png`) traces the full lifecycle of approximately 237 QCB5 speed bump approvals from 1999–2025 in a two-panel layout. The left panel shows the total approved count, while the right panel breaks down their fate: Confirmed Installed at approximately 101 (43%), Cancelled/Rejected at approximately 114 (48%), and Still Waiting at approximately 21 (9%), with the median wait time annotated on the Still Waiting bar. Cancellation is determined from the `projectstatus` field containing "Cancel," "Reject," or "denied" — DOT's own status labels, not this analysis's classification. SRTS data is loaded via `_load_cb5_srts_full()` with the full CB5 filtering pipeline.
+Chart 15 (`chart_15_srts_funnel.png`) traces the full lifecycle of 239 QCB5 speed bump approvals from 1999–2025 in a two-panel layout. The left panel shows the total approved count, while the right panel breaks down their fate: Confirmed Installed at 105 (43.9%), Cancelled/Rejected at 124 (51.9%), Closed Without Install at 1 (0.4%), and Still Waiting at 9 (3.8%), with the median wait time annotated on the Still Waiting bar. Cancellation is determined from the `projectstatus` field containing "Cancel," "Reject," or "denied" — DOT's own status labels, not this analysis's classification. SRTS data is loaded via `_load_cb5_srts_full()` with the full CB5 filtering pipeline.
 
-This is the full lifecycle view of an SRTS approval. Only approximately 43% of approvals result in installation. The locations still waiting have a median wait of many years, with some dating to 2009. A speed bump approved during the Bloomberg administration remains uninstalled in 2026. The approximately 48% cancellation rate after approval means the community cannot even rely on a "yes" from DOT.
+This is the full lifecycle view of an SRTS approval. The current output shows that 43.9% of approvals result in confirmed installation, while 52.3% are later cancelled, rejected, or closed without installation, and 3.8% remain open. A "yes" from DOT therefore overstates actual infrastructure delivery.
 
 ---
 
@@ -271,9 +277,9 @@ All layers share the same 2020–2025 analysis window. Layer names in the contro
 | # | Layer | Default | n= | Description |
 |---|-------|---------|-----|-------------|
 | 1 | Injury Crashes | ON | 3,213 | Dot density — one dot per crash, sized by severity (fatal=black r=3.5, injury=gray r=1.8, property=light gray r=1.2) |
-| 2 | Denied Signal Studies | ON | 370 | Red circle markers (r=6), signal/stop sign requests denied by DOT |
-| 3 | Approved Signal Studies | ON | 40 | Green circle markers (r=6), signal/stop sign requests approved |
-| 4 | Denied Speed Bumps | ON | 425 | Red circle markers (r=4), SRTS requests denied |
+| 2 | Denied Signal Studies | ON | 379 | Red circle markers (r=6), signal/stop sign requests denied by DOT |
+| 3 | Approved Signal Studies | ON | 42 | Green circle markers (r=6), signal/stop sign requests approved |
+| 4 | Denied Speed Bumps | ON | 430 | Red circle markers (r=4), SRTS requests denied |
 | 5 | Approved Speed Bumps | ON | 6 | Green circle markers (r=4), SRTS requests approved |
 | 6 | DOT Effectiveness (Installed) | OFF | 15 | Before-after analysis markers — green (crashes decreased), amber (increased), gray (no change). Marker radius scaled by data volume. |
 | 7 | Top 15 Denied Spotlight | OFF | 15 | Highest crash-surrounded denied locations with 150m analysis circles and rank labels (spatially de-duplicated at 150m) |
@@ -299,9 +305,9 @@ Each map layer exports a corresponding CSV spreadsheet to `output/`. These allow
 | File | Rows | Key Columns |
 |------|------|-------------|
 | `map_layer_crashes.csv` | 3,213 | date, time, streets, injury breakdown, contributing factor, vehicle type, collision ID, lat/lon |
-| `map_layer_denied_signals.csv` | 370 | ref#, type, dates, status, findings, school, Vision Zero, crash proximity metrics, lat/lon |
-| `map_layer_approved_signals.csv` | 40 | same as above |
-| `map_layer_denied_speed_bumps.csv` | 425 | project code, streets, dates, denial reason, project status, crash proximity, lat/lon |
+| `map_layer_denied_signals.csv` | 379 | ref#, type, dates, status, findings, school, Vision Zero, crash proximity metrics, lat/lon |
+| `map_layer_approved_signals.csv` | 42 | same as above |
+| `map_layer_denied_speed_bumps.csv` | 430 | project code, streets, dates, denial reason, project status, crash proximity, lat/lon |
 | `map_layer_approved_speed_bumps.csv` | 6 | same as above + install date |
 | `map_layer_top15_denied.csv` | 15 | location, dataset, request type, crash/injury/ped/fatality counts |
 | `table_before_after_installed.csv` | 15 | before-after crash/injury comparison per installed location |
@@ -319,7 +325,7 @@ For the 15 confirmed-installed signal study locations, a before-after analysis c
 
 **Standout wins:** Bleecker & Woodward (-86% crashes), Linden & Onderdonk (-50%), Seneca & Weirfield (-20%).
 
-**Policy significance:** Where DOT *does* install safety infrastructure, outcomes tend to improve. The 21.5% injury reduction across installed locations suggests the infrastructure works — making the 60% non-installation rate for approved projects even more troubling.
+**Interpretation note:** Across installed locations, before/after injury counts decline by 21.5% in this descriptive analysis. That pattern is consistent with safety benefits but is not, by itself, a causal estimate; it should be read as supporting context for reviewing approved projects that have not yet been confirmed installed.
 
 ---
 
@@ -354,7 +360,7 @@ The `denialreason` field in SRTS data is free-text. Categories:
 
 ## 10. Visual Style
 
-All visualizations follow the conventions documented in `STYLE_GUIDE.md`. Key rules:
+All visualizations follow the conventions documented in `~/sites/electoralanalytics-site/docs/style/dataviz.md`. Key rules:
 
 - **QCB5 = navy blue `#2C5F8B`** everywhere. Citywide = goldenrod `#B8860B` everywhere.
 - **Denied = muted red `#B44040`**. Approved = muted green `#4A7C59`.
@@ -399,7 +405,7 @@ python generate_charts.py      # Part 1: all charts
 python generate_maps.py        # Part 2: map + correlation charts
 ```
 
-**Note:** Re-fetching data will produce different results as the NYC Open Data API reflects ongoing updates to city records. The fetched data from 2026-02-11 is preserved in `data_raw/` for reproducibility.
+**Note:** Re-fetching data will produce different results as the NYC Open Data API reflects ongoing updates to city records. The current committed raw snapshot is preserved in `data_raw/` and validated by `scripts_validate_outputs.py`; live refreshes should be reviewed before replacing those files.
 
 ---
 
@@ -414,7 +420,7 @@ A comprehensive data integrity audit was conducted across all charts and data pi
 | # | Bug | Impact | Fix |
 |---|-----|--------|-----|
 | 1 | **`_filter_points_in_cb5()` included no-coordinate rows** | Crash count inflated from 3,213 to 3,938 (+725). No-coord rows had NaN lat/lon so did not affect proximity analysis, but inflated n= in chart titles (Chart 08, map layer counts). | Exclude rows without valid coordinates. Applied in both `generate_charts.py` and `generate_maps.py`. |
-| 2 | **Charts 13 (now 01d), 15 loaded SRTS without full CB5 filtering** | These charts loaded SRTS directly from CSV with only `cb=405`, missing polygon filter. ~26 records outside actual CB5 boundary were included. SRTS approved count was 245 (should be ~237); installed was 106 (should be ~101). | Created `_load_cb5_srts_full()` shared helper. Chart 01d (formerly 13) moved to `generate_charts.py` using the shared `prepare_data()` pipeline. Chart 15 refactored to use `_load_cb5_srts_full()`. |
+| 2 | **Charts 13 (now 01d), 15 loaded SRTS without full CB5 filtering** | These charts loaded SRTS directly from CSV with only `cb=405`, missing polygon filter. Current data has 27 resolved records outside the actual CB5 boundary after the `cb=405` filter. Current filtered output reports 239 feasible SRTS approvals and 105 confirmed installations. | Created `_load_cb5_srts_full()` shared helper. Chart 01d (formerly 13) moved to `generate_charts.py` using the shared `prepare_data()` pipeline. Chart 15 refactored to use `_load_cb5_srts_full()`. |
 | 3 | **Chart 06 missing year filter** | Title claimed "2020–2025" but no year filter was applied. Included all-years data in a chart labeled as 2020–2025. | Added explicit `.between(2020, 2025)` year filter. |
 | 4 | **Chart 09b reversed intersection duplicates** | "Cooper Ave & Cypress Ave" and "Cypress Ave & Cooper Ave" treated as different locations. | Created `_normalize_intersection()` to sort street names alphabetically. |
 | 5 | **Chart 09b spatial duplicates from overlapping 150m radii** | Nearby denied locations (e.g., same intersection in Signal Studies and SRTS) counted overlapping crash pools, appearing as separate hotspots. | Created `_spatial_dedup()` with 150m radius matching the analysis radius. Applied to chart 09b, map Top 15 spotlight, and table_09c. |
@@ -427,10 +433,10 @@ A comprehensive data integrity audit was conducted across all charts and data pi
 - 68.7% of crashes share exact coordinates with at least one other crash — expected behavior (multiple crashes at the same intersection over time).
 
 **Documentation errors that contributed to bugs:**
-- `CLAUDE.md` "CB5 Identification" section listed only `cb='405'` for SRTS without mentioning mandatory polygon filter — this omission led to charts being built without proper filtering.
-- `decisions.md` documented independent SRTS loading from CSV as intentional design rather than identifying it as inconsistent with the centralized pipeline.
+- `AGENTS.md` / README CB5 identification notes once listed only `cb='405'` for SRTS without mentioning mandatory polygon filter — this omission led to charts being built without proper filtering.
+- Earlier project notes documented independent SRTS loading from CSV as intentional design rather than identifying it as inconsistent with the centralized pipeline.
 - `METHODOLOGY.md` section 3.3 described independent loading as deliberate behavior.
-- Chart 13 (denied vs approved counts) was renumbered to Chart 01d and moved from `generate_maps.py` to `generate_charts.py`, with both panels aligned to 2020–2025. The previous version had mismatched date ranges (signals 2020–2025, SRTS 1999–2025).
+- Chart 13 (denied and approved counts) was renumbered to Chart 01d and moved from `generate_maps.py` to `generate_charts.py`, with both panels aligned to 2020–2025. The previous version had mismatched date ranges (signals 2020–2025, SRTS 1999–2025).
 
 All documentation updated to prevent recurrence.
 
@@ -438,16 +444,16 @@ All documentation updated to prevent recurrence.
 
 ## 14. Summary of Key Findings
 
-1. **QCB5's signal study denial rate is ~90%** (2020–2025), consistent with the citywide average of ~88%. This is not a local anomaly — it is a systemic pattern.
+1. **QCB5's signal study denial rate is ~90%** (2020–2025), consistent with the citywide average of ~88%. This is not a local anomaly in the current snapshot; high denial rates appear across boroughs.
 
-2. **QCB5's speed bump denial rate has reached 99–100%** in recent years, driven almost entirely by a single criterion (85th-percentile speed < 30 mph).
+2. **QCB5's speed bump denial rate has reached 99–100%** in recent years, with "Speed < 30 mph" recorded as the dominant denial reason.
 
-3. **Denied signal study locations have significantly more nearby crashes than approved locations** (median 11 vs 8, p=0.002). DOT is systematically denying requests at more dangerous locations.
+3. **Denied signal study locations have significantly more nearby crashes than approved locations** in the geocoded subset (median 12 for denied locations, 7.5 for approved locations, Mann-Whitney p=0.000689). This is evidence that approval criteria should be reviewed against documented crash exposure; it is not, by itself, proof of causation or intent.
 
-4. **Only 3.6% of signal study requests and 5.7% of speed bump requests result in confirmed installations.** Paper approvals overstate actual infrastructure delivery by roughly 2×.
+4. **Only 3.6% of signal study requests and 5.7% of speed bump requests result in confirmed installations.** Approval counts overstate confirmed infrastructure delivery by roughly 2x.
 
 5. **26 of 41 approved signal studies (after dedup) have no installation date.** The 15 confirmed installations had a maximum wait of 456 days; 24 of the 26 uninstalled approvals have been waiting longer. The oldest dates to November 2021 — 51 months and counting.
 
-6. **For SRTS, more approvals were cancelled after the fact (~114) than were actually installed (~101).** ~21 locations remain in limbo with a median wait of many years.
+6. **For SRTS, more approvals were cancelled after the fact (124) than were actually installed (105).** 9 locations remain in limbo.
 
 7. **Where DOT does install, injuries decrease by 21.5%.** The infrastructure works — the bottleneck is deployment, not design.
