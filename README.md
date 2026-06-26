@@ -47,6 +47,12 @@ After a live refresh, review `data_raw/fetch_manifest.json`, `output/source_mani
 - `scripts_fetch_data.py` writes `data_raw/fetch_manifest.json` during live refreshes, recording source metadata, per-dataset fetch timestamps, query clauses, stable Socrata `$order` fields, pagination, row counts, and output paths.
 - Current committed outputs use the 2020-2025 analysis window. The scripts compute the end year dynamically as the last complete calendar year.
 
+## Live site
+
+`master` is the only branch that matters for electoralanalytics.net. Committed changes under
+`output/` auto-trigger a site deploy. The monthly refresh workflow (1st of each month, 06:00 UTC)
+fetches NYC Open Data, regenerates charts/maps, and pushes to `master` when sources change.
+
 ## Key Documentation
 
 - `AGENTS.md` - project workflow and implementation notes for AI agents

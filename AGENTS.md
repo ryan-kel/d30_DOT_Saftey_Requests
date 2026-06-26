@@ -27,4 +27,9 @@ python -m unittest discover -s tests
 
 ## Deployment
 
-Charts/maps copied via site `fetch-maps.sh` / publish pipeline. See `electoralanalytics-site` `publish/projects/qcb5-dot-safety.json`.
+**`master` is the live line.** Pushes that change `output/` trigger an automatic site rebuild
+(`.github/workflows/notify-site.yml` → `electoralanalytics-site` deploy). Monthly data refresh
+runs on `master` via `.github/workflows/refresh-data.yml`.
+
+Manual publish when needed: `npm run publish:project -- qcb5-dot-safety` from `electoralanalytics-site`
+(see `publish/projects/qcb5-dot-safety.json`). CI also fetches maps from `master` at build time.
