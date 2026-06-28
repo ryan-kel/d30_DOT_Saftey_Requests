@@ -5,8 +5,7 @@ Orientation for AI agents. Read `README.md`. **Reproduce outputs from committed 
 
 ## Standards (shared)
 
-- Writing: `~/shared/docs/ea-writing-standards.md`
-- Style guides: `~/sites/electoralanalytics-site/docs/style/README.md`
+- Style: `~/sites/electoralanalytics-site/docs/style/README.md`
 
 ## What this is
 
