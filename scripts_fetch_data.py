@@ -73,6 +73,64 @@ DATASET_311 = {
 }
 
 
+
+FETCH_PAGE_SIZE = 50000
+FETCH_ORDER_BY = {
+    "signal_studies": "id",
+    "srts": "projectcode",
+    "aps_installed": "borocd, location, date_insta",
+    "crashes": "collision_id",
+    "311": "unique_key",
+}
+
+
+def crash_fetch_where():
+    """Build the CB5-area crash candidate query."""
+    min_lon, min_lat, max_lon, max_lat = cb5_boundary_bbox()
+    return (
+        "crash_date >= '2020-01-01' "
+        "AND latitude IS NOT NULL AND longitude IS NOT NULL "
+        "AND (number_of_persons_injured > 0 OR number_of_persons_killed > 0) "
+        f"AND latitude between {min_lat} and {max_lat} "
+        f"AND longitude between {min_lon} and {max_lon}"
+    )
+
+
+def fetch_query_plan():
+    """Return the planned Socrata query parameters for each live fetch."""
+    return {
+        "signal_studies": {
+            "endpoint": DATASETS["signal_studies"]["endpoint"],
+            "output_path": f"{DATA_DIR}/signal_studies_citywide.csv",
+            "order": FETCH_ORDER_BY["signal_studies"],
+        },
+        "srts": {
+            "endpoint": DATASETS["srts"]["endpoint"],
+            "output_path": f"{DATA_DIR}/srts_citywide.csv",
+            "order": FETCH_ORDER_BY["srts"],
+        },
+        "aps_installed": {
+            "endpoint": DATASETS["aps_installed"]["endpoint"],
+            "output_path": f"{DATA_DIR}/aps_installed_citywide.csv",
+            "order": FETCH_ORDER_BY["aps_installed"],
+        },
+        "crashes": {
+            "endpoint": DATASETS["crashes"]["endpoint"],
+            "output_path": f"{DATA_DIR}/crashes_queens_2020plus.csv",
+            "where": crash_fetch_where(),
+            "limit": 50000,
+            "order": FETCH_ORDER_BY["crashes"],
+        },
+        "311": {
+            "endpoint": DATASET_311["endpoint"],
+            "output_path": f"{DATA_DIR}/311_cb5_dot_2020plus.csv",
+            "where": "agency='DOT' AND community_board='05 QUEENS' AND created_date >= '2020-01-01'",
+            "limit": 50000,
+            "order": FETCH_ORDER_BY["311"],
+        },
+    }
+
+
 def fetch_dataset(endpoint, limit=None, where=None, select=None):
     """Fetch data from NYC Open Data Socrata API."""
     base_url = f"https://data.cityofnewyork.us/resource/{endpoint}.json"
