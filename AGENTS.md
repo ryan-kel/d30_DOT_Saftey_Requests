@@ -1,6 +1,6 @@
 # QCB5 DOT Safety — AGENTS.md
 
-**Verified state:** `docs/status.md` (2026-06-19 evaluation). Read `README.md` for operator workflow.
+**Ops:** `~/sites/electoralanalytics-site/docs/ops.md`. Read `README.md` for pipeline.
 Orientation for AI agents. Read `README.md`. **Reproduce outputs from committed `data_raw/` before changing methodology.**
 
 ## Standards (shared)
