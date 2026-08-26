@@ -2006,7 +2006,7 @@ var yearStart = {LAST_COMPLETE_YEAR}, yearEnd = {LAST_COMPLETE_YEAR};
 // Map
 var map = L.map('map', {{center:[40.714,-73.889], zoom:14, zoomControl:false}});
 L.control.zoom({{position:'bottomleft'}}).addTo(map);
-L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png', {{
+L.tileLayer('https://{{s}}.basemaps.cartocdn.com/light_all/{{z}}/{{x}}/{{y}}{{r}}.png?key=cb1_2949_1_9bd5bcde55f90cb1ce920410', {{
   attribution:'&copy; <a href="https://carto.com/">CARTO</a> &copy; OpenStreetMap',
   maxZoom:19
 }}).addTo(map);
@@ -2666,13 +2666,13 @@ def map_consolidated(signal_prox, srts_prox, cb5_crashes, data=None):
         control_scale=True,
     )
     folium.TileLayer(
-        tiles='https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+        tiles='https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png?key=cb1_2949_1_9bd5bcde55f90cb1ce920410',
         attr='&copy; OpenStreetMap contributors &copy; CARTO',
         name='Base Map',
         control=False,
     ).add_to(m)
     folium.TileLayer(
-        tiles='https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png',
+        tiles='https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png?key=cb1_2949_1_9bd5bcde55f90cb1ce920410',
         attr='&copy; OpenStreetMap contributors &copy; CARTO',
         name='Street Labels',
         overlay=True,
