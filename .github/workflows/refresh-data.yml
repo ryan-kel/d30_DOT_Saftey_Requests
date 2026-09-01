@@ -110,4 +110,15 @@ jobs:
           else
             git commit -m "Automated data refresh $(date +%Y-%m-%d)"
             git push
+            # Dispatch the site rebuild from here. notify-site.yml listens for pushes to
+            # output/**, but GitHub never runs workflows for pushes made with the default
+            # GITHUB_TOKEN (loop prevention), so this job's own push is invisible to it.
+            # On 2026-09-01 the refresh succeeded and the site kept serving the Aug 26 map.
+            curl -sfL -X POST \
+              -H "Authorization: token ${{ secrets.SITE_DEPLOY_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/ryan-kel/electoralanalytics-site/dispatches \
+              -d '{"event_type": "project-updated"}' \
+              && echo "Site rebuild dispatched" \
+              || { echo "::error::Site rebuild dispatch failed; the site will keep serving the previous map."; exit 1; }
           fi
